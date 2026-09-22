@@ -4,21 +4,31 @@ Plataforma web (PWA) que ayuda a estudiantes de bachillerato a explorar carreras
 
 ## Requisitos
 
-- **Java 17+** instalado ([descargar](https://adoptium.net/))
+- **Java 21** instalado ([descargar](https://adoptium.net/))
+- Variable de entorno `JAVA_HOME` apuntando a la carpeta del JDK
 - No se requiere instalar Maven (se usa Maven Wrapper)
+
+### Configurar JAVA_HOME
+
+**Windows (PowerShell como administrador):**
+```powershell
+[System.Environment]::SetEnvironmentVariable("JAVA_HOME", "C:\Program Files\Java\jdk-21", "User")
+```
+
+**Linux / macOS:** agregar a `~/.bashrc` o `~/.zshrc`:
+```bash
+export JAVA_HOME="/ruta/al/jdk-21"
+```
 
 ## Ejecutar en local
 
-### Windows
-Doble clic en `start.cmd` y abrir http://localhost:8080
-
-### Linux / macOS
 ```bash
-chmod +x mvnw
 ./mvnw spring-boot:run
 ```
 
 Abrir http://localhost:8080
+
+> **Windows sin Git Bash:** usa `mvnw.cmd spring-boot:run` en su lugar.
 
 ## Comandos
 
@@ -27,6 +37,8 @@ Abrir http://localhost:8080
 | `./mvnw spring-boot:run` | Arranca el servidor en local |
 | `./mvnw test` | Ejecuta los tests |
 | `./mvnw clean package` | Compila el `.jar` para produccion |
+
+> **Windows:** reemplaza `./mvnw` por `mvnw.cmd` en los comandos anteriores.
 
 ## Estructura
 

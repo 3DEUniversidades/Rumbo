@@ -9,10 +9,10 @@ Plataforma web (PWA) que ayuda a estudiantes de bachillerato a explorar carreras
 - Tests: JUnit 5 (incluido por defecto en `spring-boot-starter-test`) — aún sin cobertura definida, pendiente de que el equipo la establezca
 
 ## Comandos
-- `mvn spring-boot:run` — arranca el servidor en local (sirve backend y frontend en el mismo puerto)
-- `mvn test` — ejecuta los tests (deben pasar antes de cada commit)
+- `./mvnw spring-boot:run` — arranca el servidor en local (sirve backend y frontend en el mismo puerto)
+- `./mvnw test` — ejecuta los tests (deben pasar antes de cada commit)
 - *(pendiente)* — no hay linter configurado todavía; se recomienda Checkstyle o Spotless antes de la primera PR
-- `mvn clean package` — compila el `.jar` para producción
+- `./mvnw clean package` — compila el `.jar` para producción
 
 ## Estructura del proyecto
 - `src/main/java/com/rumbo/modelo/` — clases de modelo (entidades JPA: Usuario, Carrera, Actividad, etc.), sin lógica de acceso a datos ni de permisos
