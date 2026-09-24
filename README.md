@@ -139,6 +139,19 @@ Cuando existan entidades JPA y datos iniciales, el auxiliar podra revisar los da
 
 Si agregamos carreras iniciales con `data.sql`, tambien se documentara el modo de activarlas. Por ahora `spring.sql.init.mode` queda en `never` para evitar insertar datos antes de que existan entidades y tablas revisadas.
 
+## Usuario por defecto
+
+Al iniciar, `data.sql` siembra un usuario administrador para probar el login:
+
+| Dato | Valor |
+|---|---|
+| Correo | `admin@rumbo.com` |
+| Password | `clave-de-prueba` |
+| Nombre | `Administrador General` |
+| Rol | `ADMIN` |
+
+La contrasena se guarda siempre como hash BCrypt, nunca en texto plano.
+
 ## Comandos
 
 | Comando | Descripcion |

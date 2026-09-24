@@ -29,7 +29,7 @@ document.getElementById('login-form').addEventListener('submit', async function 
             }));
             mensajeExito.textContent = 'Bienvenido/a, ' + datos.nombreCompleto;
             mensajeExito.style.display = 'block';
-            // TODO: redirigir segun rol cuando existan esas vistas
+            window.location.href = '/inicio.html';
         } else {
             mensajeError.textContent = 'Correo o contrasena incorrectos';
             mensajeError.style.display = 'block';
