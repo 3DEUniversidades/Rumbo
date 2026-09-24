@@ -1,10 +1,11 @@
+INSERT INTO usuario (id_usuario, nombre_usuario, nombre_completo, correo, contrasenia, rol, estado_verificacion)
 VALUES ('usr-0001', 'admin', 'Administrador General', 'admin@rumbo.com',
         '$2a$10$TpLF6dwLPJqJiTr25OrXj.GblWwrnBOb1QyFtXs0vr0hjwvld9bji',
         'ADMIN', 'VERIFICADO')
 ON CONFLICT (id_usuario) DO UPDATE SET
     contrasenia = EXCLUDED.contrasenia,
     correo = EXCLUDED.correo;
-    
+     
 INSERT INTO actividad (id_actividad, fecha, descripcion, contexto, instrucciones, acciones_a_realizar, metodo_recomendado, herramientas_disponibles, informacion_a_guardar, tipo_actividad, completada)
 VALUES ('act-0001', '2026-01-15', 'Autoevaluación de intereses vocacionales', 'Primer contacto del estudiante con el proceso de orientación', 'Completa el test de intereses vocacionales de forma honesta y sin apuros', 'Realizar el test externo y anotar tus 3 áreas de interés principales', 'Prueba estandarizada de intereses (tipo Holland)', 'Enlace externo a prueba vocacional, papel y lápiz', 'Guarda tus 3 áreas de interés principales en tu bitácora', 'Autoevaluación', false)
 ON CONFLICT (id_actividad) DO NOTHING;
