@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#2563eb">
+    <meta name="description" content="Rumbo - Catalogo de carreras">
+    <link rel="manifest" href="/manifest.json">
+    <title>Rumbo - Carreras</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <header>
+        <h1><a href="/" style="color:inherit;text-decoration:none">Rumbo</a></h1>
+        <p>Catalogo de carreras universitarias</p>
+    </header>
+
+    <main>
+        <section id="catalogo-carreras">
+            <div class="vista-encabezado">
+                <div>
+                    <h2>Carreras disponibles</h2>
+                    <p class="texto-secundario">Consulta la informacion inicial de cada carrera.</p>
+                </div>
+                <a href="/" class="btn btn-secundario">Volver al inicio</a>
+            </div>
+
+            <div id="estado-carreras" class="estado-vista">Cargando carreras...</div>
+            <div id="lista-carreras" class="lista-carreras" aria-live="polite"></div>
+        </section>
+    </main>
+
+    <dialog id="modal-carrera" class="modal-carrera">
+        <article>
+            <button id="cerrar-modal-carrera" class="modal-cerrar" type="button" aria-label="Cerrar detalle">×</button>
+            <h2 id="modal-carrera-nombre"></h2>
+            <dl class="detalle-carrera">
+                <div>
+                    <dt>Duracion</dt>
+                    <dd id="modal-carrera-duracion"></dd>
+                </div>
+                <div>
+                    <dt>Costo aproximado</dt>
+                    <dd id="modal-carrera-costo"></dd>
+                </div>
+                <div>
+                    <dt>Pensum</dt>
+                    <dd id="modal-carrera-pensum"></dd>
+                </div>
+            </dl>
+        </article>
+    </dialog>
+
+    <footer>
+        <p>Rumbo &copy; 2026</p>
+    </footer>
+
+    <script src="/js/vistaCarreras.js"></script>
+</body>
+</html>
