@@ -21,12 +21,8 @@
             <p>Explora carreras universarias, haz pruebas vocacionales y compara opciones.</p>
         </section>
 
-        <section id="carreras">
-            <h2>Carreras destacadas</h2>
-            <div id="lista-carreras"></div>
-        </section>
-
         <section id="acciones">
+            <a href="/carreras.html" class="btn">Explorar carreras</a>
             <a href="/test-vocacional.html" class="btn">Hacer test vocacional</a>
             <a href="/bitacora.html" class="btn btn-secundario">Mi bitacora</a>
         </section>
@@ -35,28 +31,5 @@
     <footer>
         <p>Rumbo &copy; 2026</p>
     </footer>
-
-    <script>
-        fetch('/api/carreras')
-            .then(r => r.json())
-            .then(carreras => {
-                const contenedor = document.getElementById('lista-carreras');
-                if (carreras.length === 0) {
-                    contenedor.innerHTML = '<p>No hay carreras disponibles aun.</p>';
-                    return;
-                }
-                contenedor.innerHTML = carreras.map(c => `
-                    <div class="carrera-card">
-                        <h3>${c.nombre}</h3>
-                        <p class="carrera-uni">${c.universidad}</p>
-                        <p class="carrera-area">${c.area} &middot; ${c.duracionAnios} anios</p>
-                        <p>${c.descripcion}</p>
-                    </div>
-                `).join('');
-            })
-            .catch(() => {
-                document.getElementById('lista-carreras').innerHTML = '<p>No se pudieron cargar las carreras.</p>';
-            });
-    </script>
 </body>
 </html>
