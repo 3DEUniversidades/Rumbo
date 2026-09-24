@@ -205,3 +205,70 @@ footer {
         margin-left: 0;
     }
 }
+
+/* === Login === */
+.login-form {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.5rem;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.login-form label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+    font-size: 0.9rem;
+}
+
+.login-form input[type="email"],
+.login-form input[type="password"] {
+    width: 100%;
+    padding: 0.6rem 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    background: var(--bg);
+}
+
+.login-form input:focus {
+    outline: 2px solid var(--primary);
+    outline-offset: 1px;
+}
+
+.login-form .btn {
+    width: 100%;
+    cursor: pointer;
+    border: none;
+    font-size: 1rem;
+}
+
+.login-form .btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.mensaje-error {
+    color: #dc2626;
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    border-radius: 6px;
+    padding: 0.6rem 0.75rem;
+    margin-top: 0.75rem;
+    font-size: 0.9rem;
+    display: none;
+}
+
+.mensaje-exito {
+    color: #16a34a;
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    border-radius: 6px;
+    padding: 0.6rem 0.75rem;
+    margin-top: 0.75rem;
+    font-size: 0.9rem;
+    display: none;
+}

@@ -37,3 +37,11 @@ SELECT 'Arquitectura', 5,
 WHERE NOT EXISTS (
     SELECT 1 FROM carreras WHERE nombre = 'Arquitectura'
 );
+
+INSERT INTO usuario (id_usuario, nombre_usuario, nombre_completo, correo, contrasenia, rol, estado_verificacion)
+SELECT 'usr-0001', 'admin', 'Administrador General', 'admin@rumbo.com',
+       '$2a$10$TpLF6dwLPJqJiTr25OrXj.GblWwrnBOb1QyFtXs0vr0hjwvld9bji',
+       'ADMIN', 'VERIFICADO'
+    WHERE NOT EXISTS (
+    SELECT 1 FROM usuario WHERE id_usuario = 'usr-0001'
+);
