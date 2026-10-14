@@ -6,7 +6,15 @@ public record CarreraRespuesta(
         Long id,
         String nombre,
         Integer duracion,
-        String pensum,
-        BigDecimal costo
+        BigDecimal costo,
+        String modalidad,
+        Integer cargaCreditos,
+        String habilidadesRequeridas,
+        String oportunidadesLaborales,
+        BigDecimal salarioEstimado,
+        BigDecimal empleabilidad,
+        String pdfOficialUrl,
+        String urlCarreraOficial
 ) {
 }
+
