@@ -41,8 +41,15 @@ public class ControladorCarreras {
                 carrera.getId(),
                 carrera.getNombre(),
                 carrera.getDuracion(),
-                carrera.getPensum(),
-                carrera.getCosto()
+                carrera.getCosto(),
+                carrera.getModalidad(),
+                carrera.getCargaCreditos(),
+                carrera.getHabilidadesRequeridas(),
+                carrera.getOportunidadesLaborales(),
+                carrera.getSalarioEstimado(),
+                carrera.getEmpleabilidad(),
+                carrera.getPdfOficialUrl(),
+                carrera.getUrlCarreraOficial()
         );
     }
 }
