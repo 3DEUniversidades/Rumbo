@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#2563eb">
+    <meta name="description" content="Rumbo - Gestion de carreras">
+    <link rel="manifest" href="/manifest.json">
+    <title>Rumbo - Gestion de carreras</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <header>
+        <h1><a href="/" style="color:inherit;text-decoration:none">Rumbo</a></h1>
+        <p>Gestion de carreras</p>
+    </header>
+
+    <main class="main-ancho">
+        <section id="tablero-carreras">
+            <div class="vista-encabezado">
+                <div>
+                    <h2>Tablero de carreras</h2>
+                    <p class="texto-secundario">Actualiza la informacion que ven los estudiantes y que usa el comparador.</p>
+                </div>
+                <a href="/inicio.html" class="btn btn-secundario">Volver al inicio</a>
+            </div>
+
+            <div id="mensaje-gestion" class="mensaje-gestion" role="status" hidden></div>
+            <div id="estado-gestion" class="estado-vista">Cargando carreras...</div>
+
+            <div class="tabla-contenedor">
+                <table id="tabla-carreras" class="tabla-gestion" hidden>
+                    <thead>
+                        <tr>
+                            <th>Carrera</th>
+                            <th>Duracion</th>
+                            <th>Costo</th>
+                            <th>Modalidad</th>
+                            <th>Creditos</th>
+                            <th>Salario est.</th>
+                            <th>Empleabilidad</th>
+                            <th>Enlaces</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="cuerpo-carreras"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="historial-carreras">
+            <div class="vista-encabezado">
+                <div>
+                    <h2>Historial de actualizaciones</h2>
+                    <p class="texto-secundario">Cada cambio queda registrado con valor anterior, valor nuevo, fecha y responsable.</p>
+                </div>
+                <div class="filtro-historial">
+                    <label for="filtro-carrera">Carrera</label>
+                    <select id="filtro-carrera">
+                        <option value="">Todas</option>
+                    </select>
+                </div>
+            </div>
+
+            <div id="estado-historial" class="estado-vista">Cargando historial...</div>
+
+            <div class="tabla-contenedor">
+                <table id="tabla-historial" class="tabla-gestion" hidden>
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Carrera</th>
+                            <th>Campo</th>
+                            <th>Valor anterior</th>
+                            <th>Valor nuevo</th>
+                            <th>Responsable</th>
+                        </tr>
+                    </thead>
+                    <tbody id="cuerpo-historial"></tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <dialog id="modal-edicion" class="modal-carrera modal-edicion">
+        <article>
+            <button id="cerrar-modal-edicion" class="modal-cerrar" type="button" aria-label="Cerrar">&times;</button>
+            <h2 id="edicion-titulo">Editar carrera</h2>
+
+            <form id="form-edicion" class="form-gestion" novalidate>
+                <label for="f-nombre">Nombre</label>
+                <input id="f-nombre" type="text" maxlength="120" required>
+
+                <div class="fila-2">
+                    <div>
+                        <label for="f-duracion">Duracion (anios)</label>
+                        <input id="f-duracion" type="number" min="1" step="1" required>
+                    </div>
+                    <div>
+                        <label for="f-costo">Costo (GTQ)</label>
+                        <input id="f-costo" type="number" min="0" step="0.01" required>
+                    </div>
+                </div>
+
+                <div class="fila-2">
+                    <div>
+                        <label for="f-modalidad">Modalidad</label>
+                        <input id="f-modalidad" type="text" maxlength="80">
+                    </div>
+                    <div>
+                        <label for="f-creditos">Carga de creditos</label>
+                        <input id="f-creditos" type="number" min="1" step="1">
+                    </div>
+                </div>
+
+                <div class="fila-2">
+                    <div>
+                        <label for="f-salario">Salario estimado (GTQ)</label>
+                        <input id="f-salario" type="number" min="0" step="0.01">
+                    </div>
+                    <div>
+                        <label for="f-empleabilidad">Empleabilidad (0 a 100)</label>
+                        <input id="f-empleabilidad" type="number" min="0" max="100" step="0.01">
+                    </div>
+                </div>
+
+                <label for="f-habilidades">Habilidades requeridas</label>
+                <textarea id="f-habilidades" rows="3"></textarea>
+
+                <label for="f-oportunidades">Oportunidades laborales</label>
+                <textarea id="f-oportunidades" rows="3"></textarea>
+
+                <label for="f-pdf">URL del PDF oficial</label>
+                <input id="f-pdf" type="url" maxlength="500" placeholder="https://www.universidad.edu.gt/pensum.pdf">
+
+                <label for="f-url">URL oficial de la carrera</label>
+                <input id="f-url" type="url" maxlength="500" placeholder="https://www.universidad.edu.gt/carrera">
+
+                <div id="error-edicion" class="mensaje-error" role="alert"></div>
+
+                <div class="acciones-form">
+                    <button id="cancelar-edicion" class="btn btn-secundario" type="button">Cancelar</button>
+                    <button id="guardar-edicion" class="btn" type="submit">Guardar cambios</button>
+                </div>
+            </form>
+        </article>
+    </dialog>
+
+    <footer>
+        <p>Rumbo &copy; 2026</p>
+    </footer>
+
+    <script src="/js/vistaGestionCarreras.js"></script>
+</body>
+</html>
