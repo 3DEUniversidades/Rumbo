@@ -2,6 +2,8 @@ package com.rumbo.controlador;
 
 import com.rumbo.dto.LoginRequestDTO;
 import com.rumbo.dto.LoginResponseDTO;
+import com.rumbo.dto.RegistroRequestDTO;
+import com.rumbo.dto.RegistroResponseDTO;
 import com.rumbo.servicio.ExcepcionAutenticacion;
 import com.rumbo.servicio.UsuarioService;
 import org.springframework.http.ResponseEntity;
@@ -35,5 +37,12 @@ public class ControladorCuentas {
             return ResponseEntity.status(401)
                     .body(Map.of("error", "Credenciales incorrectas"));
         }
+    }
+
+    // RF-01, RF-02, RF-03, RF-04, RF-09, RF-11, RF-16 — registro publico de estudiante o colaborador
+    @PostMapping("/registro")
+    public ResponseEntity<RegistroResponseDTO> registrar(@RequestBody RegistroRequestDTO solicitud) {
+        RegistroResponseDTO respuesta = usuarioService.registrar(solicitud);
+        return ResponseEntity.status(201).body(respuesta);
     }
 }
