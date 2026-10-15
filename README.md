@@ -172,8 +172,8 @@ Solicitud:
 
 `rol` acepta unicamente `ESTUDIANTE` o `COLABORADOR`. Un colaborador debe usar un correo
 del dominio institucional configurado en `rumbo.correo.dominio-institucional`
-(por defecto `uvg.edu.gt`). El estudiante queda con estado `no verificado` y el
-colaborador con `verificado`.
+(por defecto `uvg.edu.gt`). El estudiante queda con estado `NO_VERIFICADO` y el
+colaborador con `VERIFICADO`.
 
 Respuesta `201 Created`:
 
@@ -184,7 +184,7 @@ Respuesta `201 Created`:
   "nombreCompleto": "Juan Perez",
   "correo": "juan@uvg.edu.gt",
   "rol": "ESTUDIANTE",
-  "estadoVerificacion": "no verificado"
+  "estadoVerificacion": "NO_VERIFICADO"
 }
 ```
 

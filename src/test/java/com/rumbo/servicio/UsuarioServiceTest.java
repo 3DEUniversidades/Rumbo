@@ -32,7 +32,7 @@ class UsuarioServiceTest {
                 solicitud("juan", "Juan Perez", "juan@correo.com", "contrasenia123", "ESTUDIANTE"));
 
         assertEquals("ESTUDIANTE", respuesta.getRol());
-        assertEquals("no verificado", respuesta.getEstadoVerificacion());
+        assertEquals("NO_VERIFICADO", respuesta.getEstadoVerificacion());
 
         Usuario guardado = usuarioRepository.findById(respuesta.getIdUsuario()).orElseThrow();
         assertTrue(guardado.verificarContrasenia("contrasenia123"));
@@ -44,7 +44,7 @@ class UsuarioServiceTest {
                 solicitud("colab", "Colaborador UVG", "colab@uvg.edu.gt", "contrasenia123", "COLABORADOR"));
 
         assertEquals("COLABORADOR", respuesta.getRol());
-        assertEquals("verificado", respuesta.getEstadoVerificacion());
+        assertEquals("VERIFICADO", respuesta.getEstadoVerificacion());
     }
 
     @Test

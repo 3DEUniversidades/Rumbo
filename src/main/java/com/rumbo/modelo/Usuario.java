@@ -2,6 +2,8 @@ package com.rumbo.modelo;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -9,12 +11,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @Entity
 @Table(name = "usuario")
 public class Usuario {
-
-    public static final String ROL_ESTUDIANTE = "ESTUDIANTE";
-    public static final String ROL_COLABORADOR = "COLABORADOR";
-
-    public static final String ESTADO_NO_VERIFICADO = "no verificado";
-    public static final String ESTADO_VERIFICADO = "verificado";
 
     @Id
     private String idUsuario;
@@ -28,14 +24,18 @@ public class Usuario {
     private String correo;
 
     private String contrasenia;
-    private String rol;
-    private String estadoVerificacion;
+
+    @Enumerated(EnumType.STRING)
+    private Rol rol;
+
+    @Enumerated(EnumType.STRING)
+    private EstadoVerificacion estadoVerificacion;
 
     protected Usuario() {
     }
 
     public Usuario(String idUsuario, String nombreUsuario, String nombreCompleto,
-                   String correo, String contrasenia, String rol, String estadoVerificacion) {
+                   String correo, String contrasenia, Rol rol, EstadoVerificacion estadoVerificacion) {
         this.idUsuario = idUsuario;
         this.nombreUsuario = nombreUsuario;
         this.nombreCompleto = nombreCompleto;
@@ -61,15 +61,15 @@ public class Usuario {
         return correo;
     }
 
-    public String getRol() {
+    public Rol getRol() {
         return rol;
     }
 
-    public String getEstadoVerificacion() {
+    public EstadoVerificacion getEstadoVerificacion() {
         return estadoVerificacion;
     }
 
-    public void setEstadoVerificacion(String estadoVerificacion) {
+    public void setEstadoVerificacion(EstadoVerificacion estadoVerificacion) {
         this.estadoVerificacion = estadoVerificacion;
     }
 

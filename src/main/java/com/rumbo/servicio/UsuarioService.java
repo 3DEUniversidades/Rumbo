@@ -4,6 +4,8 @@ import com.rumbo.dto.LoginResponseDTO;
 import com.rumbo.dto.RegistroRequestDTO;
 import com.rumbo.dto.RegistroResponseDTO;
 import com.rumbo.dto.SesionUsuario;
+import com.rumbo.modelo.EstadoVerificacion;
+import com.rumbo.modelo.Rol;
 import com.rumbo.modelo.Usuario;
 import com.rumbo.persistencia.UsuarioRepository;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -42,7 +44,7 @@ public class UsuarioService {
         return new LoginResponseDTO(
                 sesion.getIdUsuario(),
                 usuario.getNombreCompleto(),
-                usuario.getRol()
+                usuario.getRol().name()
         );
     }
 
@@ -62,9 +64,10 @@ public class UsuarioService {
             throw new ExcepcionConflicto("El correo electronico ya esta en uso");
         }
 
-        String estado = Usuario.ROL_COLABORADOR.equals(solicitud.getRol())
-                ? Usuario.ESTADO_VERIFICADO
-                : Usuario.ESTADO_NO_VERIFICADO;
+        Rol rol = Rol.desdeTexto(solicitud.getRol());
+        EstadoVerificacion estado = rol == Rol.COLABORADOR
+                ? EstadoVerificacion.VERIFICADO
+                : EstadoVerificacion.NO_VERIFICADO;
 
         Usuario usuario = new Usuario(
                 UUID.randomUUID().toString(),
@@ -72,7 +75,7 @@ public class UsuarioService {
                 solicitud.getNombreCompleto(),
                 solicitud.getCorreo(),
                 codificadorContrasenia.encode(solicitud.getContrasenia()),
-                solicitud.getRol(),
+                rol,
                 estado
         );
 
@@ -87,8 +90,8 @@ public class UsuarioService {
                 usuario.getNombreUsuario(),
                 usuario.getNombreCompleto(),
                 usuario.getCorreo(),
-                usuario.getRol(),
-                usuario.getEstadoVerificacion()
+                usuario.getRol().name(),
+                usuario.getEstadoVerificacion().name()
         );
     }
 }

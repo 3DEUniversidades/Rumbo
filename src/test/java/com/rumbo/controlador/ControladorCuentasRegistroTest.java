@@ -1,5 +1,7 @@
 package com.rumbo.controlador;
 
+import com.rumbo.modelo.EstadoVerificacion;
+import com.rumbo.modelo.Rol;
 import com.rumbo.modelo.Usuario;
 import com.rumbo.persistencia.UsuarioRepository;
 import org.junit.jupiter.api.Test;
@@ -44,7 +46,7 @@ class ControladorCuentasRegistroTest {
                 .andExpect(jsonPath("$.nombreUsuario").value("juan"))
                 .andExpect(jsonPath("$.correo").value("juan@correo.com"))
                 .andExpect(jsonPath("$.rol").value("ESTUDIANTE"))
-                .andExpect(jsonPath("$.estadoVerificacion").value("no verificado"))
+                .andExpect(jsonPath("$.estadoVerificacion").value("NO_VERIFICADO"))
                 .andExpect(content().string(not(containsString("contrasenia"))))
                 .andExpect(content().string(not(containsString("$2a$"))));
     }
@@ -59,7 +61,7 @@ class ControladorCuentasRegistroTest {
         mockMvc.perform(post("/api/auth/registro").contentType(MediaType.APPLICATION_JSON).content(json))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.rol").value("COLABORADOR"))
-                .andExpect(jsonPath("$.estadoVerificacion").value("verificado"));
+                .andExpect(jsonPath("$.estadoVerificacion").value("VERIFICADO"));
     }
 
     @Test
@@ -154,7 +156,7 @@ class ControladorCuentasRegistroTest {
     void loginSigueFuncionandoConCuentaExistente() throws Exception {
         Usuario usuario = new Usuario(
                 "usr-test", "tester", "Tester Uno", "tester@correo.com",
-                new BCryptPasswordEncoder().encode("clave-de-prueba"), "ESTUDIANTE", "no verificado");
+                new BCryptPasswordEncoder().encode("clave-de-prueba"), Rol.ESTUDIANTE, EstadoVerificacion.NO_VERIFICADO);
         usuarioRepository.save(usuario);
 
         String json = """
@@ -171,7 +173,7 @@ class ControladorCuentasRegistroTest {
     void loginRechazaCredencialesIncorrectas() throws Exception {
         Usuario usuario = new Usuario(
                 "usr-test", "tester", "Tester Uno", "tester@correo.com",
-                new BCryptPasswordEncoder().encode("clave-de-prueba"), "ESTUDIANTE", "no verificado");
+                new BCryptPasswordEncoder().encode("clave-de-prueba"), Rol.ESTUDIANTE, EstadoVerificacion.NO_VERIFICADO);
         usuarioRepository.save(usuario);
 
         String json = """
@@ -192,3 +194,4 @@ class ControladorCuentasRegistroTest {
                 .andExpect(status().isCreated());
     }
 }
+

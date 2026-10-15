@@ -1,7 +1,7 @@
 package com.rumbo.servicio;
 
 import com.rumbo.dto.RegistroRequestDTO;
-import com.rumbo.modelo.Usuario;
+import com.rumbo.modelo.Rol;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -91,12 +91,14 @@ public class ValidadorDatos {
 
         if (!validarCampoObligatorio(solicitud.getRol())) {
             errores.put("rol", "El rol es obligatorio");
-        } else if (!Usuario.ROL_ESTUDIANTE.equals(solicitud.getRol())
-                && !Usuario.ROL_COLABORADOR.equals(solicitud.getRol())) {
-            errores.put("rol", "El rol " + solicitud.getRol() + " no puede registrarse publicamente");
+        } else {
+            Rol rol = Rol.desdeTexto(solicitud.getRol());
+            if (rol == null || !rol.esPublico()) {
+                errores.put("rol", "El rol " + solicitud.getRol() + " no puede registrarse publicamente");
+            }
         }
 
-        if (Usuario.ROL_COLABORADOR.equals(solicitud.getRol())
+        if (Rol.COLABORADOR == Rol.desdeTexto(solicitud.getRol())
                 && validarCampoObligatorio(solicitud.getCorreo())
                 && validarCorreo(solicitud.getCorreo())
                 && !validarCorreoInstitucional(solicitud.getCorreo())) {
