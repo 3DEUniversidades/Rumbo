@@ -531,3 +531,95 @@ footer {
     font-size: 0.85rem;
     line-height: 1.4;
 }
+
+/* Comparador de carreras */
+
+.filtros-comparador {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 0.9rem;
+    margin-bottom: 1rem;
+}
+
+    .filtros-comparador label {
+        display: grid;
+        gap: 0.35rem;
+        font-weight: 600;
+        font-size: 0.9rem;
+    }
+
+    .filtros-comparador input,
+    .filtros-comparador select {
+        width: 100%;
+        padding: 0.6rem;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        background: var(--surface);
+        color: var(--text);
+        font: inherit;
+    }
+
+.seleccion-comparador {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 0.8rem 0 1rem;
+}
+
+    .seleccion-comparador .btn {
+        margin-left: 0;
+    }
+
+#comparador button {
+    cursor: pointer;
+}
+
+    #comparador button:disabled {
+        opacity: 0.55;
+        cursor: not-allowed;
+    }
+
+#estado-comparador {
+    margin-bottom: 1rem;
+}
+
+#resultado-comparador .tabla-contenedor {
+    margin-top: 1rem;
+}
+
+.tabla-comparador th,
+.tabla-comparador td {
+    min-width: 190px;
+    max-width: 340px;
+    white-space: normal;
+    overflow-wrap: anywhere;
+}
+
+.valor-comparador {
+    white-space: pre-line;
+    line-height: 1.5;
+}
+
+.marca-comparador {
+    display: block;
+    width: fit-content;
+    margin-top: 0.5rem;
+    padding: 0.2rem 0.45rem;
+    border-radius: 5px;
+    font-weight: 700;
+}
+
+.marca-mayor {
+    color: #1e40af;
+    background: #dbeafe;
+}
+
+.marca-menor {
+    color: #92400e;
+    background: #fef3c7;
+}
+
+.marca-igual {
+    color: #475569;
+    background: #f1f5f9;
+}
