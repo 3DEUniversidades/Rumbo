@@ -4,15 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#2563eb">
-    <meta name="description" content="Rumbo - Gestión de carreras">
     <link rel="manifest" href="/manifest.json">
-    <title>Rumbo - Gestión de carreras</title>
     <link rel="stylesheet" href="/style.css">
 </head>
 <body>
     <header>
         <h1><a href="/" style="color:inherit;text-decoration:none">Rumbo</a></h1>
-        <p>Gestión de carreras</p>
     </header>
 
     <main class="main-ancho">
@@ -20,7 +17,6 @@
             <div class="vista-encabezado">
                 <div>
                     <h2>Tablero de carreras</h2>
-                    <p class="texto-secundario">Actualiza la información que ven los estudiantes y que usa el comparador.</p>
                 </div>
                 <a href="/inicio.html" class="btn btn-secundario">Volver al inicio</a>
             </div>
@@ -33,11 +29,7 @@
                     <thead>
                         <tr>
                             <th>Carrera</th>
-                            <th>Facultad</th>
-                            <th>Duración</th>
-                            <th>Costo (1.er semestre)</th>
                             <th>Modalidad</th>
-                            <th>Créditos</th>
                             <th>Salario est.</th>
                             <th>Empleabilidad</th>
                             <th>Enlaces</th>
@@ -95,70 +87,56 @@
                 <label for="f-facultad">Facultad</label>
                 <input id="f-facultad" type="text" maxlength="120">
 
-                <label for="f-descripcion">Descripción</label>
-                <textarea id="f-descripcion" rows="3" placeholder="Qué estudia la carrera y para qué sirve"></textarea>
+                <label for="f-descripcion">Descripci�n</label>
+                <textarea id="f-descripcion" rows="3" placeholder="Qu� estudia la carrera y para qu� sirve"></textarea>
 
                 <div class="fila-2">
                     <div>
-                        <label for="f-duracion">Duración (años del plan base)</label>
-                        <input id="f-duracion" type="number" min="1" max="15" step="1" required>
                     </div>
                     <div>
-                        <label for="f-modalidad">Modalidad</label>
-                        <input id="f-modalidad" type="text" maxlength="80">
                     </div>
                 </div>
 
                 <fieldset class="grupo-form">
                     <legend>Costo de referencia</legend>
-                    <p class="ayuda-form">Total del primer semestre de primer ingreso, incluida la inscripción. No es el costo anual ni de toda la carrera.</p>
-                    <div class="fila-2">
-                        <div>
-                            <label for="f-costo">Costo (GTQ)</label>
-                            <input id="f-costo" type="number" min="0" step="0.01" required>
-                        </div>
-                        <div>
-                            <label for="f-costo-anio">Año del tarifario</label>
-                            <input id="f-costo-anio" type="number" min="2000" max="2100" step="1">
-                        </div>
+                    <p class="ayuda-form">Total del primer semestre de primer ingreso, incluida la inscripci�n. No es el costo anual ni de toda la carrera.</p>
+                <div class="fila-2">
+                    <div>
                     </div>
+                    <div>
+                    </div>
+                </div>
                     <label for="f-costo-periodo">Periodo y alcance del costo</label>
-                    <input id="f-costo-periodo" type="text" maxlength="200" placeholder="Primer semestre, estudiante de primer ingreso, incluida inscripción ordinaria">
+                    <input id="f-costo-periodo" type="text" maxlength="200" placeholder="Primer semestre, estudiante de primer ingreso, incluida inscripci�n ordinaria">
                 </fieldset>
 
-                <label for="f-creditos">Carga de créditos (total del plan)</label>
+                <label for="f-creditos">Carga de cr�ditos (total del plan)</label>
                 <input id="f-creditos" type="number" min="1" max="1000" step="1">
 
-                <label for="f-areas">Áreas de formación (una por línea)</label>
+                <label for="f-areas">�reas de formaci�n (una por l�nea)</label>
                 <textarea id="f-areas" rows="4"></textarea>
 
-                <label for="f-competencias">Competencias que desarrolla (una por línea)</label>
+                <label for="f-competencias">Competencias que desarrolla (una por l�nea)</label>
                 <textarea id="f-competencias" rows="4"></textarea>
 
-                <label for="f-oportunidades">Oportunidades laborales (una por línea)</label>
+                <label for="f-oportunidades">Oportunidades laborales (una por l�nea)</label>
                 <textarea id="f-oportunidades" rows="4"></textarea>
 
                 <fieldset class="grupo-form">
-                    <legend>Información laboral</legend>
-                    <p class="ayuda-form">Completa salario y empleabilidad solo con datos comparables. Déjalos vacíos si no hay datos: vacío significa "No disponible", nunca cero.</p>
-                    <div class="fila-2">
-                        <div>
-                            <label for="f-salario">Salario estimado (GTQ)</label>
-                            <input id="f-salario" type="number" min="0" step="0.01">
-                        </div>
-                        <div>
-                            <label for="f-empleabilidad">Empleabilidad (0 a 100)</label>
-                            <input id="f-empleabilidad" type="number" min="0" max="100" step="0.01">
-                        </div>
+                    <legend>Informaci�n laboral</legend>
+                    <p class="ayuda-form">Completa salario y empleabilidad solo con datos comparables. D�jalos vac�os si no hay datos: vac�o significa "No disponible", nunca cero.</p>
+                <div class="fila-2">
+                    <div>
+                        <label for="f-salario">Salario estimado (GTQ)</label>
+                        <input id="f-salario" type="number" min="0" step="0.01">
                     </div>
-                    <label for="f-contexto-laboral">Contexto laboral</label>
-                    <textarea id="f-contexto-laboral" rows="3" placeholder="Periodo del salario (mensual o anual), alcance, fuente y limitaciones; información laboral cuando no hay porcentaje"></textarea>
-                </fieldset>
+                    <div>
+                        <label for="f-empleabilidad">Empleabilidad (0 a 100)</label>
+                        <input id="f-empleabilidad" type="number" min="0" max="100" step="0.01">
+                    </div>
+                </div>
 
-                <label for="f-pdf">URL del PDF oficial (https)</label>
-                <input id="f-pdf" type="url" maxlength="500" placeholder="https://www.universidad.edu.gt/folleto.pdf">
 
-                <label for="f-url">URL oficial de la carrera (https)</label>
                 <input id="f-url" type="url" maxlength="500" placeholder="https://www.universidad.edu.gt/carrera">
 
                 <div id="error-edicion" class="mensaje-error" role="alert"></div>

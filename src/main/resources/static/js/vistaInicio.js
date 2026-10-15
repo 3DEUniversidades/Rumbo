@@ -7,4 +7,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     document.getElementById('saludo').textContent = 'Hola, ' + sesion.nombreCompleto;
+    if (sesion.rol === 'ENCARGADO_CARRERAS') {
+        document.getElementById('enlace-gestion-carreras').hidden = false;
+    }
 });

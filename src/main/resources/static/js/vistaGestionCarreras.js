@@ -36,14 +36,12 @@ document.addEventListener("DOMContentLoaded", () => {
         { id: "f-facultad", clave: "facultad", tipo: "texto" },
         { id: "f-descripcion", clave: "descripcion", tipo: "texto" },
         { id: "f-duracion", clave: "duracion", tipo: "entero" },
+        { id: "f-costo", clave: "costo", tipo: "decimal" },
         { id: "f-modalidad", clave: "modalidad", tipo: "texto" },
         { id: "f-costo", clave: "costo", tipo: "decimal" },
         { id: "f-costo-anio", clave: "costoAnio", tipo: "entero" },
         { id: "f-costo-periodo", clave: "costoPeriodo", tipo: "texto" },
         { id: "f-creditos", clave: "cargaCreditos", tipo: "entero" },
-        { id: "f-areas", clave: "areasFormacion", tipo: "lista" },
-        { id: "f-competencias", clave: "competenciasDesarrolladas", tipo: "lista" },
-        { id: "f-oportunidades", clave: "oportunidadesLaborales", tipo: "lista" },
         { id: "f-salario", clave: "salarioEstimado", tipo: "decimal" },
         { id: "f-empleabilidad", clave: "empleabilidad", tipo: "decimal" },
         { id: "f-contexto-laboral", clave: "contextoLaboral", tipo: "texto" },
@@ -55,14 +53,14 @@ document.addEventListener("DOMContentLoaded", () => {
     const ETIQUETAS = {
         nombre: "Nombre",
         facultad: "Facultad",
-        descripcion: "Descripción",
-        duracion: "Duración",
+        descripcion: "Descripci�n",
+        duracion: "Duraci�n",
         costo: "Costo",
         costoPeriodo: "Periodo del costo",
-        costoAnio: "Año del costo",
+        costoAnio: "A�o del costo",
         modalidad: "Modalidad",
-        cargaCreditos: "Carga de créditos",
-        areasFormacion: "Áreas de formación",
+        cargaCreditos: "Carga de cr�ditos",
+        areasFormacion: "�reas de formaci�n",
         competenciasDesarrolladas: "Competencias",
         oportunidadesLaborales: "Oportunidades laborales",
         salarioEstimado: "Salario estimado",
@@ -105,16 +103,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     async function leerError(respuesta) {
         if (respuesta.status === 401) {
-            return "Tu sesión no es válida. Vuelve a iniciar sesión.";
         }
         if (respuesta.status === 403) {
             return "No tienes permiso para gestionar carreras.";
         }
         try {
             const cuerpo = await respuesta.json();
-            return cuerpo.error || "Ocurrió un error inesperado.";
         } catch (e) {
-            return "Ocurrió un error inesperado.";
         }
     }
 
@@ -174,9 +169,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
             fila.append(
                 celda(c.nombre),
-                celda(valorOGuion(c.facultad)),
-                celda(c.duracion + " años"),
-                celda(c.costo == null ? "-" : formatearMoneda(c.costo)),
                 celda(valorOGuion(c.modalidad)),
                 celda(valorOGuion(c.cargaCreditos)),
                 celda(c.salarioEstimado == null ? "-" : formatearMoneda(c.salarioEstimado)),
@@ -254,13 +246,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         CAMPOS.forEach((campo) => {
             const valor = carrera[campo.clave];
-            const entrada = document.getElementById(campo.id);
-
-            if (campo.tipo === "lista") {
-                entrada.value = Array.isArray(valor) ? valor.join("\n") : "";
-            } else {
-                entrada.value = valor == null ? "" : valor;
-            }
         });
 
         modal.showModal();
@@ -269,27 +254,10 @@ document.addEventListener("DOMContentLoaded", () => {
     // Un campo vacio se envia como null: queda como "No disponible", nunca como cero.
     function leerCampo(campo) {
         const bruto = document.getElementById(campo.id).value.trim();
-
-        if (campo.tipo === "lista") {
-            return bruto.split("\n").map((linea) => linea.trim()).filter((linea) => linea !== "");
         }
         if (bruto === "") {
             return null;
         }
-        return campo.tipo === "texto" ? bruto : Number(bruto);
-    }
-
-    function sonIguales(campo, original, nuevo) {
-        if (campo.tipo === "lista") {
-            const anterior = Array.isArray(original) ? original : [];
-            return JSON.stringify(anterior) === JSON.stringify(nuevo);
-        }
-
-        const anterior = original == null || original === "" ? null : original;
-        if (anterior === null || nuevo === null) {
-            return anterior === nuevo;
-        }
-        return campo.tipo === "texto" ? anterior === nuevo : Number(anterior) === nuevo;
     }
 
     // Arma solo los campos que cambiaron respecto a la carrera original.
@@ -298,8 +266,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
         CAMPOS.forEach((campo) => {
             const nuevo = leerCampo(campo);
+            const original = carreraEnEdicion[campo.clave];
 
-            if (!sonIguales(campo, carreraEnEdicion[campo.clave], nuevo)) {
                 cambios[campo.clave] = nuevo;
             }
         });
@@ -350,7 +318,6 @@ document.addEventListener("DOMContentLoaded", () => {
         cuerpoHistorial.replaceChildren();
 
         if (registros.length === 0) {
-            estadoHistorial.textContent = "Aún no hay actualizaciones registradas.";
             estadoHistorial.hidden = false;
             tablaHistorial.hidden = true;
             return;
@@ -364,7 +331,6 @@ document.addEventListener("DOMContentLoaded", () => {
             fila.append(
                 celda(formatearFecha(r.fecha)),
                 celda(r.carreraNombre),
-                celda(ETIQUETAS[r.campo] ?? r.campo),
                 celda(valorOGuion(r.valorAnterior)),
                 celda(valorOGuion(r.valorNuevo)),
                 celda(r.responsable)

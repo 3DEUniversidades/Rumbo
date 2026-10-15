@@ -330,3 +330,204 @@ footer {
     color: var(--text-muted);
     line-height: 1.4;
 }
+
+
+/* Gestion de carreras , del encargado */
+
+.main-ancho {
+    max-width: 1100px;
+}
+
+.tabla-contenedor {
+    overflow-x: auto;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+}
+
+.tabla-gestion {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.92rem;
+}
+
+.tabla-gestion th,
+.tabla-gestion td {
+    padding: 0.65rem 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+}
+
+.tabla-gestion th {
+    background: var(--bg);
+    color: var(--primary-dark);
+    white-space: nowrap;
+}
+
+.tabla-gestion tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+.celda-enlaces a {
+    display: block;
+    color: var(--primary);
+}
+
+.enlace-faltante {
+    display: block;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+}
+
+.btn-pequeno {
+    padding: 0.4rem 0.9rem;
+    font-size: 0.85rem;
+    border: 0;
+    cursor: pointer;
+}
+
+.mensaje-gestion {
+    background: #dcfce7;
+    color: #166534;
+    border: 1px solid #bbf7d0;
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    margin-bottom: 1rem;
+}
+
+.filtro-historial {
+    display: grid;
+    gap: 0.25rem;
+    min-width: 200px;
+}
+
+.filtro-historial label {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.filtro-historial select,
+.form-gestion input,
+.form-gestion textarea {
+    width: 100%;
+    padding: 0.55rem 0.7rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font: inherit;
+    background: var(--surface);
+    color: var(--text);
+}
+
+.filtro-historial select:focus,
+.form-gestion input:focus,
+.form-gestion textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+}
+
+.modal-edicion {
+    width: min(94vw, 640px);
+    max-height: 92vh;
+}
+
+.form-gestion {
+    display: grid;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.form-gestion label {
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-top: 0.4rem;
+}
+
+.fila-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+}
+
+.acciones-form {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+    .acciones-form .btn {
+        cursor: pointer;
+        margin-left: 0;
+    }
+
+        .acciones-form .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+@media (max-width: 640px) {
+    .fila-2 {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Ocultar con el atributo hidden aunque la clase defina display (por ejemplo .btn). */
+[hidden] {
+    display: none !important;
+}
+
+/* ---------- Detalle ampliado de carrera (catalogo y gestion) ---------- */
+
+.modal-carrera {
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.detalle-descripcion {
+    margin-top: 0.5rem;
+    line-height: 1.5;
+    color: var(--text);
+}
+
+.lista-detalle {
+    margin: 0;
+    padding-left: 1.2rem;
+    display: grid;
+    gap: 0.25rem;
+}
+
+.dato-faltante {
+    list-style: none;
+    margin-left: -1.2rem;
+    color: var(--text-muted);
+}
+
+.nota-detalle {
+    display: block;
+    margin-top: 0.25rem;
+    color: var(--text-muted);
+    font-size: 0.82rem;
+    line-height: 1.4;
+}
+
+.grupo-form {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.75rem 0.9rem 1rem;
+    margin: 0.75rem 0 0.25rem;
+    display: grid;
+    gap: 0.5rem;
+}
+
+.grupo-form legend {
+    padding: 0 0.4rem;
+    font-weight: 700;
+    color: var(--primary-dark);
+}
+
+.ayuda-form {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    line-height: 1.4;
+}
