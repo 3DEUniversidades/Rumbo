@@ -30,6 +30,42 @@
                 <p id="mensaje-error" class="mensaje-error"></p>
                 <p id="mensaje-exito" class="mensaje-exito"></p>
             </form>
+            <p class="cambio-vista">¿No tienes cuenta? <a href="#" id="ir-a-registro">Registrate</a></p>
+        </section>
+
+        <section id="registro" hidden>
+            <h2>Crear cuenta</h2>
+            <form id="registro-form" class="login-form" novalidate>
+                <label for="registro-nombreUsuario">Nombre de usuario</label>
+                <input type="text" id="registro-nombreUsuario" name="nombreUsuario" required autocomplete="username">
+                <span class="campo-error" data-campo="nombreUsuario"></span>
+
+                <label for="registro-nombreCompleto">Nombre completo</label>
+                <input type="text" id="registro-nombreCompleto" name="nombreCompleto" required autocomplete="name">
+                <span class="campo-error" data-campo="nombreCompleto"></span>
+
+                <label for="registro-correo">Correo electronico</label>
+                <input type="email" id="registro-correo" name="correo" required autocomplete="email">
+                <span class="campo-error" data-campo="correo"></span>
+
+                <label for="registro-contrasenia">Contrasena</label>
+                <input type="password" id="registro-contrasenia" name="contrasenia" required minlength="8" autocomplete="new-password">
+                <span class="campo-error" data-campo="contrasenia"></span>
+
+                <label for="registro-rol">Rol</label>
+                <select id="registro-rol" name="rol" required>
+                    <option value="" selected disabled>Selecciona un rol</option>
+                    <option value="ESTUDIANTE">Estudiante</option>
+                    <option value="COLABORADOR">Colaborador</option>
+                </select>
+                <span class="campo-error" data-campo="rol"></span>
+
+                <button type="submit" class="btn">Registrarme</button>
+
+                <p id="registro-error" class="mensaje-error"></p>
+                <p id="registro-exito" class="mensaje-exito"></p>
+            </form>
+            <p class="cambio-vista">¿Ya tienes cuenta? <a href="#" id="ir-a-login">Inicia sesion</a></p>
         </section>
     </main>
 

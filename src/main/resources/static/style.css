@@ -224,7 +224,9 @@ footer {
 }
 
 .login-form input[type="email"],
-.login-form input[type="password"] {
+.login-form input[type="text"],
+.login-form input[type="password"],
+.login-form select {
     width: 100%;
     padding: 0.6rem 0.75rem;
     border: 1px solid var(--border);
@@ -234,9 +236,29 @@ footer {
     background: var(--bg);
 }
 
-.login-form input:focus {
+.login-form input:focus,
+.login-form select:focus {
     outline: 2px solid var(--primary);
     outline-offset: 1px;
+}
+
+.campo-error {
+    display: none;
+    color: #dc2626;
+    font-size: 0.85rem;
+    margin: -0.75rem 0 0.75rem;
+}
+
+.cambio-vista {
+    text-align: center;
+    margin-top: 1rem;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+.cambio-vista a {
+    color: var(--primary);
+    font-weight: 600;
 }
 
 .login-form .btn {
