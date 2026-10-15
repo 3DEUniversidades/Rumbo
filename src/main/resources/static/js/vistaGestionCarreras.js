@@ -409,5 +409,4 @@ document.addEventListener("DOMContentLoaded", () => {
             timeStyle: "short"
         });
     }
-}
-
+});
