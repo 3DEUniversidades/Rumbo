@@ -472,6 +472,62 @@ footer {
     }
 }
 
+/* Ocultar con el atributo hidden aunque la clase defina display (por ejemplo .btn). */
 [hidden] {
     display: none !important;
+}
+
+/* ---------- Detalle ampliado de carrera (catalogo y gestion) ---------- */
+
+.modal-carrera {
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.detalle-descripcion {
+    margin-top: 0.5rem;
+    line-height: 1.5;
+    color: var(--text);
+}
+
+.lista-detalle {
+    margin: 0;
+    padding-left: 1.2rem;
+    display: grid;
+    gap: 0.25rem;
+}
+
+.dato-faltante {
+    list-style: none;
+    margin-left: -1.2rem;
+    color: var(--text-muted);
+}
+
+.nota-detalle {
+    display: block;
+    margin-top: 0.25rem;
+    color: var(--text-muted);
+    font-size: 0.82rem;
+    line-height: 1.4;
+}
+
+.grupo-form {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.75rem 0.9rem 1rem;
+    margin: 0.75rem 0 0.25rem;
+    display: grid;
+    gap: 0.5rem;
+}
+
+.grupo-form legend {
+    padding: 0 0.4rem;
+    font-weight: 700;
+    color: var(--primary-dark);
+}
+
+.ayuda-form {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    line-height: 1.4;
 }

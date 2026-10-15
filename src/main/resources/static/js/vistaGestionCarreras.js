@@ -30,19 +30,45 @@ document.addEventListener("DOMContentLoaded", () => {
     const botonGuardar = document.getElementById("guardar-edicion");
 
     // Campos del formulario: id del input, clave del JSON y tipo de dato.
+    // Tipos: texto, entero, decimal y lista (un elemento por linea).
     const CAMPOS = [
         { id: "f-nombre", clave: "nombre", tipo: "texto" },
+        { id: "f-facultad", clave: "facultad", tipo: "texto" },
+        { id: "f-descripcion", clave: "descripcion", tipo: "texto" },
         { id: "f-duracion", clave: "duracion", tipo: "entero" },
         { id: "f-costo", clave: "costo", tipo: "decimal" },
         { id: "f-modalidad", clave: "modalidad", tipo: "texto" },
+        { id: "f-costo", clave: "costo", tipo: "decimal" },
+        { id: "f-costo-anio", clave: "costoAnio", tipo: "entero" },
+        { id: "f-costo-periodo", clave: "costoPeriodo", tipo: "texto" },
         { id: "f-creditos", clave: "cargaCreditos", tipo: "entero" },
-        { id: "f-habilidades", clave: "habilidadesRequeridas", tipo: "texto" },
-        { id: "f-oportunidades", clave: "oportunidadesLaborales", tipo: "texto" },
         { id: "f-salario", clave: "salarioEstimado", tipo: "decimal" },
         { id: "f-empleabilidad", clave: "empleabilidad", tipo: "decimal" },
+        { id: "f-contexto-laboral", clave: "contextoLaboral", tipo: "texto" },
         { id: "f-pdf", clave: "pdfOficialUrl", tipo: "texto" },
         { id: "f-url", clave: "urlCarreraOficial", tipo: "texto" }
     ];
+
+    // Nombres legibles para el historial.
+    const ETIQUETAS = {
+        nombre: "Nombre",
+        facultad: "Facultad",
+        descripcion: "Descripci�n",
+        duracion: "Duraci�n",
+        costo: "Costo",
+        costoPeriodo: "Periodo del costo",
+        costoAnio: "A�o del costo",
+        modalidad: "Modalidad",
+        cargaCreditos: "Carga de cr�ditos",
+        areasFormacion: "�reas de formaci�n",
+        competenciasDesarrolladas: "Competencias",
+        oportunidadesLaborales: "Oportunidades laborales",
+        salarioEstimado: "Salario estimado",
+        empleabilidad: "Empleabilidad",
+        contextoLaboral: "Contexto laboral",
+        pdfOficialUrl: "PDF oficial",
+        urlCarreraOficial: "Enlace oficial"
+    };
 
     let carreras = [];
     let carreraEnEdicion = null;
@@ -77,16 +103,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     async function leerError(respuesta) {
         if (respuesta.status === 401) {
-            return "Tu sesion no es valida. Vuelve a iniciar sesion.";
         }
         if (respuesta.status === 403) {
             return "No tienes permiso para gestionar carreras.";
         }
         try {
             const cuerpo = await respuesta.json();
-            return cuerpo.error || "Ocurrio un error inesperado.";
         } catch (e) {
-            return "Ocurrio un error inesperado.";
         }
     }
 
@@ -146,8 +169,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
             fila.append(
                 celda(c.nombre),
-                celda(c.duracion + " anios"),
-                celda(formatearMoneda(c.costo)),
                 celda(valorOGuion(c.modalidad)),
                 celda(valorOGuion(c.cargaCreditos)),
                 celda(c.salarioEstimado == null ? "-" : formatearMoneda(c.salarioEstimado)),
@@ -225,21 +246,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
         CAMPOS.forEach((campo) => {
             const valor = carrera[campo.clave];
-            document.getElementById(campo.id).value = valor == null ? "" : valor;
         });
 
         modal.showModal();
     }
 
+    // Un campo vacio se envia como null: queda como "No disponible", nunca como cero.
     function leerCampo(campo) {
         const bruto = document.getElementById(campo.id).value.trim();
-        if (campo.tipo === "texto") {
-            return bruto;
         }
         if (bruto === "") {
             return null;
         }
-        return campo.tipo === "entero" ? parseInt(bruto, 10) : Number(bruto);
     }
 
     // Arma solo los campos que cambiaron respecto a la carrera original.
@@ -250,11 +268,6 @@ document.addEventListener("DOMContentLoaded", () => {
             const nuevo = leerCampo(campo);
             const original = carreraEnEdicion[campo.clave];
 
-            if (campo.tipo === "texto") {
-                if ((original == null ? "" : original) !== nuevo) {
-                    cambios[campo.clave] = nuevo;
-                }
-            } else if (nuevo !== null && Number(original) !== nuevo) {
                 cambios[campo.clave] = nuevo;
             }
         });
@@ -305,7 +318,6 @@ document.addEventListener("DOMContentLoaded", () => {
         cuerpoHistorial.replaceChildren();
 
         if (registros.length === 0) {
-            estadoHistorial.textContent = "Aun no hay actualizaciones registradas.";
             estadoHistorial.hidden = false;
             tablaHistorial.hidden = true;
             return;
@@ -319,7 +331,6 @@ document.addEventListener("DOMContentLoaded", () => {
             fila.append(
                 celda(formatearFecha(r.fecha)),
                 celda(r.carreraNombre),
-                celda(r.campo),
                 celda(valorOGuion(r.valorAnterior)),
                 celda(valorOGuion(r.valorNuevo)),
                 celda(r.responsable)

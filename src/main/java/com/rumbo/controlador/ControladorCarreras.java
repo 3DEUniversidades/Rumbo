@@ -1,12 +1,13 @@
 package com.rumbo.controlador;
 
-import com.rumbo.dto.ActualizarCarreraSolicitud;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.rumbo.dto.CarreraRespuesta;
 import com.rumbo.modelo.Carrera;
 import com.rumbo.modelo.Usuario;
 import com.rumbo.persistencia.UsuarioRepository;
 import com.rumbo.servicio.CarreraService;
 import com.rumbo.servicio.ExcepcionCarrera;
+import com.rumbo.servicio.ExcepcionCarreraNoEncontrada;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -23,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/carreras")
 public class ControladorCarreras {
 
-    // TODO: mover a la definiciÛn central de roles cuando exista el mapa de permisos
+    // TODO: mover a la definici√≥n central de roles cuando exista el mapa de permisos
     private static final String ROL_ENCARGADO_CARRERAS = "ENCARGADO_CARRERAS";
 
     private final CarreraService carreraService;
@@ -34,7 +35,7 @@ public class ControladorCarreras {
         this.usuarioRepository = usuarioRepository;
     }
 
-    // ---------- Consulta p˙blica (estudiantes / comparador) ----------
+    // ---------- Consulta p√∫blica (estudiantes / comparador) ----------
 
     @GetMapping
     public List<CarreraRespuesta> consultarCarreras() {
@@ -52,25 +53,26 @@ public class ControladorCarreras {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // ---------- GestiÛn (solo encargado de carreras) ----------
+    // ---------- Gesti√≥n (solo encargado de carreras) ----------
 
+    // El cuerpo se recibe como JSON abierto para distinguir un campo ausente (no se toca)
+    // de un campo con null (queda como "no disponible").
     @PutMapping("/{id}")
     public ResponseEntity<?> actualizarCarrera(
             @PathVariable Long id,
             @RequestHeader(value = "X-Usuario-Id", required = false) String idUsuario,
-            @RequestBody ActualizarCarreraSolicitud solicitud) {
+            @RequestBody JsonNode solicitud) {
 
         ResponseEntity<?> rechazo = validarEncargado(idUsuario);
         if (rechazo != null) {
             return rechazo;
         }
-        if (carreraService.buscarPorId(id).isEmpty()) {
-            return ResponseEntity.status(404).body(Map.of("error", "Carrera no encontrada"));
-        }
 
         try {
             Carrera actualizada = carreraService.actualizarCarrera(id, solicitud, idUsuario);
             return ResponseEntity.ok(mapearRespuesta(actualizada));
+        } catch (ExcepcionCarreraNoEncontrada e) {
+            return ResponseEntity.status(404).body(Map.of("error", e.getMessage()));
         } catch (ExcepcionCarrera e) {
             return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
         }
@@ -101,18 +103,18 @@ public class ControladorCarreras {
 
     // ---------- Temporal ----------
 
-    // REMPLAZAR por GestorPermisos cuando el mÛdulo de sesiÛn/permisos estÈ listo.
-    // Devuelve null si el usuario es v·lido; si no, la respuesta de rechazo (401 / 403).
+    // REEMPLAZAR por GestorPermisos cuando el m√≥dulo de sesi√≥n/permisos est√© listo.
+    // Devuelve null si el usuario es v√°lido; si no, la respuesta de rechazo (401 / 403).
     private ResponseEntity<?> validarEncargado(String idUsuario) {
         if (idUsuario == null || idUsuario.isBlank()) {
-            return ResponseEntity.status(401).body(Map.of("error", "SesiÛn requerida"));
+            return ResponseEntity.status(401).body(Map.of("error", "Sesi√≥n requerida"));
         }
         Optional<Usuario> usuario = usuarioRepository.findById(idUsuario);
         if (usuario.isEmpty()) {
-            return ResponseEntity.status(401).body(Map.of("error", "Usuario no v·lido"));
+            return ResponseEntity.status(401).body(Map.of("error", "Usuario no v√°lido"));
         }
         if (!ROL_ENCARGADO_CARRERAS.equals(usuario.get().getRol())) {
-            return ResponseEntity.status(403).body(Map.of("error", "No tienes permiso para esta acciÛn"));
+            return ResponseEntity.status(403).body(Map.of("error", "No tienes permiso para esta acci√≥n"));
         }
         return null;
     }
@@ -121,14 +123,20 @@ public class ControladorCarreras {
         return new CarreraRespuesta(
                 carrera.getId(),
                 carrera.getNombre(),
+                carrera.getFacultad(),
+                carrera.getDescripcion(),
                 carrera.getDuracion(),
                 carrera.getCosto(),
+                carrera.getCostoPeriodo(),
+                carrera.getCostoAnio(),
                 carrera.getModalidad(),
                 carrera.getCargaCreditos(),
-                carrera.getHabilidadesRequeridas(),
+                carrera.getAreasFormacion(),
+                carrera.getCompetenciasDesarrolladas(),
                 carrera.getOportunidadesLaborales(),
                 carrera.getSalarioEstimado(),
                 carrera.getEmpleabilidad(),
+                carrera.getContextoLaboral(),
                 carrera.getPdfOficialUrl(),
                 carrera.getUrlCarreraOficial()
         );
