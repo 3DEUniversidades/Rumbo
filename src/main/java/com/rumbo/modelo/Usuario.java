@@ -1,5 +1,6 @@
 package com.rumbo.modelo;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -9,11 +10,23 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @Table(name = "usuario")
 public class Usuario {
 
+    public static final String ROL_ESTUDIANTE = "ESTUDIANTE";
+    public static final String ROL_COLABORADOR = "COLABORADOR";
+
+    public static final String ESTADO_NO_VERIFICADO = "no verificado";
+    public static final String ESTADO_VERIFICADO = "verificado";
+
     @Id
     private String idUsuario;
+
+    @Column(nullable = false, unique = true)
     private String nombreUsuario;
+
     private String nombreCompleto;
+
+    @Column(nullable = false, unique = true)
     private String correo;
+
     private String contrasenia;
     private String rol;
     private String estadoVerificacion;
