@@ -12,6 +12,7 @@ import java.util.Map;
 public class GestorPermisos {
 
     public static final String ATRIBUTO_SESION = "sesionUsuario";
+    public static final String ACCION_SOLICITAR_VERIFICACION = "solicitarVerificacion";
     private static final Map<Rol, String> RUTAS_POR_ROL = Map.of(
             Rol.ESTUDIANTE, "/roles/estudiante.html",
             Rol.COLABORADOR, "/roles/colaborador.html",
@@ -19,6 +20,9 @@ public class GestorPermisos {
             Rol.SUPERVISOR_DE_MENSAJES, "/roles/supervisor-mensajes.html",
             Rol.ENCARGADO_DE_CARRERAS, "/roles/encargado-carreras.html",
             Rol.ADMIN, "/roles/administrador.html"
+    );
+    private static final Map<String, Rol> ROLES_POR_ACCION = Map.of(
+            ACCION_SOLICITAR_VERIFICACION, Rol.ESTUDIANTE
     );
 
     public SesionUsuario exigirSesion(HttpSession sesion) {
@@ -39,6 +43,22 @@ public class GestorPermisos {
         }
 
         return sesionUsuario;
+    }
+
+    public SesionUsuario exigirAccion(HttpSession sesion, String accion) {
+        Rol rolPermitido = ROLES_POR_ACCION.get(accion);
+        if (rolPermitido == null) {
+            throw new ExcepcionPermiso("La accion no esta configurada");
+        }
+        return exigirRol(sesion, rolPermitido);
+    }
+
+    public boolean puedeAccederAlForo(String rolUsuario, String estadoVerificacion) {
+        if ("COLABORADOR".equalsIgnoreCase(rolUsuario)) {
+            return true;
+        }
+        return "ESTUDIANTE".equalsIgnoreCase(rolUsuario)
+                && "VERIFICADO".equalsIgnoreCase(estadoVerificacion);
     }
 
     public String rutaParaRol(Rol rol) {
