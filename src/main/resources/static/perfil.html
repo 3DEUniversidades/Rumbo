@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#2563eb">
+    <title>Rumbo - Mi perfil</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <header>
+        <h1>Mi perfil</h1>
+        <p>Actualiza la información de tu proceso en Rumbo</p>
+    </header>
+
+    <main id="contenido-perfil" hidden>
+        <div class="vista-encabezado">
+            <div>
+                <h2 id="titulo-perfil">Perfil</h2>
+                <p id="estado-perfil" class="estado-vista"></p>
+            </div>
+            <a id="volver-inicio" class="btn btn-secundario" href="/inicio.html">Volver</a>
+        </div>
+
+        <section class="perfil-card">
+            <h2>Datos de tu cuenta</h2>
+            <dl class="datos-cuenta">
+                <div><dt>Nombre de usuario</dt><dd id="perfil-nombre-usuario"></dd></div>
+                <div><dt>Nombre completo</dt><dd id="perfil-nombre-completo"></dd></div>
+                <div><dt>Correo electrónico</dt><dd id="perfil-correo"></dd></div>
+                <div><dt>Rol</dt><dd id="perfil-rol"></dd></div>
+            </dl>
+        </section>
+
+        <section class="perfil-card">
+            <h2>Información personal</h2>
+            <p class="texto-secundario">Completa los datos que quieras mostrar en tu perfil.</p>
+            <p id="mensaje-perfil" class="mensaje-formulario" role="status"></p>
+            <form id="formulario-perfil">
+                <label for="nivel-estudios">Nivel de estudios</label>
+                <input id="nivel-estudios" name="nivelEstudios" type="text" required>
+
+                <label id="etiqueta-carrera" for="carrera">Carrera</label>
+                <select id="carrera" name="carreraId" required>
+                    <option value="">Selecciona una carrera</option>
+                </select>
+
+                <label id="etiqueta-area-laboral" for="area-laboral">Área laboral</label>
+                <input id="area-laboral" name="areaLaboral" type="text">
+
+                <label for="descripcion-personal">Descripción personal</label>
+                <textarea id="descripcion-personal" name="descripcionPersonal"
+                          rows="5" required></textarea>
+
+                <button id="guardar-perfil" class="btn" type="submit">Guardar perfil</button>
+            </form>
+        </section>
+    </main>
+    <p id="error-perfil" class="mensaje-error" hidden></p>
+
+    <script src="/js/sesion.js"></script>
+    <script src="/js/perfil.js"></script>
+</body>
+</html>

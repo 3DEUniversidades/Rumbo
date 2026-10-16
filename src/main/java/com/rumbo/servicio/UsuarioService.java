@@ -4,13 +4,16 @@ import com.rumbo.dto.LoginResponseDTO;
 import com.rumbo.dto.RegistroRequestDTO;
 import com.rumbo.dto.RegistroResponseDTO;
 import com.rumbo.modelo.EstadoVerificacion;
+import com.rumbo.modelo.Perfil;
 import com.rumbo.modelo.Rol;
 import com.rumbo.modelo.SesionUsuario;
 import com.rumbo.modelo.Usuario;
+import com.rumbo.persistencia.PerfilRepository;
 import com.rumbo.persistencia.UsuarioRepository;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Map;
 import java.util.UUID;
@@ -22,12 +25,14 @@ public class UsuarioService {
     private final UsuarioRepository usuarioRepository;
     private final ValidadorDatos validadorDatos;
     private final PasswordEncoder codificadorContrasenia;
+    private final PerfilRepository perfilRepository;
 
     public UsuarioService(UsuarioRepository usuarioRepository, ValidadorDatos validadorDatos,
-                          PasswordEncoder codificadorContrasenia) {
+                          PasswordEncoder codificadorContrasenia, PerfilRepository perfilRepository) {
         this.usuarioRepository = usuarioRepository;
         this.validadorDatos = validadorDatos;
         this.codificadorContrasenia = codificadorContrasenia;
+        this.perfilRepository = perfilRepository;
     }
 
     public LoginResponseDTO autenticar(String correo, String contraseniaIngresada) {
@@ -62,6 +67,7 @@ public class UsuarioService {
         );
     }
 
+    @Transactional
     public RegistroResponseDTO registrar(RegistroRequestDTO solicitud) {
         validadorDatos.normalizarRegistro(solicitud);
 
@@ -93,7 +99,8 @@ public class UsuarioService {
         );
 
         try {
-            usuarioRepository.save(usuario);
+            usuarioRepository.saveAndFlush(usuario);
+            perfilRepository.save(new Perfil(usuario));
         } catch (DataIntegrityViolationException e) {
             throw new ExcepcionConflicto("El nombre de usuario o el correo ya estan en uso");
         }

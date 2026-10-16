@@ -94,6 +94,89 @@ section h2 {
     gap: 0.75rem;
 }
 
+.perfil-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.25rem;
+}
+
+.datos-cuenta {
+    display: grid;
+    gap: 0.75rem;
+    margin-top: 1rem;
+}
+
+.datos-cuenta div {
+    display: grid;
+    grid-template-columns: minmax(9rem, 0.35fr) 1fr;
+    gap: 1rem;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 0.5rem;
+}
+
+.datos-cuenta dt {
+    color: var(--text-muted);
+    font-weight: 600;
+}
+
+.datos-cuenta dd {
+    overflow-wrap: anywhere;
+}
+
+#formulario-perfil {
+    display: grid;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+#formulario-perfil input,
+#formulario-perfil select,
+#formulario-perfil textarea {
+    width: 100%;
+    padding: 0.6rem 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font: inherit;
+    background: var(--bg);
+    margin-bottom: 0.5rem;
+}
+
+#formulario-perfil input:focus,
+#formulario-perfil select:focus,
+#formulario-perfil textarea:focus {
+    outline: 2px solid var(--primary);
+    outline-offset: 1px;
+}
+
+#formulario-perfil label {
+    font-weight: 600;
+}
+
+.mensaje-formulario {
+    min-height: 1.4rem;
+    margin-top: 1rem;
+}
+
+.mensaje-exito {
+    color: #15803d;
+}
+
+.mensaje-error,
+.mensaje-error:not([hidden]) {
+    color: #dc2626;
+}
+
+#error-perfil {
+    max-width: 800px;
+    margin: 1rem auto;
+    padding: 0 1rem;
+}
+
+#error-perfil:not([hidden]) {
+    display: block;
+}
+
 footer {
     text-align: center;
     padding: 1rem;
