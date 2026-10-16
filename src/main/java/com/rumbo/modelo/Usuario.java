@@ -6,7 +6,7 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "usuario")
@@ -73,7 +73,8 @@ public class Usuario {
         this.estadoVerificacion = estadoVerificacion;
     }
 
-    public boolean verificarContrasenia(String contraseniaIngresada) {
-        return new BCryptPasswordEncoder().matches(contraseniaIngresada, this.contrasenia);
+    @JsonIgnore
+    public String getContrasenia() {
+        return contrasenia;
     }
 }

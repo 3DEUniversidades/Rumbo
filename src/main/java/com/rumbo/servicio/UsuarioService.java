@@ -3,16 +3,14 @@ package com.rumbo.servicio;
 import com.rumbo.dto.LoginResponseDTO;
 import com.rumbo.dto.RegistroRequestDTO;
 import com.rumbo.dto.RegistroResponseDTO;
-import com.rumbo.dto.SesionUsuario;
 import com.rumbo.modelo.EstadoVerificacion;
 import com.rumbo.modelo.Rol;
 import com.rumbo.modelo.Usuario;
 import com.rumbo.persistencia.UsuarioRepository;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.UUID;
 
@@ -21,28 +19,31 @@ public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
     private final ValidadorDatos validadorDatos;
-    private final BCryptPasswordEncoder codificadorContrasenia = new BCryptPasswordEncoder();
+    private final PasswordEncoder codificadorContrasenia;
 
-    public UsuarioService(UsuarioRepository usuarioRepository, ValidadorDatos validadorDatos) {
+    public UsuarioService(UsuarioRepository usuarioRepository, ValidadorDatos validadorDatos,
+                          PasswordEncoder codificadorContrasenia) {
         this.usuarioRepository = usuarioRepository;
         this.validadorDatos = validadorDatos;
+        this.codificadorContrasenia = codificadorContrasenia;
     }
 
     public LoginResponseDTO autenticar(String correo, String contraseniaIngresada) {
-        Usuario usuario = usuarioRepository.findByCorreo(correo)
+        Map<String, String> errores = validadorDatos.validarLogin(correo, contraseniaIngresada);
+        if (!errores.isEmpty()) {
+            throw new ExcepcionValidacion(errores);
+        }
+
+        String correoNormalizado = validadorDatos.normalizarCorreo(correo);
+        Usuario usuario = usuarioRepository.findByCorreoIgnoreCase(correoNormalizado)
                 .orElseThrow(() -> new ExcepcionAutenticacion("Credenciales incorrectas"));
 
-        if (!usuario.verificarContrasenia(contraseniaIngresada)) {
+        if (!codificadorContrasenia.matches(contraseniaIngresada, usuario.getContrasenia())) {
             throw new ExcepcionAutenticacion("Credenciales incorrectas");
         }
 
-        SesionUsuario sesion = new SesionUsuario(
-                usuario.getIdUsuario(),
-                LocalDateTime.now().toString()
-        );
-
         return new LoginResponseDTO(
-                sesion.getIdUsuario(),
+                usuario.getIdUsuario(),
                 usuario.getNombreCompleto(),
                 usuario.getRol().name()
         );
@@ -65,10 +66,6 @@ public class UsuarioService {
         }
 
         Rol rol = Rol.desdeTexto(solicitud.getRol());
-        EstadoVerificacion estado = rol == Rol.COLABORADOR
-                ? EstadoVerificacion.VERIFICADO
-                : EstadoVerificacion.NO_VERIFICADO;
-
         Usuario usuario = new Usuario(
                 UUID.randomUUID().toString(),
                 solicitud.getNombreUsuario(),
@@ -76,7 +73,7 @@ public class UsuarioService {
                 solicitud.getCorreo(),
                 codificadorContrasenia.encode(solicitud.getContrasenia()),
                 rol,
-                estado
+                EstadoVerificacion.NO_VERIFICADO
         );
 
         try {

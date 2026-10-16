@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -26,6 +27,9 @@ class UsuarioServiceTest {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Test
     void registraEstudianteComoNoVerificado() {
         RegistroResponseDTO respuesta = usuarioService.registrar(
@@ -35,16 +39,16 @@ class UsuarioServiceTest {
         assertEquals("NO_VERIFICADO", respuesta.getEstadoVerificacion());
 
         Usuario guardado = usuarioRepository.findById(respuesta.getIdUsuario()).orElseThrow();
-        assertTrue(guardado.verificarContrasenia("contrasenia123"));
+        assertTrue(passwordEncoder.matches("contrasenia123", guardado.getContrasenia()));
     }
 
     @Test
-    void registraColaboradorConCorreoInstitucionalComoVerificado() {
+    void registraColaboradorConCorreoInstitucionalComoNoVerificado() {
         RegistroResponseDTO respuesta = usuarioService.registrar(
                 solicitud("colab", "Colaborador UVG", "colab@uvg.edu.gt", "contrasenia123", "COLABORADOR"));
 
         assertEquals("COLABORADOR", respuesta.getRol());
-        assertEquals("VERIFICADO", respuesta.getEstadoVerificacion());
+        assertEquals("NO_VERIFICADO", respuesta.getEstadoVerificacion());
     }
 
     @Test
@@ -103,7 +107,7 @@ class UsuarioServiceTest {
 
         assertFalse(respuesta.toString().contains("contrasenia123"));
         Usuario guardado = usuarioRepository.findById(respuesta.getIdUsuario()).orElseThrow();
-        assertTrue(guardado.verificarContrasenia("contrasenia123"));
+        assertTrue(passwordEncoder.matches("contrasenia123", guardado.getContrasenia()));
     }
 
     private RegistroRequestDTO solicitud(String nombreUsuario, String nombreCompleto,

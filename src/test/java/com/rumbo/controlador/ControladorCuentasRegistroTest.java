@@ -61,7 +61,7 @@ class ControladorCuentasRegistroTest {
         mockMvc.perform(post("/api/auth/registro").contentType(MediaType.APPLICATION_JSON).content(json))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.rol").value("COLABORADOR"))
-                .andExpect(jsonPath("$.estadoVerificacion").value("VERIFICADO"));
+                .andExpect(jsonPath("$.estadoVerificacion").value("NO_VERIFICADO"));
     }
 
     @Test
@@ -184,6 +184,32 @@ class ControladorCuentasRegistroTest {
                 .andExpect(status().isUnauthorized());
     }
 
+    @Test
+    void loginAceptaCorreoSinDistinguirMayusculasNiEspacios() throws Exception {
+        Usuario usuario = new Usuario(
+                "usr-test", "tester", "Tester Uno", "tester@correo.com",
+                new BCryptPasswordEncoder().encode("clave-de-prueba"), Rol.ESTUDIANTE, EstadoVerificacion.NO_VERIFICADO);
+        usuarioRepository.save(usuario);
+
+        String json = """
+                {"correo":"  TESTER@CORREO.COM  ","contrasenia":"clave-de-prueba"}
+                """;
+
+        mockMvc.perform(post("/api/auth/login").contentType(MediaType.APPLICATION_JSON).content(json))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.idUsuario").value("usr-test"));
+    }
+
+    @Test
+    void loginRechazaDatosIncompletos() throws Exception {
+        mockMvc.perform(post("/api/auth/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{}"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.campos.correo").exists())
+                .andExpect(jsonPath("$.campos.contrasenia").exists());
+    }
+
     private void registrar(String nombreUsuario, String correo) throws Exception {
         String json = String.format("""
                 {"nombreUsuario":"%s","nombreCompleto":"Juan Perez","correo":"%s",
@@ -194,4 +220,3 @@ class ControladorCuentasRegistroTest {
                 .andExpect(status().isCreated());
     }
 }
-

@@ -12,6 +12,8 @@ import java.util.regex.Pattern;
 @Service
 public class ValidadorDatos {
 
+    // TODO: separar normalizacion, validaciones estructurales y reglas de negocio
+    // cuando crezca el modulo de usuarios; evitar mutar directamente los DTOs.
     public static final int LONGITUD_MINIMA_CONTRASENIA = 8;
 
     private static final Pattern FORMATO_CORREO =
@@ -49,15 +51,36 @@ public class ValidadorDatos {
         return valor == null ? null : valor.trim();
     }
 
+    public String normalizarCorreo(String correo) {
+        String correoNormalizado = normalizar(correo);
+        return correoNormalizado == null ? null : correoNormalizado.toLowerCase(java.util.Locale.ROOT);
+    }
+
     public RegistroRequestDTO normalizarRegistro(RegistroRequestDTO solicitud) {
         if (solicitud == null) {
             return null;
         }
         solicitud.setNombreUsuario(normalizar(solicitud.getNombreUsuario()));
         solicitud.setNombreCompleto(normalizar(solicitud.getNombreCompleto()));
-        solicitud.setCorreo(normalizar(solicitud.getCorreo()));
+        solicitud.setCorreo(normalizarCorreo(solicitud.getCorreo()));
         solicitud.setRol(normalizar(solicitud.getRol()));
         return solicitud;
+    }
+
+    public Map<String, String> validarLogin(String correo, String contrasenia) {
+        Map<String, String> errores = new LinkedHashMap<>();
+
+        if (!validarCampoObligatorio(correo)) {
+            errores.put("correo", "El correo electronico es obligatorio");
+        } else if (!validarCorreo(correo)) {
+            errores.put("correo", "El correo electronico no tiene un formato valido");
+        }
+
+        if (!validarCampoObligatorio(contrasenia)) {
+            errores.put("contrasenia", "La contrasenia es obligatoria");
+        }
+
+        return errores;
     }
 
     public Map<String, String> validarRegistro(RegistroRequestDTO solicitud) {
