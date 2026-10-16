@@ -90,8 +90,8 @@ document.addEventListener("DOMContentLoaded", () => {
         const resumen = document.createElement("p");
         resumen.className = "carrera-uni";
         resumen.textContent = carrera.costo == null
-            ? `${carrera.duracion} años`
-            : `${carrera.duracion} años · ${formatearMonto(carrera.costo)} el primer semestre`;
+            ? (carrera.duracion == null ? "No disponible" : `${carrera.duracion} años`)
+            : `${carrera.duracion == null ? "No disponible" : carrera.duracion + " años"} · ${formatearMonto(carrera.costo)}${carrera.costoPeriodo ? " · " + carrera.costoPeriodo : (carrera.costo == null ? "" : " · Período no disponible")}`;
 
         const botonDetalle = document.createElement("button");
         botonDetalle.className = "btn";
@@ -110,7 +110,7 @@ document.addEventListener("DOMContentLoaded", () => {
         modalDescripcion.textContent = carrera.descripcion ?? "";
         modalDescripcion.hidden = !carrera.descripcion;
 
-        modalDuracion.textContent = `${carrera.duracion} años`;
+        modalDuracion.textContent = (carrera.duracion == null ? "No disponible" : `${carrera.duracion} años`);
         modalCosto.textContent = formatearMonto(carrera.costo);
         modalCostoNota.textContent = construirNotaCosto(carrera);
         modalModalidad.textContent = carrera.modalidad ?? NO_DISPONIBLE;

@@ -155,6 +155,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     "btn btn-pequeno accion-supervision"
                 );
 
+                if (accion === "eliminar") boton.classList.add("btn-peligro");
                 boton.type = "button";
                 boton.disabled = ocupado;
                 boton.addEventListener(

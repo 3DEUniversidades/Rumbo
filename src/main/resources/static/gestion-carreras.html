@@ -3,19 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#2563eb">
+    <meta name="theme-color" content="#0f766e">
     <title>Rumbo - Gestión de carreras</title>
     <link rel="manifest" href="/manifest.json">
     <link rel="stylesheet" href="/style.css">
 </head>
 <body>
+    <a class="skip-link" href="#rumbo-contenido">Saltar al contenido</a>
+
     <header>
         <h1>Rumbo</h1>
         <p>Gestión de carreras</p>
+    <nav class="rumbo-nav" aria-label="Ubicación"><a href="/inicio.html">Inicio</a><span aria-current="page">Gestión de carreras</span></nav>
     </header>
 
     <p id="estado-acceso" role="alert"></p>
 
+    <div id="rumbo-contenido" tabindex="-1"></div>
     <main id="gestion-carreras" class="main-ancho" hidden>
         <section>
             <div class="vista-encabezado">
@@ -38,14 +42,14 @@
                 Cargando carreras...
             </div>
 
-            <div class="tabla-contenedor">
+            <div class="tabla-contenedor" role="region" aria-label="Tabla de gestión de carreras" tabindex="0">
                 <table id="tabla-carreras" class="tabla-gestion" hidden>
                     <thead>
                         <tr>
                             <th>Carrera</th>
                             <th>Facultad</th>
                             <th>Duración</th>
-                            <th>Costo primer semestre</th>
+                            <th>Costo de referencia</th>
                             <th>Modalidad</th>
                             <th>Créditos</th>
                             <th>Salario estimado</th>
@@ -80,7 +84,7 @@
                 Cargando historial...
             </div>
 
-            <div class="tabla-contenedor">
+            <div class="tabla-contenedor" role="region" aria-label="Tabla de gestión de carreras" tabindex="0">
                 <table id="tabla-historial" class="tabla-gestion" hidden>
                     <thead>
                         <tr>
@@ -98,7 +102,7 @@
         </section>
     </main>
 
-    <dialog id="modal-edicion" class="modal-carrera modal-edicion">
+    <dialog id="modal-edicion" class="modal-carrera modal-edicion" aria-labelledby="edicion-titulo">
         <article>
             <button id="cerrar-modal-edicion" class="modal-cerrar"
                     type="button" aria-label="Cerrar">
@@ -133,8 +137,8 @@
                 <fieldset class="grupo-form">
                     <legend>Costo de referencia</legend>
                     <p class="ayuda-form">
-                        Total del primer semestre de primer ingreso,
-                        incluida inscripción. No es el costo de toda la carrera.
+                        Indica el período y alcance que corresponden al monto registrado.
+                        No presupone el costo total de la carrera.
                     </p>
 
                     <div class="fila-2">

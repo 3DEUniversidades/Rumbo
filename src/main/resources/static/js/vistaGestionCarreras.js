@@ -134,8 +134,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 [
                     c.nombre,
                     dato(c.facultad),
-                    `${c.duracion} años`,
-                    moneda(c.costo),
+                    (c.duracion == null ? "No disponible" : `${c.duracion} años`),
+                    moneda(c.costo) + (c.costo == null ? "" : " · " + (c.costoPeriodo || "Período no disponible")),
                     dato(c.modalidad),
                     dato(c.cargaCreditos),
                     moneda(c.salarioEstimado),

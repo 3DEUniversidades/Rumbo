@@ -4,6 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const aviso = document.createElement("p");
     aviso.setAttribute("role", "status");
+    aviso.className = "rumbo-estado";
     panel.before(aviso);
 
     const reintentar = document.createElement("button");
@@ -29,7 +30,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 });
 
                 if (!respuesta.ok && respuesta.status !== 401) {
-                    throw new Error("No se pudo cerrar la sesión.");
+                    throw new Error("No se pudo cerrar la sesiÃ³n.");
                 }
 
                 window.location.replace("/login.html");
@@ -45,7 +46,7 @@ document.addEventListener("DOMContentLoaded", () => {
     async function cargar() {
         panel.hidden = true;
         reintentar.hidden = true;
-        aviso.textContent = "Cargando sesión...";
+        aviso.textContent = "Cargando sesiÃ³n...";
 
         try {
             const sesion = await obtenerSesion();
@@ -70,7 +71,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         } catch (error) {
             aviso.textContent =
-                error.message || "No se pudo cargar la sesión.";
+                error.message || "No se pudo cargar la sesiÃ³n.";
 
             reintentar.hidden = false;
         }

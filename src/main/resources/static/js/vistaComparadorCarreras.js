@@ -155,7 +155,7 @@
                 crear("p", c.facultad ?? "Facultad no disponible", "carrera-area"),
                 crear(
                     "p",
-                    `${c.duracion} años · ${moneda(c.costo)} el primer semestre`,
+                    `${c.duracion == null ? "No disponible" : c.duracion + " años"} · ${moneda(c.costo)}${c.costoPeriodo ? " · " + c.costoPeriodo : (c.costo == null ? "" : " · Período no disponible")}`,
                     "carrera-uni"
                 )
             );
