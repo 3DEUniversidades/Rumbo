@@ -12,11 +12,13 @@ import org.springframework.http.MediaType;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.mock.web.MockHttpSession;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.not;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -170,6 +172,44 @@ class ControladorCuentasRegistroTest {
     }
 
     @Test
+    void loginCreaSesionConRolYDatosDelUsuario() throws Exception {
+        Usuario usuario = new Usuario(
+                "usr-sesion", "sesion", "Usuario Sesion", "sesion@correo.com",
+                new BCryptPasswordEncoder().encode("clave-de-prueba"), Rol.ESTUDIANTE, EstadoVerificacion.NO_VERIFICADO);
+        usuarioRepository.save(usuario);
+
+        MockHttpSession sesion = iniciarSesion("sesion@correo.com");
+
+        mockMvc.perform(get("/api/auth/sesion").session(sesion))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.idUsuario").value("usr-sesion"))
+                .andExpect(jsonPath("$.nombreCompleto").value("Usuario Sesion"))
+                .andExpect(jsonPath("$.rol").value("ESTUDIANTE"))
+                .andExpect(jsonPath("$.activa").value(true));
+    }
+
+    @Test
+    void consultaSesionSinLoginRechazaLaSolicitud() throws Exception {
+        mockMvc.perform(get("/api/auth/sesion"))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void logoutInvalidaLaSesion() throws Exception {
+        Usuario usuario = new Usuario(
+                "usr-logout", "logout", "Usuario Logout", "logout@correo.com",
+                new BCryptPasswordEncoder().encode("clave-de-prueba"), Rol.ESTUDIANTE, EstadoVerificacion.NO_VERIFICADO);
+        usuarioRepository.save(usuario);
+
+        MockHttpSession sesion = iniciarSesion("logout@correo.com");
+
+        mockMvc.perform(post("/api/auth/logout").session(sesion))
+                .andExpect(status().isNoContent());
+        mockMvc.perform(get("/api/auth/sesion").session(sesion))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
     void loginRechazaCredencialesIncorrectas() throws Exception {
         Usuario usuario = new Usuario(
                 "usr-test", "tester", "Tester Uno", "tester@correo.com",
@@ -208,6 +248,38 @@ class ControladorCuentasRegistroTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.campos.correo").exists())
                 .andExpect(jsonPath("$.campos.contrasenia").exists());
+    }
+
+    @Test
+    void rutaDeCarrerasRechazaSolicitudSinSesion() throws Exception {
+        mockMvc.perform(get("/api/carreras"))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void rutaDeActividadesRechazaRolQueNoEsEstudiante() throws Exception {
+        Usuario usuario = new Usuario(
+                "usr-colab", "colab", "Colaborador", "colab@uvg.edu.gt",
+                new BCryptPasswordEncoder().encode("clave-de-prueba"), Rol.COLABORADOR, EstadoVerificacion.NO_VERIFICADO);
+        usuarioRepository.save(usuario);
+
+        MockHttpSession sesion = iniciarSesion("colab@uvg.edu.gt");
+
+        mockMvc.perform(get("/api/actividades").session(sesion))
+                .andExpect(status().isForbidden());
+    }
+
+    private MockHttpSession iniciarSesion(String correo) throws Exception {
+        String json = """
+                {"correo":"%s","contrasenia":"clave-de-prueba"}
+                """.formatted(correo);
+
+        return (MockHttpSession) mockMvc.perform(post("/api/auth/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json))
+                .andReturn()
+                .getRequest()
+                .getSession();
     }
 
     private void registrar(String nombreUsuario, String correo) throws Exception {

@@ -205,6 +205,26 @@ curl -X POST http://localhost:8080/api/auth/registro \
   -d "{\"nombreUsuario\":\"juanperez\",\"nombreCompleto\":\"Juan Perez\",\"correo\":\"juan@uvg.edu.gt\",\"contrasenia\":\"contrasenia123\",\"rol\":\"ESTUDIANTE\"}"
 ```
 
+## Sesion y permisos
+
+El login crea una sesion HTTP en el servidor mediante la cookie `JSESSIONID`. La
+sesion guarda el id del usuario, su nombre, su rol y la fecha de inicio. El
+frontend no usa `localStorage` como fuente de autenticacion y no se debe enviar
+el rol desde el cliente para autorizar una operacion.
+
+Consultar la sesion actual:
+
+`GET /api/auth/sesion`
+
+Cierra la sesion e invalida la cookie:
+
+`POST /api/auth/logout`
+
+Las rutas protegidas responden `401 Unauthorized` cuando no existe una sesion y
+`403 Forbidden` cuando la sesion existe, pero el rol no tiene permiso. El acceso
+a carreras requiere cualquier sesion autenticada. La linea de tiempo de
+actividades requiere el rol `ESTUDIANTE`.
+
 ## Comandos
 
 | Comando | Descripcion |

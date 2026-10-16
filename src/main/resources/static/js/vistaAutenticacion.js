@@ -40,11 +40,6 @@ document.getElementById('login-form').addEventListener('submit', async function 
 
         if (respuesta.ok) {
             const datos = await respuesta.json();
-            localStorage.setItem('sesionRumbo', JSON.stringify({
-                idUsuario: datos.idUsuario,
-                rol: datos.rol,
-                nombreCompleto: datos.nombreCompleto
-            }));
             mensajeExito.textContent = 'Bienvenido/a, ' + datos.nombreCompleto;
             mensajeExito.style.display = 'block';
             window.location.href = '/inicio.html';

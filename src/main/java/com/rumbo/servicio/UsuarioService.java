@@ -5,6 +5,7 @@ import com.rumbo.dto.RegistroRequestDTO;
 import com.rumbo.dto.RegistroResponseDTO;
 import com.rumbo.modelo.EstadoVerificacion;
 import com.rumbo.modelo.Rol;
+import com.rumbo.modelo.SesionUsuario;
 import com.rumbo.modelo.Usuario;
 import com.rumbo.persistencia.UsuarioRepository;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Map;
 import java.util.UUID;
+import java.time.Instant;
 
 @Service
 public class UsuarioService {
@@ -29,6 +31,15 @@ public class UsuarioService {
     }
 
     public LoginResponseDTO autenticar(String correo, String contraseniaIngresada) {
+        SesionUsuario sesion = crearSesion(correo, contraseniaIngresada);
+        return new LoginResponseDTO(
+                sesion.getIdUsuario(),
+                sesion.getNombreCompleto(),
+                sesion.getRol().name()
+        );
+    }
+
+    public SesionUsuario crearSesion(String correo, String contraseniaIngresada) {
         Map<String, String> errores = validadorDatos.validarLogin(correo, contraseniaIngresada);
         if (!errores.isEmpty()) {
             throw new ExcepcionValidacion(errores);
@@ -42,10 +53,11 @@ public class UsuarioService {
             throw new ExcepcionAutenticacion("Credenciales incorrectas");
         }
 
-        return new LoginResponseDTO(
+        return new SesionUsuario(
                 usuario.getIdUsuario(),
                 usuario.getNombreCompleto(),
-                usuario.getRol().name()
+                usuario.getRol(),
+                Instant.now().toString()
         );
     }
 
