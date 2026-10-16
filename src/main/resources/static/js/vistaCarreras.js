@@ -26,7 +26,13 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    cargarCarreras();
+    obtenerSesion().then(function (sesion) {
+        if (sesion) {
+            cargarCarreras();
+        }
+    }).catch(function () {
+        estado.textContent = "No se pudo cargar la sesion.";
+    });
 
     async function cargarCarreras() {
         estado.textContent = "Cargando carreras...";

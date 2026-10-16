@@ -1,10 +1,11 @@
 document.addEventListener('DOMContentLoaded', function () {
-    const sesion = JSON.parse(localStorage.getItem('sesionRumbo'));
-
-    if (!sesion) {
-        window.location.replace('/login.html');
-        return;
-    }
-
-    document.getElementById('saludo').textContent = 'Hola, ' + sesion.nombreCompleto;
+    obtenerSesion()
+        .then(function (sesion) {
+            if (sesion) {
+                document.getElementById('saludo').textContent = 'Hola, ' + sesion.nombreCompleto;
+            }
+        })
+        .catch(function () {
+            document.getElementById('saludo').textContent = 'No se pudo cargar la sesion';
+        });
 });

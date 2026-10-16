@@ -60,5 +60,13 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    cargarActividades();
+    obtenerSesion().then(function (sesion) {
+        if (sesion && sesion.rol === 'ESTUDIANTE') {
+            cargarActividades();
+        } else if (sesion) {
+            contenedor.innerHTML = '<p>No tienes permisos para ver esta linea de tiempo.</p>';
+        }
+    }).catch(function () {
+        contenedor.innerHTML = '<p>No se pudo cargar la sesion.</p>';
+    });
 });
