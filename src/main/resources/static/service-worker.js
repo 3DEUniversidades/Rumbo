@@ -1,4 +1,4 @@
-const CACHE_NAME = "rumbo-v6-navegacion";
+const CACHE_NAME = "rumbo-v7-supervision";
 const ASSETS = ["/style.css", "/manifest.json"];
 
 self.addEventListener("install", event => {

@@ -833,3 +833,19 @@ footer {
         grid-template-columns: 1fr;
     }
 }
+
+.supervision-contenido {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    line-height: 1.6;
+    margin: 0.8rem 0;
+}
+
+#mensaje-supervision {
+    margin: 1rem 0;
+    line-height: 1.5;
+}
+
+#estado-acceso-supervision {
+    padding: 1rem;
+}
