@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#2563eb">
+    <title>Rumbo - Foro</title>
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <header>
+        <h1>Rumbo</h1>
+        <p>Foro de orientación vocacional</p>
+    </header>
+
+    <main class="main-ancho">
+        <div class="vista-encabezado">
+            <div>
+                <h2>Comparte y resuelve tus dudas</h2>
+                <p class="texto-secundario">
+                    Conversa con estudiantes y colaboradores.
+                </p>
+            </div>
+            <a href="/inicio.html" class="btn btn-secundario">
+                Volver al inicio
+            </a>
+        </div>
+
+        <p id="mensaje-foro" class="estado-vista"
+           role="status" aria-live="polite">Comprobando acceso...</p>
+
+        <a id="login-foro" href="/login.html" hidden>Iniciar sesión</a>
+
+        <div id="contenido-foro" hidden>
+            <section>
+                <h2>Nueva publicación</h2>
+
+                <form id="form-publicacion" class="form-gestion">
+                    <label for="titulo-publicacion">Título</label>
+                    <input id="titulo-publicacion" type="text"
+                           maxlength="160" required>
+
+                    <label for="tipo-publicacion">Tipo</label>
+                    <select id="tipo-publicacion" required></select>
+
+                    <label for="contenido-publicacion">Contenido</label>
+                    <textarea id="contenido-publicacion" rows="5"
+                              maxlength="6000" required></textarea>
+
+                    <fieldset class="grupo-form">
+                        <legend>Carreras relacionadas, opcional</legend>
+                        <p class="ayuda-form">
+                            Selecciona hasta tres. Déjalas sin seleccionar
+                            si tu publicación es general.
+                        </p>
+                        <p id="estado-carreras-foro"
+                           class="texto-secundario"></p>
+                        <div id="opciones-carreras-foro"
+                             class="opciones-carreras-foro"></div>
+                    </fieldset>
+
+                    <button id="publicar-foro" class="btn" type="submit">
+                        Publicar
+                    </button>
+                </form>
+            </section>
+
+            <section>
+                <h2>Publicaciones</h2>
+
+                <p id="filtro-autor-foro" hidden>
+                    Mostrando publicaciones de un autor.
+                    <a href="/foro.html">Ver todas</a>
+                </p>
+
+                <form id="filtros-foro" class="filtros-foro">
+                    <label>
+                        Buscar
+                        <input id="buscar-foro" type="search"
+                               maxlength="200"
+                               placeholder="Título o contenido">
+                    </label>
+
+                    <label>
+                        Tipo
+                        <select id="filtro-tipo-foro">
+                            <option value="">Todos</option>
+                        </select>
+                    </label>
+
+                    <label>
+                        Carrera
+                        <select id="filtro-carrera-foro">
+                            <option value="">Todas</option>
+                        </select>
+                    </label>
+
+                    <button class="btn btn-pequeno" type="submit">
+                        Buscar
+                    </button>
+                </form>
+
+                <p id="estado-listado-foro" class="estado-vista"
+                   role="status"></p>
+
+                <div id="lista-publicaciones-foro"></div>
+            </section>
+        </div>
+    </main>
+
+    <dialog id="detalle-foro" class="modal-carrera modal-foro">
+        <article>
+            <button id="cerrar-detalle-foro" class="modal-cerrar"
+                    type="button" aria-label="Cerrar">
+                &times;
+            </button>
+
+            <p id="estado-detalle-foro" class="estado-vista"
+               role="status"></p>
+
+            <div id="contenido-detalle-foro" hidden>
+                <h2 id="titulo-detalle-foro"></h2>
+                <div id="autor-detalle-foro"></div>
+                <p id="carreras-detalle-foro" class="carrera-area"></p>
+                <p id="texto-detalle-foro" class="texto-publicacion-foro"></p>
+
+                <h3>Respuestas</h3>
+                <div id="respuestas-foro"></div>
+
+                <form id="form-respuesta-foro" class="form-gestion">
+                    <label for="texto-respuesta-foro">Tu respuesta</label>
+                    <textarea id="texto-respuesta-foro" rows="4"
+                              maxlength="4000" required></textarea>
+
+                    <button id="responder-foro" class="btn" type="submit">
+                        Responder
+                    </button>
+                </form>
+            </div>
+        </article>
+    </dialog>
+
+    <footer>
+        <p>Rumbo &copy; 2026</p>
+    </footer>
+
+    <script src="/js/vistaForo.js"></script>
+</body>
+</html>

@@ -1,3 +1,4 @@
+
 const CACHE_NAME = 'rumbo-v2';
 const ASSETS = [
     '/', '/style.css', '/manifest.json', '/perfil.html', '/js/sesion.js', '/js/perfil.js'

@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#2563eb">
+    <title>Rumbo - Gestión de carreras</title>
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <header>
+        <h1>Rumbo</h1>
+        <p>Gestión de carreras</p>
+    </header>
+
+    <p id="estado-acceso" role="alert"></p>
+
+    <main id="gestion-carreras" class="main-ancho" hidden>
+        <section>
+            <div class="vista-encabezado">
+                <div>
+                    <h2>Tablero de carreras</h2>
+                    <p class="texto-secundario">
+                        Actualiza la información del catálogo y del comparador.
+                    </p>
+                </div>
+                <a href="/roles/encargado-carreras.html"
+                   class="btn btn-secundario">
+                    Volver a mi pantalla
+                </a>
+            </div>
+
+            <div id="mensaje-gestion" class="mensaje-gestion"
+                 role="status" hidden></div>
+
+            <div id="estado-gestion" class="estado-vista">
+                Cargando carreras...
+            </div>
+
+            <div class="tabla-contenedor">
+                <table id="tabla-carreras" class="tabla-gestion" hidden>
+                    <thead>
+                        <tr>
+                            <th>Carrera</th>
+                            <th>Facultad</th>
+                            <th>Duración</th>
+                            <th>Costo primer semestre</th>
+                            <th>Modalidad</th>
+                            <th>Créditos</th>
+                            <th>Salario estimado</th>
+                            <th>Empleabilidad</th>
+                            <th>Enlaces</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="cuerpo-carreras"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <section>
+            <div class="vista-encabezado">
+                <div>
+                    <h2>Historial de actualizaciones</h2>
+                    <p class="texto-secundario">
+                        Valor anterior, valor nuevo, fecha y responsable.
+                    </p>
+                </div>
+
+                <div class="filtro-historial">
+                    <label for="filtro-carrera">Carrera</label>
+                    <select id="filtro-carrera">
+                        <option value="">Todas</option>
+                    </select>
+                </div>
+            </div>
+
+            <div id="estado-historial" class="estado-vista">
+                Cargando historial...
+            </div>
+
+            <div class="tabla-contenedor">
+                <table id="tabla-historial" class="tabla-gestion" hidden>
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Carrera</th>
+                            <th>Campo</th>
+                            <th>Valor anterior</th>
+                            <th>Valor nuevo</th>
+                            <th>Responsable</th>
+                        </tr>
+                    </thead>
+                    <tbody id="cuerpo-historial"></tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <dialog id="modal-edicion" class="modal-carrera modal-edicion">
+        <article>
+            <button id="cerrar-modal-edicion" class="modal-cerrar"
+                    type="button" aria-label="Cerrar">
+                &times;
+            </button>
+
+            <h2 id="edicion-titulo">Editar carrera</h2>
+
+            <form id="form-edicion" class="form-gestion">
+                <label for="f-nombre">Nombre</label>
+                <input id="f-nombre" type="text" maxlength="120" required>
+
+                <label for="f-facultad">Facultad</label>
+                <input id="f-facultad" type="text" maxlength="120">
+
+                <label for="f-descripcion">Descripción</label>
+                <textarea id="f-descripcion" rows="3"
+                          maxlength="4000"></textarea>
+
+                <div class="fila-2">
+                    <div>
+                        <label for="f-duracion">Duración en años</label>
+                        <input id="f-duracion" type="number"
+                               min="1" max="15" step="1" required>
+                    </div>
+                    <div>
+                        <label for="f-modalidad">Modalidad</label>
+                        <input id="f-modalidad" type="text" maxlength="80">
+                    </div>
+                </div>
+
+                <fieldset class="grupo-form">
+                    <legend>Costo de referencia</legend>
+                    <p class="ayuda-form">
+                        Total del primer semestre de primer ingreso,
+                        incluida inscripción. No es el costo de toda la carrera.
+                    </p>
+
+                    <div class="fila-2">
+                        <div>
+                            <label for="f-costo">Costo en GTQ</label>
+                            <input id="f-costo" type="number"
+                                   min="0" max="1000000000"
+                                   step="0.01" required>
+                        </div>
+                        <div>
+                            <label for="f-costo-anio">Año del tarifario</label>
+                            <input id="f-costo-anio" type="number"
+                                   min="2000" max="2100" step="1">
+                        </div>
+                    </div>
+
+                    <label for="f-costo-periodo">
+                        Periodo y alcance del costo
+                    </label>
+                    <input id="f-costo-periodo" type="text" maxlength="200">
+                </fieldset>
+
+                <label for="f-creditos">Créditos del plan</label>
+                <input id="f-creditos" type="number"
+                       min="1" max="1000" step="1">
+
+                <label for="f-areas">Áreas de formación, una por línea</label>
+                <textarea id="f-areas" rows="4"></textarea>
+
+                <label for="f-competencias">Competencias, una por línea</label>
+                <textarea id="f-competencias" rows="4"></textarea>
+
+                <label for="f-oportunidades">
+                    Oportunidades laborales, una por línea
+                </label>
+                <textarea id="f-oportunidades" rows="4"></textarea>
+
+                <fieldset class="grupo-form">
+                    <legend>Información laboral</legend>
+                    <p class="ayuda-form">
+                        Deja vacíos los datos desconocidos.
+                        Vacío significa “No disponible”.
+                    </p>
+
+                    <div class="fila-2">
+                        <div>
+                            <label for="f-salario">Salario estimado en GTQ</label>
+                            <input id="f-salario" type="number"
+                                   min="0" max="1000000000" step="0.01">
+                        </div>
+                        <div>
+                            <label for="f-empleabilidad">
+                                Empleabilidad, de 0 a 100
+                            </label>
+                            <input id="f-empleabilidad" type="number"
+                                   min="0" max="100" step="0.01">
+                        </div>
+                    </div>
+
+                    <label for="f-contexto-laboral">Contexto laboral</label>
+                    <textarea id="f-contexto-laboral" rows="3"
+                              maxlength="4000"></textarea>
+                </fieldset>
+
+                <label for="f-pdf">URL HTTPS del PDF oficial</label>
+                <input id="f-pdf" type="url" maxlength="500">
+
+                <label for="f-url">URL HTTPS de la carrera</label>
+                <input id="f-url" type="url" maxlength="500">
+
+                <div id="error-edicion" class="mensaje-error"
+                     role="alert"></div>
+
+                <div class="acciones-form">
+                    <button id="cancelar-edicion" type="button"
+                            class="btn btn-secundario">
+                        Cancelar
+                    </button>
+
+                    <button id="guardar-edicion" type="submit"
+                            class="btn">
+                        Guardar cambios
+                    </button>
+                </div>
+            </form>
+        </article>
+    </dialog>
+
+    <footer><p>Rumbo &copy; 2026</p></footer>
+
+    <script src="/js/sesion.js"></script>
+    <script src="/js/vistaGestionCarreras.js"></script>
+</body>
+</html>

@@ -3,6 +3,9 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     try {
         const sesion = await obtenerSesion();
+        if (!sesion) {
+            return;
+        }
         document.getElementById('nombre-usuario').textContent = sesion.nombreCompleto;
         document.getElementById('rol-usuario').textContent = sesion.rol;
         document.getElementById('cerrar-sesion').addEventListener('click', async function () {

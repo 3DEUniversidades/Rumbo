@@ -1,10 +1,16 @@
-document.addEventListener('DOMContentLoaded', async function () {
+document.addEventListener("DOMContentLoaded", async () => {
     try {
         const sesion = await obtenerSesion();
-        if (sesion) {
-            document.getElementById('saludo').textContent = 'Hola, ' + sesion.nombreCompleto;
-        }
+
+        if (!sesion) return;
+
+        document.getElementById("saludo").textContent =
+            "Hola, " + sesion.nombreCompleto;
+
+        document.getElementById("enlace-gestion-carreras").hidden =
+            sesion.rol !== "ENCARGADO_DE_CARRERAS";
+
     } catch (error) {
-        document.getElementById('saludo').textContent = 'No se pudo cargar la sesion';
+        document.getElementById("saludo").textContent = error.message;
     }
 });
