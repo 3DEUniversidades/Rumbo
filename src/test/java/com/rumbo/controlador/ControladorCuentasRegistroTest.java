@@ -2,7 +2,9 @@ package com.rumbo.controlador;
 
 import com.rumbo.modelo.EstadoVerificacion;
 import com.rumbo.modelo.Rol;
+import com.rumbo.modelo.SolicitudVerificacion;
 import com.rumbo.modelo.Usuario;
+import com.rumbo.persistencia.SolicitudVerificacionRepository;
 import com.rumbo.persistencia.UsuarioRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +37,9 @@ class ControladorCuentasRegistroTest {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private SolicitudVerificacionRepository solicitudRepository;
 
     @Test
     void registraEstudianteYNoExponeContrasenia() throws Exception {
@@ -303,12 +308,105 @@ class ControladorCuentasRegistroTest {
                 .andExpect(redirectedUrl("/login.html"));
     }
 
+    @Test
+    void estudianteNoVerificadoCreaSolicitudPendiente() throws Exception {
+        guardarUsuario("usr-solicitud", "solicitud", "Estudiante Solicitud",
+                "solicitud@correo.com", Rol.ESTUDIANTE, EstadoVerificacion.NO_VERIFICADO);
+        MockHttpSession sesion = iniciarSesion("solicitud@correo.com");
+
+        mockMvc.perform(post("/api/verificacion/solicitudes").session(sesion))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.estado").value("pendiente"))
+                .andExpect(jsonPath("$.idSolicitud").exists());
+    }
+
+    @Test
+    void estudianteConSolicitudPendienteNoPuedeCrearOtra() throws Exception {
+        guardarUsuario("usr-solicitud", "solicitud", "Estudiante Solicitud",
+                "solicitud@correo.com", Rol.ESTUDIANTE, EstadoVerificacion.NO_VERIFICADO);
+        solicitudRepository.save(new SolicitudVerificacion(
+                "solicitud-existente", "usr-solicitud",
+                SolicitudVerificacion.ESTADO_PENDIENTE, "2026-10-15 10:00"));
+        MockHttpSession sesion = iniciarSesion("solicitud@correo.com");
+
+        mockMvc.perform(post("/api/verificacion/solicitudes").session(sesion))
+                .andExpect(status().isConflict());
+    }
+
+    @Test
+    void estudianteVerificadoNoPuedeSolicitar() throws Exception {
+        guardarUsuario("usr-verificado", "verificado", "Estudiante Verificado",
+                "verificado@correo.com", Rol.ESTUDIANTE, EstadoVerificacion.VERIFICADO);
+        MockHttpSession sesion = iniciarSesion("verificado@correo.com");
+
+        mockMvc.perform(post("/api/verificacion/solicitudes").session(sesion))
+                .andExpect(status().isConflict());
+    }
+
+    @Test
+    void colaboradorNoPuedeSolicitar() throws Exception {
+        guardarUsuario("usr-colaborador", "colaborador", "Colaborador",
+                "colaborador@uvg.edu.gt", Rol.COLABORADOR, EstadoVerificacion.VERIFICADO);
+        MockHttpSession sesion = iniciarSesion("colaborador@uvg.edu.gt");
+
+        mockMvc.perform(post("/api/verificacion/solicitudes").session(sesion))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    void solicitudSinSesionEsRechazada() throws Exception {
+        mockMvc.perform(post("/api/verificacion/solicitudes"))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void solicitudRechazadaPermiteUnaNueva() throws Exception {
+        guardarUsuario("usr-reintento", "reintento", "Estudiante Reintento",
+                "reintento@correo.com", Rol.ESTUDIANTE, EstadoVerificacion.NO_VERIFICADO);
+        solicitudRepository.save(new SolicitudVerificacion(
+                "solicitud-rechazada", "usr-reintento",
+                SolicitudVerificacion.ESTADO_RECHAZADA, "2026-10-15 10:00"));
+        MockHttpSession sesion = iniciarSesion("reintento@correo.com");
+
+        mockMvc.perform(post("/api/verificacion/solicitudes").session(sesion))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.estado").value("pendiente"));
+    }
+
+    @Test
+    void consultaEstadoDevuelveSolicitudPendiente() throws Exception {
+        guardarUsuario("usr-estado", "estado", "Estudiante Estado",
+                "estado@correo.com", Rol.ESTUDIANTE, EstadoVerificacion.NO_VERIFICADO);
+        solicitudRepository.save(new SolicitudVerificacion(
+                "solicitud-estado", "usr-estado",
+                SolicitudVerificacion.ESTADO_PENDIENTE, "2026-10-15 10:00"));
+        MockHttpSession sesion = iniciarSesion("estado@correo.com");
+
+        mockMvc.perform(get("/api/verificacion/estado").session(sesion))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.estadoVerificacion").value("no verificado"))
+                .andExpect(jsonPath("$.solicitudPendiente").value(true))
+                .andExpect(jsonPath("$.estadoUltimaSolicitud").value("pendiente"));
+    }
+
+    @Test
+    void consultaEstadoSinSesionEsRechazada() throws Exception {
+        mockMvc.perform(get("/api/verificacion/estado"))
+                .andExpect(status().isUnauthorized());
+    }
+
     private void guardarUsuario(String id, String nombreUsuario, String nombreCompleto,
                                 String correo, Rol rol) {
+        guardarUsuario(id, nombreUsuario, nombreCompleto, correo, rol,
+                EstadoVerificacion.VERIFICADO);
+    }
+
+    private void guardarUsuario(String id, String nombreUsuario, String nombreCompleto,
+                                String correo, Rol rol, EstadoVerificacion estadoVerificacion) {
         usuarioRepository.save(new Usuario(
                 id, nombreUsuario, nombreCompleto, correo,
                 new BCryptPasswordEncoder().encode("clave-de-prueba"),
-                rol, EstadoVerificacion.VERIFICADO));
+                rol, estadoVerificacion));
     }
 
     private MockHttpSession iniciarSesion(String correo) throws Exception {

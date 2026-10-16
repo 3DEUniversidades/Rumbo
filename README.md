@@ -230,6 +230,15 @@ Cada rol tiene una pantalla base propia bajo `/roles/`. La respuesta de
 el rol activo. El servidor protege además las rutas `/roles/**`, por lo que un
 usuario autenticado no puede acceder a la pantalla de otro rol.
 
+## Solicitud de verificacion
+
+Un estudiante no verificado puede consultar su estado con
+`GET /api/verificacion/estado` y crear una solicitud con
+`POST /api/verificacion/solicitudes`. El id del usuario se obtiene de la
+sesion del servidor. Una solicitud pendiente bloquea solicitudes duplicadas;
+una solicitud rechazada permite volver a solicitar. Los colaboradores no
+pueden crear solicitudes.
+
 ## Comandos
 
 | Comando | Descripcion |
