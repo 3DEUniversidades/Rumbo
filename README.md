@@ -152,6 +152,59 @@ Al iniciar, `data.sql` siembra un usuario administrador para probar el login:
 
 La contrasena se guarda siempre como hash BCrypt, nunca en texto plano.
 
+## Registro de cuentas
+
+Endpoint publico para crear una cuenta de estudiante o colaborador.
+
+`POST /api/auth/registro`
+
+Solicitud:
+
+```json
+{
+  "nombreUsuario": "juanperez",
+  "nombreCompleto": "Juan Perez",
+  "correo": "juan@uvg.edu.gt",
+  "contrasenia": "contrasenia123",
+  "rol": "ESTUDIANTE"
+}
+```
+
+`rol` acepta unicamente `ESTUDIANTE` o `COLABORADOR`. Un colaborador debe usar un correo
+del dominio institucional configurado en `rumbo.correo.dominio-institucional`
+(por defecto `uvg.edu.gt`). El estudiante queda con estado `NO_VERIFICADO` y el
+colaborador con `VERIFICADO`.
+
+Respuesta `201 Created`:
+
+```json
+{
+  "idUsuario": "3f1c...",
+  "nombreUsuario": "juanperez",
+  "nombreCompleto": "Juan Perez",
+  "correo": "juan@uvg.edu.gt",
+  "rol": "ESTUDIANTE",
+  "estadoVerificacion": "NO_VERIFICADO"
+}
+```
+
+Errores:
+
+| Codigo | Caso | Cuerpo |
+|---|---|---|
+| `400` | Campos vacios, correo mal formado, contrasenia de menos de 8 caracteres, correo no institucional o rol no permitido | `{"error":"Datos invalidos","campos":{"correo":"..."}}` |
+| `409` | Nombre de usuario o correo ya en uso (sin distinguir mayusculas) | `{"error":"El correo electronico ya esta en uso"}` |
+
+La respuesta nunca incluye la contrasena ni su hash.
+
+Ejemplo con curl:
+
+```bash
+curl -X POST http://localhost:8080/api/auth/registro \
+  -H "Content-Type: application/json" \
+  -d "{\"nombreUsuario\":\"juanperez\",\"nombreCompleto\":\"Juan Perez\",\"correo\":\"juan@uvg.edu.gt\",\"contrasenia\":\"contrasenia123\",\"rol\":\"ESTUDIANTE\"}"
+```
+
 ## Comandos
 
 | Comando | Descripcion |
