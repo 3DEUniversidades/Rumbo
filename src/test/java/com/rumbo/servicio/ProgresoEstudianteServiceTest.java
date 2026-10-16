@@ -1,5 +1,7 @@
 package com.rumbo.servicio;
 
+import com.rumbo.modelo.Rol;
+import com.rumbo.modelo.EstadoVerificacion;
 import com.rumbo.modelo.Actividad;
 import com.rumbo.modelo.EstadoActividad;
 import com.rumbo.modelo.RegistroActividadEstudiante;
@@ -40,8 +42,8 @@ class ProgresoEstudianteServiceTest {
                 "Estudiante Kevin",
                 "kevin@example.com",
                 hashPrueba,
-                "ESTUDIANTE",
-                "NO_VERIFICADO"
+                Rol.ESTUDIANTE,
+                EstadoVerificacion.NO_VERIFICADO
         );
 
         Actividad actividad = new Actividad(

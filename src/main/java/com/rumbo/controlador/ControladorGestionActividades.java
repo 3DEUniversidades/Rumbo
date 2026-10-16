@@ -3,6 +3,9 @@ package com.rumbo.controlador;
 import com.rumbo.modelo.Actividad;
 import com.rumbo.servicio.ActividadService;
 import com.rumbo.servicio.ExcepcionActividad;
+import com.rumbo.servicio.GestorPermisos;
+import com.rumbo.modelo.Rol;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -18,19 +21,23 @@ import java.util.Map;
 public class ControladorGestionActividades {
 
     private final ActividadService actividadService;
+    private final GestorPermisos gestorPermisos;
 
-    public ControladorGestionActividades(ActividadService actividadService) {
+    public ControladorGestionActividades(ActividadService actividadService, GestorPermisos gestorPermisos) {
         this.actividadService = actividadService;
+        this.gestorPermisos = gestorPermisos;
     }
 
     @GetMapping
-    public List<Actividad> obtenerLineaDeTiempo() {
+    public List<Actividad> obtenerLineaDeTiempo(HttpSession sesion) {
+        gestorPermisos.exigirRol(sesion, Rol.ESTUDIANTE);
         return actividadService.obtenerLineaDeTiempo();
     }
 
     @PatchMapping("/{id}/toggle")
-    public ResponseEntity<?> toggleCompletada(@PathVariable String id) {
+    public ResponseEntity<?> toggleCompletada(@PathVariable String id, HttpSession sesion) {
         try {
+            gestorPermisos.exigirRol(sesion, Rol.ESTUDIANTE);
             Actividad actividad = actividadService.marcarCompletada(id);
             return ResponseEntity.ok(actividad);
         } catch (ExcepcionActividad e) {

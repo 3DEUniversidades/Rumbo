@@ -1,5 +1,7 @@
 package com.rumbo.persistencia;
 
+import com.rumbo.modelo.Rol;
+import com.rumbo.modelo.EstadoVerificacion;
 import com.rumbo.modelo.Actividad;
 import com.rumbo.modelo.EstadoActividad;
 import com.rumbo.modelo.RegistroActividadEstudiante;
@@ -113,8 +115,8 @@ class RegistroActividadEstudianteRepositoryTest {
                 "Estudiante " + nombreUsuario,
                 nombreUsuario + "@example.com",
                 hashPrueba,
-                "ESTUDIANTE",
-                "NO_VERIFICADO"
+                Rol.ESTUDIANTE,
+                EstadoVerificacion.NO_VERIFICADO
         );
     }
 }

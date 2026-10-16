@@ -7,7 +7,16 @@ document.addEventListener("DOMContentLoaded", () => {
     const modalNombre = document.getElementById("modal-carrera-nombre");
     const modalDuracion = document.getElementById("modal-carrera-duracion");
     const modalCosto = document.getElementById("modal-carrera-costo");
-    const modalPensum = document.getElementById("modal-carrera-pensum");
+    const modalModalidad = document.getElementById("modal-carrera-modalidad");
+    const modalCreditos = document.getElementById("modal-carrera-creditos");
+    const modalHabilidades = document.getElementById("modal-carrera-habilidades");
+    const modalOportunidades = document.getElementById("modal-carrera-oportunidades");
+    const modalSalario = document.getElementById("modal-carrera-salario");
+    const modalEmpleabilidad = document.getElementById("modal-carrera-empleabilidad");
+    const bloquePdf = document.getElementById("bloque-pdf-oficial");
+    const enlacePdf = document.getElementById("modal-carrera-pdf");
+    const bloqueCarreraOficial = document.getElementById("bloque-carrera-oficial");
+    const enlaceCarreraOficial = document.getElementById("modal-carrera-enlace-oficial");
 
     botonCerrar.addEventListener("click", () => modal.close());
 
@@ -17,7 +26,13 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    cargarCarreras();
+    obtenerSesion().then(function (sesion) {
+        if (sesion) {
+            cargarCarreras();
+        }
+    }).catch(function () {
+        estado.textContent = "No se pudo cargar la sesion.";
+    });
 
     async function cargarCarreras() {
         estado.textContent = "Cargando carreras...";
@@ -67,16 +82,13 @@ document.addEventListener("DOMContentLoaded", () => {
         costo.className = "carrera-uni";
         costo.textContent = formatearCosto(carrera.costo);
 
-        const pensum = document.createElement("p");
-        pensum.textContent = carrera.pensum;
-
         const botonDetalle = document.createElement("button");
         botonDetalle.className = "btn";
         botonDetalle.type = "button";
         botonDetalle.textContent = "Ver detalle";
         botonDetalle.addEventListener("click", () => abrirDetalle(carrera));
 
-        tarjeta.append(nombre, duracion, costo, pensum, botonDetalle);
+        tarjeta.append(nombre, duracion, costo, botonDetalle);
         return tarjeta;
     }
 
@@ -84,8 +96,47 @@ document.addEventListener("DOMContentLoaded", () => {
         modalNombre.textContent = carrera.nombre;
         modalDuracion.textContent = `${carrera.duracion} años`;
         modalCosto.textContent = formatearCosto(carrera.costo);
-        modalPensum.textContent = carrera.pensum;
+        modalModalidad.textContent = carrera.modalidad ?? "Pendiente de información oficial";
+        modalCreditos.textContent = carrera.cargaCreditos ?? "Pendiente de información oficial";
+        modalHabilidades.textContent =
+            carrera.habilidadesRequeridas ?? "Pendiente de información oficial";
+        modalOportunidades.textContent =
+            carrera.oportunidadesLaborales ?? "Pendiente de información oficial";
+
+        modalSalario.textContent = carrera.salarioEstimado == null
+            ? "Pendiente de información oficial"
+            : formatearCosto(carrera.salarioEstimado);
+
+        modalEmpleabilidad.textContent = carrera.empleabilidad == null
+            ? "Pendiente de información oficial"
+            : `${carrera.empleabilidad} %`;
+
+        mostrarEnlaceOficial(bloquePdf, enlacePdf, carrera.pdfOficialUrl);
+        mostrarEnlaceOficial(
+            bloqueCarreraOficial, enlaceCarreraOficial, carrera.urlCarreraOficial
+        );
         modal.showModal();
+    }
+
+    function mostrarEnlaceOficial(bloque, enlace, direccion) {
+        let url;
+
+        try {
+            url = new URL(direccion);
+        } catch {
+            bloque.hidden = true;
+            enlace.removeAttribute("href");
+            return;
+        }
+
+        if (url.protocol !== "https:") {
+            bloque.hidden = true;
+            enlace.removeAttribute("href");
+            return;
+        }
+
+        enlace.href = url.href;
+        bloque.hidden = false;
     }
 
     function formatearCosto(costo) {

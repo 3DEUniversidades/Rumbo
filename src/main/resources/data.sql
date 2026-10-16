@@ -1,42 +1,124 @@
-INSERT INTO carreras (nombre, duracion, pensum, costo)
-SELECT 'Ingenieria en Ciencias de la Computacion', 5,
-       'Programacion, estructuras de datos, bases de datos, redes, ingenieria de software e inteligencia artificial.',
-       57500.00
+INSERT INTO carreras (
+    nombre,
+    duracion,
+    costo,
+    modalidad,
+    carga_creditos,
+    habilidades_requeridas,
+    oportunidades_laborales,
+    salario_estimado,
+    empleabilidad,
+    pdf_oficial_url,
+    url_carrera_oficial
+)
+
+SELECT datos.*
+
+FROM (
+    VALUES
+    (
+        'Ingenieria en Ciencias de la Computacion',
+        5,
+        57500.00,
+        'Presencial',
+        220,
+        'Razonamiento lógico, matemáticas y resolución de problemas.',
+        'Desarrollo de software, análisis de datos y soporte tecnológico.',
+        8500.00,
+        82.00,
+        'https://example.org/pensum/computacion.pdf',
+        'https://example.org/carreras/computacion'
+    ),
+    (
+        'Ingenieria Industrial',
+        5,
+        54800.00,
+        'Presencial',
+        215,
+        'Análisis de procesos, matemáticas y organización.',
+        'Producción, logística, calidad y gestión de proyectos.',
+        7800.00,
+        79.00,
+        'https://example.org/pensum/industrial.pdf',
+        'https://example.org/carreras/industrial'
+    ),
+    (
+        'Administracion de Empresas',
+        4,
+        46200.00,
+        'Híbrida',
+        190,
+        'Comunicación, organización y análisis financiero.',
+        'Administración, mercadeo, finanzas y emprendimiento.',
+        6500.00,
+        76.00,
+        'https://example.org/pensum/administracion.pdf',
+        'https://example.org/carreras/administracion'
+    ),
+    (
+        'Psicologia Clinica',
+        5,
+        48900.00,
+        'Presencial',
+        205,
+        'Escucha activa, investigación y comunicación.',
+        'Atención psicológica, investigación y programas de bienestar.',
+        6200.00,
+        71.00,
+        'https://example.org/pensum/psicologia.pdf',
+        'https://example.org/carreras/psicologia'
+    ),
+    (
+        'Arquitectura',
+        5,
+        61000.00,
+        'Presencial',
+        225,
+        'Diseño, creatividad, dibujo técnico y análisis espacial.',
+        'Diseño arquitectónico, urbanismo y supervisión de obras.',
+        7200.00,
+        74.00,
+        'https://example.org/pensum/arquitectura.pdf',
+        'https://example.org/carreras/arquitectura'
+    ),
+    (
+        'Medicina Veterinaria',
+        5,
+        59000.00,
+        'Presencial',
+        230,
+        'Biología, observación, trabajo práctico y cuidado animal.',
+        'Clínicas veterinarias, salud pública e investigación.',
+        6800.00,
+        73.00,
+        'https://example.org/pensum/veterinaria.pdf',
+        'https://example.org/carreras/veterinaria'
+    )
+) 
+
+AS datos (
+    nombre,
+    duracion,
+    costo,
+    modalidad,
+    carga_creditos,
+    habilidades_requeridas,
+    oportunidades_laborales,
+    salario_estimado,
+    empleabilidad,
+    pdf_oficial_url,
+    url_carrera_oficial
+)
+
 WHERE NOT EXISTS (
-    SELECT 1 FROM carreras WHERE nombre = 'Ingenieria en Ciencias de la Computacion'
+    SELECT 1
+    FROM carreras AS existente
+    WHERE existente.nombre = datos.nombre
 );
 
-INSERT INTO carreras (nombre, duracion, pensum, costo)
-SELECT 'Ingenieria Industrial', 5,
-       'Matematica, estadistica, administracion de operaciones, logistica, calidad, finanzas y gestion de proyectos.',
-       54800.00
-WHERE NOT EXISTS (
-    SELECT 1 FROM carreras WHERE nombre = 'Ingenieria Industrial'
-);
 
-INSERT INTO carreras (nombre, duracion, pensum, costo)
-SELECT 'Administracion de Empresas', 4,
-       'Contabilidad, economia, mercadeo, finanzas, gestion del talento humano, emprendimiento y estrategia empresarial.',
-       46200.00
-WHERE NOT EXISTS (
-    SELECT 1 FROM carreras WHERE nombre = 'Administracion de Empresas'
-);
 
-INSERT INTO carreras (nombre, duracion, pensum, costo)
-SELECT 'Psicologia Clinica', 5,
-       'Bases biologicas de la conducta, evaluacion psicologica, psicoterapia, investigacion, etica y practica supervisada.',
-       48900.00
-WHERE NOT EXISTS (
-    SELECT 1 FROM carreras WHERE nombre = 'Psicologia Clinica'
-);
 
-INSERT INTO carreras (nombre, duracion, pensum, costo)
-SELECT 'Arquitectura', 5,
-       'Diseno arquitectonico, dibujo tecnico, urbanismo, estructuras, construccion, historia de la arquitectura y sostenibilidad.',
-       61000.00
-WHERE NOT EXISTS (
-    SELECT 1 FROM carreras WHERE nombre = 'Arquitectura'
-);
 
 INSERT INTO usuario (id_usuario, nombre_usuario, nombre_completo, correo, contrasenia, rol, estado_verificacion)
 VALUES ('usr-0001', 'admin', 'Administrador General', 'admin@rumbo.com',
