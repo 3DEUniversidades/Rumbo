@@ -56,8 +56,7 @@ class ProgresoEstudianteServiceTest {
                 "Investigación documental",
                 "Catálogo de carreras",
                 "Anotar tus conclusiones",
-                "Exploración",
-                false
+                "Exploración"
         );
 
         entityManager.persist(estudiante);
@@ -294,8 +293,7 @@ class ProgresoEstudianteServiceTest {
                 "Investigación documental",
                 "Recursos universitarios",
                 "Anotar conclusiones",
-                "Exploración",
-                false
+                "Exploración"
         );
 
         entityManager.persist(segundaActividad);

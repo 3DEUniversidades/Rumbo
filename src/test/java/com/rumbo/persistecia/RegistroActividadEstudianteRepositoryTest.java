@@ -42,8 +42,7 @@ class RegistroActividadEstudianteRepositoryTest {
                 "Investigación documental",
                 "Catálogo de carreras",
                 "Anotar tus conclusiones",
-                "Exploración",
-                false
+                "Exploración"
         );
 
         entityManager.persist(actividad);

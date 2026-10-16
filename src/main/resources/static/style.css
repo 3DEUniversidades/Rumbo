@@ -352,3 +352,99 @@ footer {
     color: var(--text-muted);
     line-height: 1.4;
 }
+
+[hidden] {
+    display: none !important;
+}
+
+#barra-progreso {
+    display: block;
+    width: 100%;
+    height: 1rem;
+    margin: 0.75rem 0;
+    accent-color: var(--primary);
+}
+
+#resumen-progreso {
+    margin-bottom: 1.5rem;
+}
+
+#lista-actividades .actividad-card {
+    line-height: 1.6;
+}
+
+#lista-actividades summary {
+    margin-top: 0.75rem;
+    color: var(--primary-dark);
+    cursor: pointer;
+    font-weight: 600;
+}
+
+#lista-actividades dl {
+    margin-top: 1rem;
+}
+
+#lista-actividades dt {
+    margin-top: 0.75rem;
+    font-weight: 700;
+}
+
+#lista-actividades dd {
+    margin: 0.25rem 0 0;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+.formulario-avance {
+    margin-top: 1.5rem;
+}
+
+.formulario-avance fieldset {
+    min-width: 0;
+    padding: 1rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+}
+
+.formulario-avance legend {
+    padding: 0 0.4rem;
+    font-weight: 700;
+}
+
+.formulario-avance label {
+    display: block;
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+.formulario-avance select,
+.formulario-avance textarea {
+    display: block;
+    width: 100%;
+    margin-top: 0.4rem;
+    padding: 0.65rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--surface);
+    color: var(--text);
+    font: inherit;
+}
+
+.formulario-avance textarea {
+    resize: vertical;
+}
+
+.formulario-avance .btn {
+    border: 0;
+    cursor: pointer;
+    font: inherit;
+    font-weight: 600;
+}
+
+.formulario-avance fieldset:disabled {
+    opacity: 0.65;
+}
+
+.mensaje-guardado {
+    margin-top: 0.75rem;
+    line-height: 1.5;
+}

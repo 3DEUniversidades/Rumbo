@@ -18,12 +18,4 @@ public class ActividadService {
     public List<Actividad> obtenerLineaDeTiempo() {
         return actividadRepository.findAllByOrderByFechaAsc();
     }
-
-    public Actividad marcarCompletada(String idActividad) {
-        Actividad actividad = actividadRepository.findById(idActividad)
-                .orElseThrow(() -> new ExcepcionActividad("Actividad no encontrada: " + idActividad));
-
-        actividad.setCompletada(!actividad.isCompletada());
-        return actividadRepository.save(actividad);
-    }
 }
