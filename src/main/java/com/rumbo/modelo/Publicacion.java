@@ -107,4 +107,9 @@ public class Publicacion {
     public Set<Carrera> getCarreras() {
         return new LinkedHashSet<>(carreras);
     }
+
+    public void setEstado(Estado estado) {
+        this.estado = estado;
+    }   
+
 }
