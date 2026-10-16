@@ -1,18 +1,26 @@
 document.addEventListener("DOMContentLoaded", () => {
+    const NO_DISPONIBLE = "No disponible";
+
     const estado = document.getElementById("estado-carreras");
     const lista = document.getElementById("lista-carreras");
     const modal = document.getElementById("modal-carrera");
     const botonCerrar = document.getElementById("cerrar-modal-carrera");
 
     const modalNombre = document.getElementById("modal-carrera-nombre");
+    const modalFacultad = document.getElementById("modal-carrera-facultad");
+    const modalDescripcion = document.getElementById("modal-carrera-descripcion");
     const modalDuracion = document.getElementById("modal-carrera-duracion");
     const modalCosto = document.getElementById("modal-carrera-costo");
+    const modalCostoNota = document.getElementById("modal-carrera-costo-nota");
     const modalModalidad = document.getElementById("modal-carrera-modalidad");
     const modalCreditos = document.getElementById("modal-carrera-creditos");
-    const modalHabilidades = document.getElementById("modal-carrera-habilidades");
+    const modalAreas = document.getElementById("modal-carrera-areas");
+    const modalCompetencias = document.getElementById("modal-carrera-competencias");
     const modalOportunidades = document.getElementById("modal-carrera-oportunidades");
     const modalSalario = document.getElementById("modal-carrera-salario");
     const modalEmpleabilidad = document.getElementById("modal-carrera-empleabilidad");
+    const bloqueContextoLaboral = document.getElementById("bloque-contexto-laboral");
+    const modalContextoLaboral = document.getElementById("modal-carrera-contexto-laboral");
     const bloquePdf = document.getElementById("bloque-pdf-oficial");
     const enlacePdf = document.getElementById("modal-carrera-pdf");
     const bloqueCarreraOficial = document.getElementById("bloque-carrera-oficial");
@@ -74,13 +82,16 @@ document.addEventListener("DOMContentLoaded", () => {
         const nombre = document.createElement("h3");
         nombre.textContent = carrera.nombre;
 
-        const duracion = document.createElement("p");
-        duracion.className = "carrera-area";
-        duracion.textContent = `${carrera.duracion} años`;
+        const facultad = document.createElement("p");
+        facultad.className = "carrera-area";
+        facultad.textContent = carrera.facultad ?? "";
+        facultad.hidden = !carrera.facultad;
 
-        const costo = document.createElement("p");
-        costo.className = "carrera-uni";
-        costo.textContent = formatearCosto(carrera.costo);
+        const resumen = document.createElement("p");
+        resumen.className = "carrera-uni";
+        resumen.textContent = carrera.costo == null
+            ? `${carrera.duracion} años`
+            : `${carrera.duracion} años · ${formatearMonto(carrera.costo)} el primer semestre`;
 
         const botonDetalle = document.createElement("button");
         botonDetalle.className = "btn";
@@ -88,34 +99,72 @@ document.addEventListener("DOMContentLoaded", () => {
         botonDetalle.textContent = "Ver detalle";
         botonDetalle.addEventListener("click", () => abrirDetalle(carrera));
 
-        tarjeta.append(nombre, duracion, costo, botonDetalle);
+        tarjeta.append(nombre, facultad, resumen, botonDetalle);
         return tarjeta;
     }
 
     function abrirDetalle(carrera) {
         modalNombre.textContent = carrera.nombre;
+        modalFacultad.textContent = carrera.facultad ?? "";
+        modalFacultad.hidden = !carrera.facultad;
+        modalDescripcion.textContent = carrera.descripcion ?? "";
+        modalDescripcion.hidden = !carrera.descripcion;
+
         modalDuracion.textContent = `${carrera.duracion} años`;
-        modalCosto.textContent = formatearCosto(carrera.costo);
-        modalModalidad.textContent = carrera.modalidad ?? "Pendiente de información oficial";
-        modalCreditos.textContent = carrera.cargaCreditos ?? "Pendiente de información oficial";
-        modalHabilidades.textContent =
-            carrera.habilidadesRequeridas ?? "Pendiente de información oficial";
-        modalOportunidades.textContent =
-            carrera.oportunidadesLaborales ?? "Pendiente de información oficial";
+        modalCosto.textContent = formatearMonto(carrera.costo);
+        modalCostoNota.textContent = construirNotaCosto(carrera);
+        modalModalidad.textContent = carrera.modalidad ?? NO_DISPONIBLE;
+        modalCreditos.textContent = carrera.cargaCreditos ?? NO_DISPONIBLE;
 
-        modalSalario.textContent = carrera.salarioEstimado == null
-            ? "Pendiente de información oficial"
-            : formatearCosto(carrera.salarioEstimado);
+        mostrarLista(modalAreas, carrera.areasFormacion);
+        mostrarLista(modalCompetencias, carrera.competenciasDesarrolladas);
+        mostrarLista(modalOportunidades, carrera.oportunidadesLaborales);
 
+        modalSalario.textContent = formatearMonto(carrera.salarioEstimado);
         modalEmpleabilidad.textContent = carrera.empleabilidad == null
-            ? "Pendiente de información oficial"
+            ? NO_DISPONIBLE
             : `${carrera.empleabilidad} %`;
+
+        modalContextoLaboral.textContent = carrera.contextoLaboral ?? "";
+        bloqueContextoLaboral.hidden = !carrera.contextoLaboral;
 
         mostrarEnlaceOficial(bloquePdf, enlacePdf, carrera.pdfOficialUrl);
         mostrarEnlaceOficial(
             bloqueCarreraOficial, enlaceCarreraOficial, carrera.urlCarreraOficial
         );
         modal.showModal();
+    }
+
+    function construirNotaCosto(carrera) {
+        if (carrera.costo == null) {
+            return "";
+        }
+
+        let nota = carrera.costoPeriodo ?? "";
+        if (carrera.costoAnio) {
+            nota += nota ? ` (tarifario ${carrera.costoAnio})` : `Tarifario ${carrera.costoAnio}`;
+        }
+
+        const aviso = "Es una referencia: no es el costo total de la carrera ni incluye becas o descuentos.";
+        return nota ? `${nota}. ${aviso}` : aviso;
+    }
+
+    function mostrarLista(contenedor, elementos) {
+        contenedor.replaceChildren();
+
+        if (!Array.isArray(elementos) || elementos.length === 0) {
+            const vacio = document.createElement("li");
+            vacio.className = "dato-faltante";
+            vacio.textContent = NO_DISPONIBLE;
+            contenedor.appendChild(vacio);
+            return;
+        }
+
+        elementos.forEach((texto) => {
+            const item = document.createElement("li");
+            item.textContent = texto;
+            contenedor.appendChild(item);
+        });
     }
 
     function mostrarEnlaceOficial(bloque, enlace, direccion) {
@@ -139,11 +188,16 @@ document.addEventListener("DOMContentLoaded", () => {
         bloque.hidden = false;
     }
 
-    function formatearCosto(costo) {
+    // Un valor desconocido es null; nunca se muestra como cero.
+    function formatearMonto(valor) {
+        if (valor == null) {
+            return NO_DISPONIBLE;
+        }
+
         return new Intl.NumberFormat("es-GT", {
             style: "currency",
             currency: "GTQ",
             maximumFractionDigits: 2
-        }).format(costo);
+        }).format(valor);
     }
 });

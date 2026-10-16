@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import com.rumbo.modelo.Rol;
 
 @Configuration
 public class ConfiguracionWeb implements WebMvcConfigurer {
@@ -23,7 +24,7 @@ public class ConfiguracionWeb implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registro) {
         registro.addInterceptor(new InterceptorPantallasRol(gestorPermisos))
-                .addPathPatterns("/roles/**");
+                .addPathPatterns("/roles/**", "/gestion-carreras.html");
     }
 
     private static class InterceptorPantallasRol implements HandlerInterceptor {
@@ -35,8 +36,7 @@ public class ConfiguracionWeb implements WebMvcConfigurer {
         }
 
         @Override
-        public boolean preHandle(HttpServletRequest solicitud, HttpServletResponse respuesta,
-                                 Object handler) throws Exception {
+        public boolean preHandle(HttpServletRequest solicitud, HttpServletResponse respuesta, Object handler) throws Exception {
             HttpSession sesion = solicitud.getSession(false);
             if (sesion == null) {
                 respuesta.sendRedirect("/login.html");
@@ -60,6 +60,19 @@ public class ConfiguracionWeb implements WebMvcConfigurer {
 
             String rutaSolicitada = solicitud.getRequestURI()
                     .substring(solicitud.getContextPath().length());
+            if ("/gestion-carreras.html".equals(rutaSolicitada)) {
+                if (sesionUsuario.getRol() != Rol.ENCARGADO_DE_CARRERAS) {
+                    respuesta.sendError(
+                            HttpServletResponse.SC_FORBIDDEN,
+                            "Pantalla no existente"
+                    );
+                    return false;
+                }
+
+                respuesta.setHeader("Cache-Control", "no-store");
+                return true;
+            }
+
             if (!rutaPermitida.equals(rutaSolicitada)) {
                 respuesta.sendRedirect(rutaPermitida);
                 return false;
