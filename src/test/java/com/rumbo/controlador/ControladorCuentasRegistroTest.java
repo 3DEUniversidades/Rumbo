@@ -21,6 +21,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -63,7 +64,7 @@ class ControladorCuentasRegistroTest {
         mockMvc.perform(post("/api/auth/registro").contentType(MediaType.APPLICATION_JSON).content(json))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.rol").value("COLABORADOR"))
-                .andExpect(jsonPath("$.estadoVerificacion").value("NO_VERIFICADO"));
+                .andExpect(jsonPath("$.estadoVerificacion").value("VERIFICADO"));
     }
 
     @Test
@@ -267,6 +268,47 @@ class ControladorCuentasRegistroTest {
 
         mockMvc.perform(get("/api/actividades").session(sesion))
                 .andExpect(status().isForbidden());
+    }
+
+    @Test
+    void loginDevuelveLaPantallaDelRolActivo() throws Exception {
+        guardarUsuario("usr-pantalla", "pantalla", "Usuario Pantalla",
+                "pantalla@correo.com", Rol.ESTUDIANTE);
+
+        mockMvc.perform(post("/api/auth/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {"correo":"pantalla@correo.com","contrasenia":"clave-de-prueba"}
+                                """))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.rol").value("ESTUDIANTE"))
+                .andExpect(jsonPath("$.rutaPantalla").value("/roles/estudiante.html"));
+    }
+
+    @Test
+    void paginaDeOtroRolNoSeSirveAlUsuarioActivo() throws Exception {
+        guardarUsuario("usr-pantalla", "pantalla", "Usuario Pantalla",
+                "pantalla@correo.com", Rol.ESTUDIANTE);
+        MockHttpSession sesion = iniciarSesion("pantalla@correo.com");
+
+        mockMvc.perform(get("/roles/administrador.html").session(sesion))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/roles/estudiante.html"));
+    }
+
+    @Test
+    void paginaDeRolNoSeSirveSinSesion() throws Exception {
+        mockMvc.perform(get("/roles/estudiante.html"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/login.html"));
+    }
+
+    private void guardarUsuario(String id, String nombreUsuario, String nombreCompleto,
+                                String correo, Rol rol) {
+        usuarioRepository.save(new Usuario(
+                id, nombreUsuario, nombreCompleto, correo,
+                new BCryptPasswordEncoder().encode("clave-de-prueba"),
+                rol, EstadoVerificacion.VERIFICADO));
     }
 
     private MockHttpSession iniciarSesion(String correo) throws Exception {

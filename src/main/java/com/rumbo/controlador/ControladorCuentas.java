@@ -40,7 +40,8 @@ public class ControladorCuentas {
         return ResponseEntity.ok(new LoginResponseDTO(
                 sesionUsuario.getIdUsuario(),
                 sesionUsuario.getNombreCompleto(),
-                sesionUsuario.getRol().name()
+                sesionUsuario.getRol().name(),
+                gestorPermisos.rutaParaRol(sesionUsuario.getRol())
         ));
     }
 

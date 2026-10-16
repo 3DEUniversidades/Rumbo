@@ -225,6 +225,11 @@ Las rutas protegidas responden `401 Unauthorized` cuando no existe una sesion y
 a carreras requiere cualquier sesion autenticada. La linea de tiempo de
 actividades requiere el rol `ESTUDIANTE`.
 
+Cada rol tiene una pantalla base propia bajo `/roles/`. La respuesta de
+`POST /api/auth/login` incluye `rutaPantalla`, calculada por el servidor según
+el rol activo. El servidor protege además las rutas `/roles/**`, por lo que un
+usuario autenticado no puede acceder a la pantalla de otro rol.
+
 ## Comandos
 
 | Comando | Descripcion |

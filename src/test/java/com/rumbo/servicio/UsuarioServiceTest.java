@@ -43,12 +43,12 @@ class UsuarioServiceTest {
     }
 
     @Test
-    void registraColaboradorConCorreoInstitucionalComoNoVerificado() {
+    void registraColaboradorConCorreoInstitucionalComoVerificado() {
         RegistroResponseDTO respuesta = usuarioService.registrar(
                 solicitud("colab", "Colaborador UVG", "colab@uvg.edu.gt", "contrasenia123", "COLABORADOR"));
 
         assertEquals("COLABORADOR", respuesta.getRol());
-        assertEquals("NO_VERIFICADO", respuesta.getEstadoVerificacion());
+        assertEquals("VERIFICADO", respuesta.getEstadoVerificacion());
     }
 
     @Test

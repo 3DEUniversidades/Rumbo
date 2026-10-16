@@ -5,11 +5,13 @@ public class LoginResponseDTO {
     private String idUsuario;
     private String nombreCompleto;
     private String rol;
+    private String rutaPantalla;
 
-    public LoginResponseDTO(String idUsuario, String nombreCompleto, String rol) {
+    public LoginResponseDTO(String idUsuario, String nombreCompleto, String rol, String rutaPantalla) {
         this.idUsuario = idUsuario;
         this.nombreCompleto = nombreCompleto;
         this.rol = rol;
+        this.rutaPantalla = rutaPantalla;
     }
 
     public String getIdUsuario() {
@@ -22,5 +24,9 @@ public class LoginResponseDTO {
 
     public String getRol() {
         return rol;
+    }
+
+    public String getRutaPantalla() {
+        return rutaPantalla;
     }
 }

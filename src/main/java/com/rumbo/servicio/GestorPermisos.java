@@ -6,11 +6,20 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
+import java.util.Map;
 
 @Component
 public class GestorPermisos {
 
     public static final String ATRIBUTO_SESION = "sesionUsuario";
+    private static final Map<Rol, String> RUTAS_POR_ROL = Map.of(
+            Rol.ESTUDIANTE, "/roles/estudiante.html",
+            Rol.COLABORADOR, "/roles/colaborador.html",
+            Rol.SUPERVISOR_DE_USUARIOS, "/roles/supervisor-usuarios.html",
+            Rol.SUPERVISOR_DE_MENSAJES, "/roles/supervisor-mensajes.html",
+            Rol.ENCARGADO_DE_CARRERAS, "/roles/encargado-carreras.html",
+            Rol.ADMIN, "/roles/administrador.html"
+    );
 
     public SesionUsuario exigirSesion(HttpSession sesion) {
         SesionUsuario sesionUsuario = (SesionUsuario) sesion.getAttribute(ATRIBUTO_SESION);
@@ -31,4 +40,13 @@ public class GestorPermisos {
 
         return sesionUsuario;
     }
+
+    public String rutaParaRol(Rol rol) {
+        String ruta = RUTAS_POR_ROL.get(rol);
+        if (ruta == null) {
+            throw new ExcepcionPermiso("El rol no tiene una pantalla asignada");
+        }
+        return ruta;
+    }
+
 }

@@ -35,7 +35,8 @@ public class UsuarioService {
         return new LoginResponseDTO(
                 sesion.getIdUsuario(),
                 sesion.getNombreCompleto(),
-                sesion.getRol().name()
+                sesion.getRol().name(),
+                null
         );
     }
 
@@ -78,6 +79,9 @@ public class UsuarioService {
         }
 
         Rol rol = Rol.desdeTexto(solicitud.getRol());
+        EstadoVerificacion estadoVerificacion = rol == Rol.COLABORADOR
+                ? EstadoVerificacion.VERIFICADO
+                : EstadoVerificacion.NO_VERIFICADO;
         Usuario usuario = new Usuario(
                 UUID.randomUUID().toString(),
                 solicitud.getNombreUsuario(),
@@ -85,7 +89,7 @@ public class UsuarioService {
                 solicitud.getCorreo(),
                 codificadorContrasenia.encode(solicitud.getContrasenia()),
                 rol,
-                EstadoVerificacion.NO_VERIFICADO
+                estadoVerificacion
         );
 
         try {
