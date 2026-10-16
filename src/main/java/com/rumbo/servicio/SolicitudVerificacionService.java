@@ -23,11 +23,14 @@ public class SolicitudVerificacionService {
 
     private final UsuarioRepository usuarioRepository;
     private final SolicitudVerificacionRepository solicitudRepository;
+    private final PerfilService perfilService;
 
     public SolicitudVerificacionService(UsuarioRepository usuarioRepository,
-                                        SolicitudVerificacionRepository solicitudRepository) {
+                                        SolicitudVerificacionRepository solicitudRepository,
+                                        PerfilService perfilService) {
         this.usuarioRepository = usuarioRepository;
         this.solicitudRepository = solicitudRepository;
+        this.perfilService = perfilService;
     }
 
     public SolicitudVerificacionResponse solicitarVerificacion(String idUsuario) {
@@ -47,7 +50,11 @@ public class SolicitudVerificacionService {
             throw new ExcepcionConflicto("Ya existe una solicitud pendiente");
         }
 
-        // TODO(T-06): validar que el perfil del estudiante este completo.
+        if (!perfilService.estaCompleto(idUsuario)) {
+            throw new ExcepcionValidacion(java.util.Map.of(
+                    "perfil", "Debe completar nivel de estudios, carrera de interes y descripcion personal"));
+        }
+
         SolicitudVerificacion solicitud = new SolicitudVerificacion(
                 UUID.randomUUID().toString(),
                 idUsuario,

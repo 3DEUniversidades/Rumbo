@@ -1,5 +1,7 @@
-const CACHE_NAME = 'rumbo-v1';
-const ASSETS = ['/', '/style.css', '/manifest.json'];
+const CACHE_NAME = 'rumbo-v2';
+const ASSETS = [
+    '/', '/style.css', '/manifest.json', '/perfil.html', '/js/sesion.js', '/js/perfil.js'
+];
 
 self.addEventListener('install', event => {
     event.waitUntil(

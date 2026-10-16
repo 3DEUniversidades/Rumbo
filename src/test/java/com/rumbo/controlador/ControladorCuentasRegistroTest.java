@@ -1,10 +1,14 @@
 package com.rumbo.controlador;
 
 import com.rumbo.modelo.EstadoVerificacion;
+import com.rumbo.modelo.Carrera;
+import com.rumbo.modelo.Perfil;
 import com.rumbo.modelo.Rol;
 import com.rumbo.modelo.SolicitudVerificacion;
 import com.rumbo.modelo.Usuario;
 import com.rumbo.persistencia.SolicitudVerificacionRepository;
+import com.rumbo.persistencia.CarreraRepository;
+import com.rumbo.persistencia.PerfilRepository;
 import com.rumbo.persistencia.UsuarioRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +20,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.transaction.annotation.Transactional;
+import java.math.BigDecimal;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.not;
@@ -40,6 +45,12 @@ class ControladorCuentasRegistroTest {
 
     @Autowired
     private SolicitudVerificacionRepository solicitudRepository;
+
+    @Autowired
+    private CarreraRepository carreraRepository;
+
+    @Autowired
+    private PerfilRepository perfilRepository;
 
     @Test
     void registraEstudianteYNoExponeContrasenia() throws Exception {
@@ -312,6 +323,7 @@ class ControladorCuentasRegistroTest {
     void estudianteNoVerificadoCreaSolicitudPendiente() throws Exception {
         guardarUsuario("usr-solicitud", "solicitud", "Estudiante Solicitud",
                 "solicitud@correo.com", Rol.ESTUDIANTE, EstadoVerificacion.NO_VERIFICADO);
+        completarPerfilEstudiante("usr-solicitud");
         MockHttpSession sesion = iniciarSesion("solicitud@correo.com");
 
         mockMvc.perform(post("/api/verificacion/solicitudes").session(sesion))
@@ -363,6 +375,7 @@ class ControladorCuentasRegistroTest {
     void solicitudRechazadaPermiteUnaNueva() throws Exception {
         guardarUsuario("usr-reintento", "reintento", "Estudiante Reintento",
                 "reintento@correo.com", Rol.ESTUDIANTE, EstadoVerificacion.NO_VERIFICADO);
+        completarPerfilEstudiante("usr-reintento");
         solicitudRepository.save(new SolicitudVerificacion(
                 "solicitud-rechazada", "usr-reintento",
                 SolicitudVerificacion.ESTADO_RECHAZADA, "2026-10-15 10:00"));
@@ -420,6 +433,16 @@ class ControladorCuentasRegistroTest {
                 .andReturn()
                 .getRequest()
                 .getSession();
+    }
+
+    private void completarPerfilEstudiante(String idUsuario) {
+        Carrera carrera = carreraRepository.save(new Carrera(
+                "Ingenieria de prueba", 5, BigDecimal.ONE));
+        Perfil perfil = new Perfil(usuarioRepository.findById(idUsuario).orElseThrow());
+        perfil.setNivelEstudios("Bachillerato");
+        perfil.setDescripcionPersonal("Descripcion de prueba");
+        perfil.setCarrera(carrera);
+        perfilRepository.save(perfil);
     }
 
     private void registrar(String nombreUsuario, String correo) throws Exception {
