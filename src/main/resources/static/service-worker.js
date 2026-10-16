@@ -1,4 +1,4 @@
-const CACHE_NAME = 'rumbo-v3';
+const CACHE_NAME = 'rumbo-v4-foro';
 const ASSETS = ['/', '/style.css', '/manifest.json'];
 
 self.addEventListener('install', event => {
