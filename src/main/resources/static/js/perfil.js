@@ -8,6 +8,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     const areaLaboral = document.getElementById("area-laboral");
     const etiquetaArea = document.getElementById("etiqueta-area-laboral");
     const etiquetaCarrera = document.getElementById("etiqueta-carrera");
+    const seccionEdicion = document.getElementById("seccion-edicion-perfil");
 
     try {
         const sesion = await obtenerSesion();
@@ -16,14 +17,26 @@ document.addEventListener("DOMContentLoaded", async function () {
         }
         const perfil = await consultarPerfil();
         mostrarCuenta(perfil);
-        mostrarFormulario(perfil, [], sesion.rol);
-        configurarRegreso(sesion.rol);
+        const puedeEditar = sesion.rol === "ESTUDIANTE"
+            || sesion.rol === "COLABORADOR";
+
+        if (!puedeEditar) {
+            seccionEdicion.hidden = true;
+        } else {
+            mostrarFormulario(perfil, [], sesion.rol);
+        }
+
         contenido.hidden = false;
-        try {
-            const carreras = await consultarCarreras();
-            mostrarCarreras(carreras, perfil);
-        } catch (exception) {
-            mostrarMensaje(exception.message || "No se pudo cargar el catálogo de carreras.");
+
+        if (puedeEditar) {
+            try {
+                const carreras = await consultarCarreras();
+                mostrarCarreras(carreras, perfil);
+            } catch (exception) {
+                mostrarMensaje(
+                    exception.message || "No se pudo cargar el catálogo de carreras."
+                );
+            }
         }
     } catch (exception) {
         mostrarMensaje(exception.message || "No se pudo cargar el perfil.");
@@ -92,15 +105,6 @@ document.addEventListener("DOMContentLoaded", async function () {
         document.getElementById("perfil-correo").textContent = perfil.correo;
         document.getElementById("perfil-rol").textContent = perfil.rol;
         document.getElementById("titulo-perfil").textContent = "Perfil de " + perfil.nombreCompleto;
-    }
-
-    function configurarRegreso(rol) {
-        const rutas = {
-            ESTUDIANTE: "/roles/estudiante.html",
-            COLABORADOR: "/roles/colaborador.html"
-        };
-        document.getElementById("volver-inicio").href =
-            rutas[rol] || "/inicio.html";
     }
 
     function mostrarFormulario(perfil, carreras, rol) {

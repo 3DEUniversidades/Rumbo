@@ -40,8 +40,7 @@ public class UsuarioService {
         return new LoginResponseDTO(
                 sesion.getIdUsuario(),
                 sesion.getNombreCompleto(),
-                sesion.getRol().name(),
-                null
+                sesion.getRol().name()
         );
     }
 

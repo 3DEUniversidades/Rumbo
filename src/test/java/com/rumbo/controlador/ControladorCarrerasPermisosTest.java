@@ -155,15 +155,13 @@ class ControladorCarrerasPermisosTest {
         return (MockHttpSession) mvc.perform(post("/api/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
-                                {
-                                  "correo":"encargado.test@rumbo.test",
-                                  "contrasenia":"clave-de-prueba"
-                                }
-                                """))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.rutaPantalla")
-                        .value("/roles/encargado-carreras.html"))
-                .andReturn()
+                                        {
+                                          "correo":"encargado.test@rumbo.test",
+                                          "contrasenia":"clave-de-prueba"
+                                        }
+                                        """))
+                        .andExpect(status().isOk())
+                        .andReturn()
                 .getRequest()
                 .getSession();
     }

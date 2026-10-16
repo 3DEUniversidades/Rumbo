@@ -1,7 +1,6 @@
 package com.rumbo;
 
 import com.rumbo.modelo.SesionUsuario;
-import com.rumbo.servicio.ExcepcionPermiso;
 import com.rumbo.servicio.GestorPermisos;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -92,12 +91,11 @@ public class ConfiguracionWeb implements WebMvcConfigurer {
         )
         .order(0);
 
-        // 2. Conserva las restricciones particulares de las pantallas por rol.
+        // 2. Conserva la restricción de acceso a la gestión de carreras.
         registro.addInterceptor(
                 new InterceptorPantallasRol(gestorPermisos)
         )
         .addPathPatterns(
-                "/roles/**",
                 "/gestion-carreras.html"
         )
         .order(1);
@@ -126,14 +124,6 @@ public class ConfiguracionWeb implements WebMvcConfigurer {
                 return false;
             }
 
-            String rutaPermitida;
-            try {
-                rutaPermitida = gestorPermisos.rutaParaRol(sesionUsuario.getRol());
-            } catch (ExcepcionPermiso e) {
-                respuesta.sendError(HttpServletResponse.SC_FORBIDDEN, e.getMessage());
-                return false;
-            }
-
             String rutaSolicitada = solicitud.getRequestURI()
                     .substring(solicitud.getContextPath().length());
             if ("/gestion-carreras.html".equals(rutaSolicitada)) {
@@ -147,11 +137,6 @@ public class ConfiguracionWeb implements WebMvcConfigurer {
 
                 respuesta.setHeader("Cache-Control", "no-store");
                 return true;
-            }
-
-            if (!rutaPermitida.equals(rutaSolicitada)) {
-                respuesta.sendRedirect(rutaPermitida);
-                return false;
             }
 
             return true;

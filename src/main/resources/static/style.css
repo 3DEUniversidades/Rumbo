@@ -75,6 +75,16 @@ section h2 {
     gap: 0.5rem;
 }
 
+.menu-principal {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.menu-principal .btn {
+    margin-left: 0;
+}
+
 .vista-encabezado {
     display: flex;
     align-items: flex-start;

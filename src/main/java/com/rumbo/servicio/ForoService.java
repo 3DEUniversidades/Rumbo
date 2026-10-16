@@ -194,7 +194,7 @@ public class ForoService {
 
         String rol = codigo(usuario.getRol());
 
-        if ("COLABORADOR".equals(rol)) {
+        if ("COLABORADOR".equals(rol) || "ADMIN".equals(rol)) {
             return usuario;
         }
 

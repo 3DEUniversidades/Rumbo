@@ -26,9 +26,9 @@ import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.not;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -111,7 +111,7 @@ class ControladorCuentasRegistroTest {
     void rechazaRolAdministrativo() throws Exception {
         String json = """
                 {"nombreUsuario":"admin2","nombreCompleto":"Admin","correo":"admin2@uvg.edu.gt",
-                 "contrasenia":"contrasenia123","rol":"ADMINISTRADOR"}
+                 "contrasenia":"contrasenia123","rol":"ADMIN"}
                 """;
 
         mockMvc.perform(post("/api/auth/registro").contentType(MediaType.APPLICATION_JSON).content(json))
@@ -287,7 +287,7 @@ class ControladorCuentasRegistroTest {
     }
 
     @Test
-    void loginDevuelveLaPantallaDelRolActivo() throws Exception {
+    void loginDevuelveLaInformacionDelUsuario() throws Exception {
         guardarUsuario("usr-pantalla", "pantalla", "Usuario Pantalla",
                 "pantalla@correo.com", Rol.ESTUDIANTE);
 
@@ -297,26 +297,7 @@ class ControladorCuentasRegistroTest {
                                 {"correo":"pantalla@correo.com","contrasenia":"clave-de-prueba"}
                                 """))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.rol").value("ESTUDIANTE"))
-                .andExpect(jsonPath("$.rutaPantalla").value("/roles/estudiante.html"));
-    }
-
-    @Test
-    void paginaDeOtroRolNoSeSirveAlUsuarioActivo() throws Exception {
-        guardarUsuario("usr-pantalla", "pantalla", "Usuario Pantalla",
-                "pantalla@correo.com", Rol.ESTUDIANTE);
-        MockHttpSession sesion = iniciarSesion("pantalla@correo.com");
-
-        mockMvc.perform(get("/roles/administrador.html").session(sesion))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/roles/estudiante.html"));
-    }
-
-    @Test
-    void paginaDeRolNoSeSirveSinSesion() throws Exception {
-        mockMvc.perform(get("/roles/estudiante.html"))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/login.html"));
+                .andExpect(jsonPath("$.rol").value("ESTUDIANTE"));
     }
 
     @Test
@@ -468,12 +449,10 @@ class ControladorCuentasRegistroTest {
 
         MockHttpSession sesion = iniciarSesion("menu.estudiante@correo.com");
 
-        mockMvc.perform(get("/roles/estudiante.html").session(sesion))
+        mockMvc.perform(get("/inicio.html").session(sesion))
                 .andExpect(status().isOk())
                 .andExpect(content().string(
-                        containsString("href=\"/perfil.html\"")))
-                .andExpect(content().string(
-                        containsString("id=\"solicitar-verificacion\"")));
+                        containsString("href=\"/perfil.html\"")));
 
         mockMvc.perform(get("/api/perfil").session(sesion))
                 .andExpect(status().isOk())
@@ -497,7 +476,7 @@ class ControladorCuentasRegistroTest {
 
         MockHttpSession sesion = iniciarSesion("menu.colaborador@uvg.edu.gt");
 
-        mockMvc.perform(get("/roles/colaborador.html").session(sesion))
+        mockMvc.perform(get("/inicio.html").session(sesion))
                 .andExpect(status().isOk())
                 .andExpect(content().string(
                         containsString("href=\"/perfil.html\"")));
@@ -505,6 +484,46 @@ class ControladorCuentasRegistroTest {
         mockMvc.perform(get("/api/perfil").session(sesion))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.rol").value("COLABORADOR"));
+    }
+
+    @Test
+    void rolesAdministrativosPuedenVerPeroNoEditarSuPerfil() throws Exception {
+        Rol[] rolesSoloLectura = {
+                Rol.SUPERVISOR_DE_USUARIOS,
+                Rol.SUPERVISOR_DE_MENSAJES,
+                Rol.ENCARGADO_DE_CARRERAS,
+                Rol.ADMIN
+        };
+
+        for (Rol rol : rolesSoloLectura) {
+            String identificador = rol.name().toLowerCase();
+            String correo = identificador + "@rumbo.test";
+            guardarUsuario(
+                    "usr-" + identificador,
+                    identificador,
+                    "Usuario " + identificador,
+                    correo,
+                    rol
+            );
+
+            MockHttpSession sesion = iniciarSesion(correo);
+
+            mockMvc.perform(get("/api/perfil").session(sesion))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.rol").value(rol.name()));
+
+            mockMvc.perform(put("/api/perfil")
+                            .session(sesion)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content("""
+                                    {
+                                      "nivelEstudios":"Universidad",
+                                      "carreraId":1,
+                                      "descripcionPersonal":"Descripción"
+                                    }
+                                    """))
+                    .andExpect(status().isForbidden());
+        }
     }
 
     @Test
@@ -540,5 +559,20 @@ class ControladorCuentasRegistroTest {
         mockMvc.perform(get("/api/foro/acceso").session(colaborador))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.rol").value("COLABORADOR"));
+
+        guardarUsuario(
+                "usr-foro-admin",
+                "foro_admin",
+                "Administrador",
+                "foro.admin@rumbo.test",
+                Rol.ADMIN,
+                EstadoVerificacion.NO_VERIFICADO
+        );
+
+        MockHttpSession admin = iniciarSesion("foro.admin@rumbo.test");
+
+        mockMvc.perform(get("/api/foro/acceso").session(admin))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.rol").value("ADMIN"));
     }
 }

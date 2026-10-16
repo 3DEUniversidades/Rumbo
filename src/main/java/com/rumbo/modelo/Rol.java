@@ -9,7 +9,6 @@ public enum Rol {
     SUPERVISOR_DE_USUARIOS,
     SUPERVISOR_DE_MENSAJES,
     ENCARGADO_DE_CARRERAS,
-    ADMINISTRADOR,
     ADMIN;
 
     public boolean esPublico() {

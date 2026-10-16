@@ -28,18 +28,15 @@ public class ControladorPerfil {
 
     @GetMapping
     public ResponseEntity<PerfilResponseDTO> consultar(HttpSession sesion) {
-        SesionUsuario usuario = exigirRolDePerfil(sesion);
+        SesionUsuario usuario = gestorPermisos.exigirSesion(sesion);
         return ResponseEntity.ok(perfilService.consultar(usuario.getIdUsuario()));
     }
 
     @PutMapping
     public ResponseEntity<PerfilResponseDTO> actualizar(
             @RequestBody PerfilRequestDTO solicitud, HttpSession sesion) {
-        SesionUsuario usuario = exigirRolDePerfil(sesion);
+        SesionUsuario usuario = gestorPermisos.exigirRol(
+                sesion, Rol.ESTUDIANTE, Rol.COLABORADOR);
         return ResponseEntity.ok(perfilService.actualizar(usuario.getIdUsuario(), solicitud));
-    }
-
-    private SesionUsuario exigirRolDePerfil(HttpSession sesion) {
-        return gestorPermisos.exigirRol(sesion, Rol.ESTUDIANTE, Rol.COLABORADOR);
     }
 }
