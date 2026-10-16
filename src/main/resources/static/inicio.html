@@ -21,17 +21,48 @@
             <p class="texto-secundario">Elige hacia donde quieres continuar tu proceso.</p>
         </section>
 
-        <section id="acciones">
-            <a href="/carreras.html" class="btn">Ver carreras</a>
-            <a href="/linea-tiempo.html" class="btn btn-secundario">Ver mi linea de tiempo</a>
-            <a id="enlace-gestion-carreras" href="/gestion-carreras.html" class="btn btn-secundario" hidden>Gestionar carreras</a>
+        <section id="acciones" hidden>
+            <a id="enlace-panel-rol" href="/inicio.html"
+               class="btn btn-secundario">
+                Mi panel
+            </a>
+
+            <a href="/carreras.html" class="btn">
+                Ver carreras
+            </a>
+
             <a href="/comparador-carreras.html" class="btn btn-secundario">
                 Comparar carreras
             </a>
-            <a href="/foro.html" class="btn btn-secundario">
+
+            <a id="enlace-perfil" href="/perfil.html"
+               class="btn btn-secundario" hidden>
+                Mi perfil
+            </a>
+
+            <a id="enlace-linea-tiempo" href="/linea-tiempo.html"
+               class="btn btn-secundario" hidden>
+                Mi línea de tiempo
+            </a>
+
+            <a id="enlace-foro" href="/foro.html"
+               class="btn btn-secundario" hidden>
                 Entrar al foro
             </a>
-            <a href="/perfil.html" class="btn btn-secundario">Mi perfil</a>
+
+            <a id="enlace-gestion-carreras" href="/gestion-carreras.html"
+               class="btn btn-secundario" hidden>
+                Gestionar carreras
+            </a>
+        </section>
+
+        <section id="verificacion-estudiante" hidden>
+            <h2>Verificación de mi cuenta</h2>
+            <p id="mensaje-verificacion" role="status"></p>
+
+            <button id="solicitar-verificacion" class="btn" type="button">
+                Solicitar verificación
+            </button>
         </section>
     </main>
 
@@ -41,5 +72,6 @@
 
     <script src="/js/sesion.js"></script>
     <script src="/js/vistaInicio.js"></script>
+    <script src="/js/vistaVerificacion.js"></script>
 </body>
 </html>

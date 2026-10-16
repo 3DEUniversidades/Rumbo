@@ -454,4 +454,91 @@ class ControladorCuentasRegistroTest {
         mockMvc.perform(post("/api/auth/registro").contentType(MediaType.APPLICATION_JSON).content(json))
                 .andExpect(status().isCreated());
     }
+
+    @Test
+    void estudianteConservaPerfilYVerificacionEnSuPantalla() throws Exception {
+        guardarUsuario(
+                "usr-menu-estudiante",
+                "menu_estudiante",
+                "Estudiante",
+                "menu.estudiante@correo.com",
+                Rol.ESTUDIANTE,
+                EstadoVerificacion.NO_VERIFICADO
+        );
+
+        MockHttpSession sesion = iniciarSesion("menu.estudiante@correo.com");
+
+        mockMvc.perform(get("/roles/estudiante.html").session(sesion))
+                .andExpect(status().isOk())
+                .andExpect(content().string(
+                        containsString("href=\"/perfil.html\"")))
+                .andExpect(content().string(
+                        containsString("id=\"solicitar-verificacion\"")));
+
+        mockMvc.perform(get("/api/perfil").session(sesion))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.rol").value("ESTUDIANTE"));
+
+        mockMvc.perform(get("/api/verificacion/estado").session(sesion))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.estadoVerificacion")
+                        .value("no verificado"));
+    }
+
+    @Test
+    void colaboradorConservaAccesoASuPerfil() throws Exception {
+        guardarUsuario(
+                "usr-menu-colaborador",
+                "menu_colaborador",
+                "Colaborador",
+                "menu.colaborador@uvg.edu.gt",
+                Rol.COLABORADOR
+        );
+
+        MockHttpSession sesion = iniciarSesion("menu.colaborador@uvg.edu.gt");
+
+        mockMvc.perform(get("/roles/colaborador.html").session(sesion))
+                .andExpect(status().isOk())
+                .andExpect(content().string(
+                        containsString("href=\"/perfil.html\"")));
+
+        mockMvc.perform(get("/api/perfil").session(sesion))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.rol").value("COLABORADOR"));
+    }
+
+    @Test
+    void foroUsaLaSesionAunqueEnvienOtroUsuarioEnUnHeader() throws Exception {
+        guardarUsuario(
+                "usr-foro-estudiante",
+                "foro_estudiante",
+                "Estudiante",
+                "foro.estudiante@correo.com",
+                Rol.ESTUDIANTE,
+                EstadoVerificacion.NO_VERIFICADO
+        );
+
+        guardarUsuario(
+                "usr-foro-colaborador",
+                "foro_colaborador",
+                "Colaborador",
+                "foro.colaborador@uvg.edu.gt",
+                Rol.COLABORADOR
+        );
+
+        MockHttpSession estudiante =
+                iniciarSesion("foro.estudiante@correo.com");
+
+        mockMvc.perform(get("/api/foro/acceso")
+                        .session(estudiante)
+                        .header("X-Usuario-Id", "usr-foro-colaborador"))
+                .andExpect(status().isForbidden());
+
+        MockHttpSession colaborador =
+                iniciarSesion("foro.colaborador@uvg.edu.gt");
+
+        mockMvc.perform(get("/api/foro/acceso").session(colaborador))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.rol").value("COLABORADOR"));
+    }
 }

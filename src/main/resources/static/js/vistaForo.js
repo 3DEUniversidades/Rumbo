@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
     const obtener = id => document.getElementById(id);
 
     const mensaje = obtener("mensaje-foro");
@@ -41,13 +41,18 @@ document.addEventListener("DOMContentLoaded", () => {
     let respondiendo = false;
 
     try {
-        sesion = JSON.parse(localStorage.getItem("sesionRumbo"));
-    } catch {
-        sesion = null;
+        sesion = await obtenerSesion();
+
+        if (!sesion) return;
+
+    } catch (error) {
+        mensaje.textContent = error.message;
+        login.hidden = false;
+        return;
     }
 
     if (!sesion?.idUsuario) {
-        mensaje.textContent = "Inicia sesión para entrar al foro.";
+        mensaje.textContent = "Inicia sesiÃ³n para entrar al foro.";
         login.hidden = false;
         return;
     }
@@ -103,11 +108,10 @@ document.addEventListener("DOMContentLoaded", () => {
     async function solicitar(url, opciones = {}) {
         const respuesta = await fetch(url, {
             ...opciones,
+            credentials: "same-origin",
             cache: "no-store",
             headers: {
                 "Content-Type": "application/json",
-                // Mecanismo provisional utilizado por el repo.
-                "X-Usuario-Id": sesion.idUsuario,
                 ...(opciones.headers ?? {})
             }
         });
@@ -116,7 +120,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (!respuesta.ok) {
             throw new Error(
-                datos.error || "No se pudo completar la operación."
+                datos.error || "No se pudo completar la operaciÃ³n."
             );
         }
 
@@ -153,7 +157,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         } catch {
             estadoCarreras.textContent =
-                "No se cargó el catálogo. Puedes hacer una publicación general.";
+                "No se cargÃ³ el catÃ¡logo. Puedes hacer una publicaciÃ³n general.";
         }
     }
 
@@ -208,7 +212,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     crear(
                         "p",
                         p.contenido.length > 220
-                            ? p.contenido.slice(0, 220) + "…"
+                            ? p.contenido.slice(0, 220) + "â€¦"
                             : p.contenido,
                         "texto-publicacion-foro"
                     ),
@@ -217,12 +221,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 if (p.estado === "VALIDADA") {
                     tarjeta.appendChild(
-                        crear("small", "Publicación validada", "carrera-area")
+                        crear("small", "PublicaciÃ³n validada", "carrera-area")
                     );
                 }
 
                 const abrir = crear(
-                    "button", "Abrir publicación", "btn btn-pequeno"
+                    "button", "Abrir publicaciÃ³n", "btn btn-pequeno"
                 );
                 abrir.type = "button";
                 abrir.addEventListener(
@@ -273,7 +277,7 @@ document.addEventListener("DOMContentLoaded", () => {
             formulario.reset();
             actualizarCarreras();
 
-            mensaje.textContent = "Publicación creada.";
+            mensaje.textContent = "PublicaciÃ³n creada.";
             await cargarListado();
             await abrirPublicacion(publicacion.id);
 
@@ -291,7 +295,7 @@ document.addEventListener("DOMContentLoaded", () => {
         publicacionAbierta = null;
 
         contenidoDetalle.hidden = true;
-        estadoDetalle.textContent = "Cargando publicación...";
+        estadoDetalle.textContent = "Cargando publicaciÃ³n...";
 
         if (!modal.open) {
             modal.showModal();
@@ -327,7 +331,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if (listaRespuestas.length === 0) {
                 respuestas.appendChild(crear(
                     "p",
-                    "Todavía no hay respuestas.",
+                    "TodavÃ­a no hay respuestas.",
                     "texto-secundario sin-respuestas-foro"
                 ));
             } else {
@@ -418,7 +422,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         contenedor.append(
             enlace,
-            crear("span", " · " + fechaFormateada)
+            crear("span", " Â· " + fechaFormateada)
         );
 
         return contenedor;
@@ -426,8 +430,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function nombresCarreras(publicacion) {
         return publicacion.carreras.length === 0
-            ? "Publicación general"
-            : publicacion.carreras.map(c => c.nombre).join(" · ");
+            ? "PublicaciÃ³n general"
+            : publicacion.carreras.map(c => c.nombre).join(" Â· ");
     }
 
     function agregarOpcion(select, valor, etiqueta) {

@@ -10,7 +10,7 @@ async function obtenerSesion() {
     }
 
     if (!respuesta.ok) {
-        throw new Error("No se pudo consultar la sesión.");
+        throw new Error("No se pudo consultar la sesiÃ³n.");
     }
 
     return respuesta.json();

@@ -25,7 +25,7 @@ public class ConfiguracionWeb implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registro) {
 
-        // 1. Exige sesión para todas las rutas salvo las públicas.
+        // 1. Exige sesiÃ³n para todas las rutas salvo las pÃºblicas.
         registro.addInterceptor(new HandlerInterceptor() {
 
             @Override

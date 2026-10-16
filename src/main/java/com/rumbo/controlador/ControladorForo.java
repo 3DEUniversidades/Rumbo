@@ -3,6 +3,8 @@ package com.rumbo.controlador;
 import com.rumbo.dto.*;
 import com.rumbo.servicio.ExcepcionForo;
 import com.rumbo.servicio.ForoService;
+import com.rumbo.servicio.GestorPermisos;
+import jakarta.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Map;
 import org.springframework.http.HttpStatus;
@@ -14,58 +16,56 @@ import org.springframework.web.bind.annotation.*;
 public class ControladorForo {
 
     private final ForoService foroService;
+    private final GestorPermisos gestorPermisos;
 
-    public ControladorForo(ForoService foroService) {
+    public ControladorForo(
+            ForoService foroService,
+            GestorPermisos gestorPermisos) {
+
         this.foroService = foroService;
+        this.gestorPermisos = gestorPermisos;
     }
 
     @GetMapping("/acceso")
-    public Map<String, String> consultarAcceso(
-            @RequestHeader(value = "X-Usuario-Id", required = false)
-            String usuario) {
-
-        return foroService.consultarAcceso(usuario);
+    public Map<String, String> consultarAcceso(HttpSession sesion) {
+        return foroService.consultarAcceso(idUsuario(sesion));
     }
 
     @GetMapping("/publicaciones")
     public List<PublicacionForoRespuesta> listarPublicaciones(
-            @RequestHeader(value = "X-Usuario-Id", required = false)
-            String usuario,
+            HttpSession sesion,
             @RequestParam(defaultValue = "") String q,
             @RequestParam(defaultValue = "") String tipo,
             @RequestParam(required = false) Long carreraId,
             @RequestParam(required = false) String autor) {
 
         return foroService.listarPublicaciones(
-                usuario, q, tipo, carreraId, autor);
+                idUsuario(sesion), q, tipo, carreraId, autor);
     }
 
     @GetMapping("/publicaciones/{id}")
     public PublicacionForoRespuesta consultarPublicacion(
             @PathVariable Long id,
-            @RequestHeader(value = "X-Usuario-Id", required = false)
-            String usuario) {
+            HttpSession sesion) {
 
-        return foroService.consultarPublicacion(id, usuario);
+        return foroService.consultarPublicacion(id, idUsuario(sesion));
     }
 
     @PostMapping("/publicaciones")
     @ResponseStatus(HttpStatus.CREATED)
     public PublicacionForoRespuesta crearPublicacion(
             @RequestBody CrearPublicacionSolicitud solicitud,
-            @RequestHeader(value = "X-Usuario-Id", required = false)
-            String usuario) {
+            HttpSession sesion) {
 
-        return foroService.crearPublicacion(solicitud, usuario);
+        return foroService.crearPublicacion(solicitud, idUsuario(sesion));
     }
 
     @GetMapping("/publicaciones/{id}/respuestas")
     public List<RespuestaForoRespuesta> listarRespuestas(
             @PathVariable Long id,
-            @RequestHeader(value = "X-Usuario-Id", required = false)
-            String usuario) {
+            HttpSession sesion) {
 
-        return foroService.listarRespuestas(id, usuario);
+        return foroService.listarRespuestas(id, idUsuario(sesion));
     }
 
     @PostMapping("/publicaciones/{id}/respuestas")
@@ -73,10 +73,14 @@ public class ControladorForo {
     public RespuestaForoRespuesta crearRespuesta(
             @PathVariable Long id,
             @RequestBody CrearRespuestaSolicitud solicitud,
-            @RequestHeader(value = "X-Usuario-Id", required = false)
-            String usuario) {
+            HttpSession sesion) {
 
-        return foroService.crearRespuesta(id, solicitud, usuario);
+        return foroService.crearRespuesta(
+                id, solicitud, idUsuario(sesion));
+    }
+
+    private String idUsuario(HttpSession sesion) {
+        return gestorPermisos.exigirSesion(sesion).getIdUsuario();
     }
 
     @ExceptionHandler(ExcepcionForo.class)
