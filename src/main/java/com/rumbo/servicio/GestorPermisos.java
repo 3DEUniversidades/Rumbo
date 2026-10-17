@@ -13,9 +13,14 @@ public class GestorPermisos {
 
     public static final String ATRIBUTO_SESION = "sesionUsuario";
     public static final String ACCION_SOLICITAR_VERIFICACION = "solicitarVerificacion";
+    public static final String ACCION_TABLERO_SUPERVISION = "tableroSupervision";
     private static final Map<String, Rol> ROLES_POR_ACCION = Map.of(
             ACCION_SOLICITAR_VERIFICACION, Rol.ESTUDIANTE
     );
+
+    public boolean puedeSupervisarUsuarios(Rol rol) {
+        return rol == Rol.SUPERVISOR_DE_USUARIOS || rol == Rol.ADMIN;
+    }
 
     public SesionUsuario exigirSesion(HttpSession sesion) {
         SesionUsuario sesionUsuario = (SesionUsuario) sesion.getAttribute(ATRIBUTO_SESION);

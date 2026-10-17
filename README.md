@@ -253,6 +253,28 @@ solo contiene nombre de usuario, nombre completo y descripción personal. Desde
 el foro, el autor de una publicación o respuesta abre esta información y puede
 navegar a sus publicaciones filtradas.
 
+## Supervisión de usuarios
+
+El menú de inicio muestra la opción **Supervisión de usuarios** únicamente a
+los roles `SUPERVISOR_DE_USUARIOS` y `ADMIN`. La pantalla
+`/supervision-usuarios.html` también está protegida por rol en el backend.
+
+El tablero consulta solicitudes pendientes mediante:
+
+- `GET /api/supervision/usuarios/verificaciones`
+- `GET /api/supervision/usuarios/perfiles`
+
+Las decisiones se envían con `PUT` a la solicitud correspondiente usando
+`{"decision":"APROBAR"}` o `{"decision":"RECHAZAR","motivo":"..."}`.
+Rechazar exige un motivo. Aprobar una verificación cambia al estudiante a
+`VERIFICADO`; aprobar un cambio de perfil aplica el nombre de usuario y nombre
+completo propuestos. Cada decisión crea una notificación y un registro de
+supervisión con supervisor, solicitud, tipo, decisión y fecha.
+
+Las notificaciones del usuario se consultan con
+`GET /api/supervision/usuarios/notificaciones` y se marcan como leídas con
+`PUT /api/supervision/usuarios/notificaciones/{idNotificacion}/leida`.
+
 ## Comandos
 
 | Comando | Descripcion |

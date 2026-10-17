@@ -99,6 +99,9 @@ public class ConfiguracionWeb implements WebMvcConfigurer {
                 "/gestion-carreras.html",
                 "/gestion-actividades.html"
         )
+        .addPathPatterns(
+                "/supervision-usuarios.html"
+        )
         .order(1);
     }
 
@@ -130,6 +133,19 @@ public class ConfiguracionWeb implements WebMvcConfigurer {
             if ("/gestion-carreras.html".equals(rutaSolicitada)
                     || "/gestion-actividades.html".equals(rutaSolicitada)) {
                 if (sesionUsuario.getRol() != Rol.ENCARGADO_DE_CARRERAS) {
+                    respuesta.sendError(
+                            HttpServletResponse.SC_FORBIDDEN,
+                            "Pantalla no existente"
+                    );
+                    return false;
+                }
+
+                respuesta.setHeader("Cache-Control", "no-store");
+                return true;
+            }
+
+            if ("/supervision-usuarios.html".equals(rutaSolicitada)) {
+                if (!gestorPermisos.puedeSupervisarUsuarios(sesionUsuario.getRol())) {
                     respuesta.sendError(
                             HttpServletResponse.SC_FORBIDDEN,
                             "Pantalla no existente"

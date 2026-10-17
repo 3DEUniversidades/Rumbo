@@ -16,4 +16,6 @@ public interface SolicitudVerificacionRepository extends JpaRepository<Solicitud
     boolean existsByIdUsuarioAndEstado(String idUsuario, String estado);
 
     List<SolicitudVerificacion> findByEstado(String estado);
+
+    List<SolicitudVerificacion> findByEstadoOrderByFechaSolicitudAsc(String estado);
 }

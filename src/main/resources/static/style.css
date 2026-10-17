@@ -145,6 +145,19 @@ section h2 {
     overflow-wrap: anywhere;
 }
 
+.supervision-solicitud,
+.notificacion {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin-bottom: 0.75rem;
+    padding: 1rem;
+}
+
+.notificacion-no-leida {
+    border-color: var(--primary);
+    background: #eff6ff;
+}
+
 #formulario-perfil {
     display: grid;
     gap: 0.5rem;

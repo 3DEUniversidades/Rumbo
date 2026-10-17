@@ -57,6 +57,11 @@ public class Usuario {
         return nombreCompleto;
     }
 
+    public void actualizarDatosCuenta(String nombreUsuario, String nombreCompleto) {
+        this.nombreUsuario = nombreUsuario;
+        this.nombreCompleto = nombreCompleto;
+    }
+
     public String getCorreo() {
         return correo;
     }
