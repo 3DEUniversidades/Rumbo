@@ -42,7 +42,7 @@ document.getElementById('login-form').addEventListener('submit', async function 
             const datos = await respuesta.json();
             mensajeExito.textContent = 'Bienvenido/a, ' + datos.nombreCompleto;
             mensajeExito.style.display = 'block';
-            window.location.replace(datos.rutaPantalla);
+            window.location.replace('/inicio.html');
         } else {
             mensajeError.textContent = 'Correo o contrasena incorrectos';
             mensajeError.style.display = 'block';

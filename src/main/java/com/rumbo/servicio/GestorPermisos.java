@@ -13,14 +13,6 @@ public class GestorPermisos {
 
     public static final String ATRIBUTO_SESION = "sesionUsuario";
     public static final String ACCION_SOLICITAR_VERIFICACION = "solicitarVerificacion";
-    private static final Map<Rol, String> RUTAS_POR_ROL = Map.of(
-            Rol.ESTUDIANTE, "/roles/estudiante.html",
-            Rol.COLABORADOR, "/roles/colaborador.html",
-            Rol.SUPERVISOR_DE_USUARIOS, "/roles/supervisor-usuarios.html",
-            Rol.SUPERVISOR_DE_MENSAJES, "/roles/supervisor-mensajes.html",
-            Rol.ENCARGADO_DE_CARRERAS, "/roles/encargado-carreras.html",
-            Rol.ADMIN, "/roles/administrador.html"
-    );
     private static final Map<String, Rol> ROLES_POR_ACCION = Map.of(
             ACCION_SOLICITAR_VERIFICACION, Rol.ESTUDIANTE
     );
@@ -54,19 +46,12 @@ public class GestorPermisos {
     }
 
     public boolean puedeAccederAlForo(String rolUsuario, String estadoVerificacion) {
-        if ("COLABORADOR".equalsIgnoreCase(rolUsuario)) {
+        if ("COLABORADOR".equalsIgnoreCase(rolUsuario)
+                || "ADMIN".equalsIgnoreCase(rolUsuario)) {
             return true;
         }
         return "ESTUDIANTE".equalsIgnoreCase(rolUsuario)
                 && "VERIFICADO".equalsIgnoreCase(estadoVerificacion);
-    }
-
-    public String rutaParaRol(Rol rol) {
-        String ruta = RUTAS_POR_ROL.get(rol);
-        if (ruta == null) {
-            throw new ExcepcionPermiso("El rol no tiene una pantalla asignada");
-        }
-        return ruta;
     }
 
 }

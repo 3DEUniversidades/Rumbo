@@ -64,7 +64,7 @@ class UsuarioServiceTest {
     void rechazaRolAdministrativo() {
         ExcepcionValidacion excepcion = assertThrows(ExcepcionValidacion.class, () ->
                 usuarioService.registrar(
-                        solicitud("admin2", "Admin", "admin2@uvg.edu.gt", "contrasenia123", "ADMINISTRADOR")));
+                        solicitud("admin2", "Admin", "admin2@uvg.edu.gt", "contrasenia123", "ADMIN")));
 
         assertTrue(excepcion.getErrores().containsKey("rol"));
     }
