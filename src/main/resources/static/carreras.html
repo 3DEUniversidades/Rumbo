@@ -23,6 +23,9 @@
                     <p class="texto-secundario">Consulta la informacion inicial de cada carrera.</p>
                 </div>
                 <a href="/inicio.html" class="btn btn-secundario">← Volver al inicio</a>
+                <a href="/comparador-carreras.html" class="btn btn-secundario">
+                    Comparar carreras
+                </a>
             </div>
 
             <div id="estado-carreras" class="estado-vista">Cargando carreras...</div>
@@ -34,18 +37,67 @@
         <article>
             <button id="cerrar-modal-carrera" class="modal-cerrar" type="button" aria-label="Cerrar detalle">×</button>
             <h2 id="modal-carrera-nombre"></h2>
+            <p id="modal-carrera-facultad" class="carrera-area"></p>
+            <p id="modal-carrera-descripcion" class="detalle-descripcion"></p>
             <dl class="detalle-carrera">
                 <div>
-                    <dt>Duracion</dt>
+                    <dt>Duración</dt>
                     <dd id="modal-carrera-duracion"></dd>
                 </div>
                 <div>
-                    <dt>Costo aproximado</dt>
-                    <dd id="modal-carrera-costo"></dd>
+                    <dt>Costo de referencia</dt>
+                    <dd>
+                        <span id="modal-carrera-costo"></span>
+                        <small id="modal-carrera-costo-nota" class="nota-detalle"></small>
+                    </dd>
                 </div>
                 <div>
-                    <dt>Pensum</dt>
-                    <dd id="modal-carrera-pensum"></dd>
+                    <dt>Modalidad</dt>
+                    <dd id="modal-carrera-modalidad"></dd>
+                </div>
+                <div>
+                    <dt>Carga de créditos</dt>
+                    <dd id="modal-carrera-creditos"></dd>
+                </div>
+                <div>
+                    <dt>Áreas de formación</dt>
+                    <dd><ul id="modal-carrera-areas" class="lista-detalle"></ul></dd>
+                </div>
+                <div>
+                    <dt>Competencias que desarrollarás</dt>
+                    <dd><ul id="modal-carrera-competencias" class="lista-detalle"></ul></dd>
+                </div>
+                <div>
+                    <dt>Oportunidades laborales</dt>
+                    <dd><ul id="modal-carrera-oportunidades" class="lista-detalle"></ul></dd>
+                </div>
+                <div>
+                    <dt>Salario estimado</dt>
+                    <dd id="modal-carrera-salario"></dd>
+                </div>
+                <div>
+                    <dt>Empleabilidad</dt>
+                    <dd id="modal-carrera-empleabilidad"></dd>
+                </div>
+                <div id="bloque-contexto-laboral" hidden>
+                    <dt>Información laboral adicional</dt>
+                    <dd id="modal-carrera-contexto-laboral"></dd>
+                </div>
+                <div id="bloque-pdf-oficial" hidden>
+                    <dt>Documento oficial (PDF)</dt>
+                    <dd>
+                        <a id="modal-carrera-pdf" target="_blank" rel="noopener noreferrer">
+                            Abrir PDF
+                        </a>
+                    </dd>
+                </div>
+                <div id="bloque-carrera-oficial" hidden>
+                    <dt>Información oficial de la carrera</dt>
+                    <dd>
+                        <a id="modal-carrera-enlace-oficial" target="_blank" rel="noopener noreferrer">
+                            Visitar sitio oficial
+                        </a>
+                    </dd>
                 </div>
             </dl>
         </article>
@@ -55,6 +107,7 @@
         <p>Rumbo &copy; 2026</p>
     </footer>
 
+    <script src="/js/sesion.js"></script>
     <script src="/js/vistaCarreras.js"></script>
 </body>
 </html>

@@ -1,9 +1,12 @@
 package com.rumbo.modelo;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "usuario")
@@ -11,18 +14,28 @@ public class Usuario {
 
     @Id
     private String idUsuario;
+
+    @Column(nullable = false, unique = true)
     private String nombreUsuario;
+
     private String nombreCompleto;
+
+    @Column(nullable = false, unique = true)
     private String correo;
+
     private String contrasenia;
-    private String rol;
-    private String estadoVerificacion;
+
+    @Enumerated(EnumType.STRING)
+    private Rol rol;
+
+    @Enumerated(EnumType.STRING)
+    private EstadoVerificacion estadoVerificacion;
 
     protected Usuario() {
     }
 
     public Usuario(String idUsuario, String nombreUsuario, String nombreCompleto,
-                   String correo, String contrasenia, String rol, String estadoVerificacion) {
+                   String correo, String contrasenia, Rol rol, EstadoVerificacion estadoVerificacion) {
         this.idUsuario = idUsuario;
         this.nombreUsuario = nombreUsuario;
         this.nombreCompleto = nombreCompleto;
@@ -48,19 +61,20 @@ public class Usuario {
         return correo;
     }
 
-    public String getRol() {
+    public Rol getRol() {
         return rol;
     }
 
-    public String getEstadoVerificacion() {
+    public EstadoVerificacion getEstadoVerificacion() {
         return estadoVerificacion;
     }
 
-    public void setEstadoVerificacion(String estadoVerificacion) {
+    public void setEstadoVerificacion(EstadoVerificacion estadoVerificacion) {
         this.estadoVerificacion = estadoVerificacion;
     }
 
-    public boolean verificarContrasenia(String contraseniaIngresada) {
-        return new BCryptPasswordEncoder().matches(contraseniaIngresada, this.contrasenia);
+    @JsonIgnore
+    public String getContrasenia() {
+        return contrasenia;
     }
 }

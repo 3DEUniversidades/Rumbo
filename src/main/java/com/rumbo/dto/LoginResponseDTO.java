@@ -23,4 +23,5 @@ public class LoginResponseDTO {
     public String getRol() {
         return rol;
     }
+
 }
