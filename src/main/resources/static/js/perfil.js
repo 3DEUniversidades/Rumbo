@@ -9,6 +9,33 @@ document.addEventListener("DOMContentLoaded", async function () {
     const etiquetaArea = document.getElementById("etiqueta-area-laboral");
     const etiquetaCarrera = document.getElementById("etiqueta-carrera");
     const seccionEdicion = document.getElementById("seccion-edicion-perfil");
+    const seccionSolicitud = document.getElementById("seccion-solicitud-perfil");
+    const formularioSolicitud = document.getElementById("formulario-solicitud-perfil");
+    const estadoSolicitud = document.getElementById("estado-solicitud-perfil");
+    const botonSolicitud = document.getElementById("solicitar-cambio-perfil");
+    const botonEditarCuenta = document.getElementById("editar-datos-cuenta");
+    const campoNombreUsuario = document.getElementById("solicitud-nombre-usuario");
+    const campoNombreCompleto = document.getElementById("solicitud-nombre-completo");
+    let solicitudPendiente = false;
+
+    const cargarSolicitudPendiente = async function () {
+        const respuesta = await fetch("/api/perfil/solicitudes/pendiente");
+        if (!respuesta.ok) {
+            throw new Error("No se pudo consultar la solicitud pendiente.");
+        }
+        const solicitud = await respuesta.json();
+        if (!solicitud) {
+            return;
+        }
+        solicitudPendiente = true;
+        campoNombreUsuario.value =
+            solicitud.nombreUsuarioSolicitado;
+        campoNombreCompleto.value =
+            solicitud.nombreCompletoSolicitado;
+        estadoSolicitud.textContent =
+            "Ya tienes una solicitud pendiente de revisión.";
+        botonSolicitud.disabled = true;
+    };
 
     try {
         const sesion = await obtenerSesion();
@@ -23,6 +50,16 @@ document.addEventListener("DOMContentLoaded", async function () {
         if (!puedeEditar) {
             seccionEdicion.hidden = true;
         } else {
+            seccionSolicitud.hidden = false;
+            botonEditarCuenta.hidden = false;
+            campoNombreUsuario.value = perfil.nombreUsuario || "";
+            campoNombreCompleto.value = perfil.nombreCompleto || "";
+            try {
+                await cargarSolicitudPendiente();
+            } catch (exception) {
+                estadoSolicitud.textContent = exception.message;
+                estadoSolicitud.className = "mensaje-formulario mensaje-error";
+            }
             mostrarFormulario(perfil, [], sesion.rol);
         }
 
@@ -61,6 +98,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(datos)
             });
+
             if (respuesta.status === 401) {
                 window.location.replace("/login.html");
                 return;
@@ -77,6 +115,20 @@ document.addEventListener("DOMContentLoaded", async function () {
         } finally {
             botonGuardar.disabled = false;
         }
+    });
+
+    botonEditarCuenta.addEventListener("click", function () {
+        if (solicitudPendiente) {
+            return;
+        }
+        campoNombreUsuario.disabled = false;
+        campoNombreCompleto.disabled = false;
+        botonSolicitud.disabled = false;
+        botonEditarCuenta.disabled = true;
+        botonEditarCuenta.textContent = "Editando";
+        estadoSolicitud.textContent =
+            "Modifica tus datos y después solicita el cambio.";
+        estadoSolicitud.className = "mensaje-formulario";
     });
 
     async function consultarPerfil() {
@@ -98,6 +150,39 @@ document.addEventListener("DOMContentLoaded", async function () {
         }
         return respuesta.json();
     }
+
+    formularioSolicitud.addEventListener("submit", async function (evento) {
+        evento.preventDefault();
+        botonSolicitud.disabled = true;
+        estadoSolicitud.textContent = "Enviando solicitud...";
+        estadoSolicitud.className = "mensaje-formulario";
+
+        try {
+            const respuesta = await fetch("/api/perfil/solicitudes", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    nombreUsuario: campoNombreUsuario.value.trim(),
+                    nombreCompleto: campoNombreCompleto.value.trim()
+                })
+            });
+            const cuerpo = await respuesta.json().catch(() => ({}));
+            if (!respuesta.ok) {
+                throw new Error(cuerpo.error || "No se pudo crear la solicitud.");
+            }
+            estadoSolicitud.textContent =
+                "Solicitud enviada y pendiente de revisión.";
+            estadoSolicitud.className = "mensaje-formulario mensaje-exito";
+            solicitudPendiente = true;
+            campoNombreUsuario.disabled = true;
+            campoNombreCompleto.disabled = true;
+            botonEditarCuenta.disabled = true;
+        } catch (exception) {
+            estadoSolicitud.textContent = exception.message;
+            estadoSolicitud.className = "mensaje-formulario mensaje-error";
+            botonSolicitud.disabled = false;
+        }
+    });
 
     function mostrarCuenta(perfil) {
         document.getElementById("perfil-nombre-usuario").textContent = perfil.nombreUsuario;

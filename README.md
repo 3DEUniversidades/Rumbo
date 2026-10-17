@@ -239,6 +239,20 @@ sesion del servidor. Una solicitud pendiente bloquea solicitudes duplicadas;
 una solicitud rechazada permite volver a solicitar. Los colaboradores no
 pueden crear solicitudes.
 
+## Perfiles y cambios de cuenta
+
+`GET /api/perfil` permite a cualquier usuario autenticado consultar su propio
+perfil. Estudiantes y colaboradores pueden editar directamente sus datos
+personales, pero los cambios de nombre de usuario y nombre completo se envían
+como solicitud pendiente mediante `POST /api/perfil/solicitudes`. Mientras no
+exista un flujo de revisión implementado, la solicitud no modifica la cuenta.
+
+Los usuarios autenticados pueden consultar el perfil público de estudiantes y
+colaboradores con `GET /api/perfil/publico/{idUsuario}`. La respuesta pública
+solo contiene nombre de usuario, nombre completo y descripción personal. Desde
+el foro, el autor de una publicación o respuesta abre esta información y puede
+navegar a sus publicaciones filtradas.
+
 ## Comandos
 
 | Comando | Descripcion |

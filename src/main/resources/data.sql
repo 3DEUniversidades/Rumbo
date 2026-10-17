@@ -4,6 +4,9 @@
 -- NULL = dato no confirmado todavia; nunca equivale a cero.
 -- Las listas (areas, competencias, oportunidades) se guardan como arreglos JSON en texto.
 
+-- La finalizacion ahora pertenece al registro de cada estudiante, no a la actividad.
+ALTER TABLE actividad DROP COLUMN IF EXISTS completada;
+
 -- Retira las carreras de ejemplo anteriores (enlaces example.org) si no tienen historial de cambios.
 DELETE FROM carreras
 WHERE pdf_oficial_url LIKE 'https://example.org/%'

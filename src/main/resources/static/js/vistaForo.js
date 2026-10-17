@@ -17,6 +17,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const listado = obtener("lista-publicaciones-foro");
 
     const modal = obtener("detalle-foro");
+    const modalPerfil = obtener("perfil-publico-foro");
     const estadoDetalle = obtener("estado-detalle-foro");
     const contenidoDetalle = obtener("contenido-detalle-foro");
     const respuestas = obtener("respuestas-foro");
@@ -65,6 +66,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         revisionDetalle++;
         publicacionAbierta = null;
     });
+
+    obtener("cerrar-perfil-publico-foro").addEventListener(
+        "click", () => modalPerfil.close()
+    );
 
     filtros.addEventListener("submit", evento => {
         evento.preventDefault();
@@ -409,11 +414,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     function crearAutor(autor, fecha) {
         const contenedor = crear("p", "", "autor-foro");
-        const enlace = crear("a", "@" + autor.nombre);
-
-        enlace.href = "/foro.html?autor="
-            + encodeURIComponent(autor.idUsuario);
-        enlace.title = "Ver publicaciones de este autor";
+        const enlace = crear("button", "@" + autor.nombre, "enlace-autor-foro");
+        enlace.type = "button";
+        enlace.title = "Ver perfil de este autor";
+        enlace.addEventListener("click", () => abrirPerfilPublico(autor.idUsuario));
 
         const fechaFormateada = new Date(fecha).toLocaleString("es-GT", {
             dateStyle: "medium",
@@ -426,6 +430,36 @@ document.addEventListener("DOMContentLoaded", async () => {
         );
 
         return contenedor;
+    }
+
+    async function abrirPerfilPublico(idUsuario) {
+        const estado = obtener("estado-perfil-publico-foro");
+        const contenido = obtener("contenido-perfil-publico-foro");
+        const enlacePublicaciones = obtener("publicaciones-perfil-publico-foro");
+
+        contenido.hidden = true;
+        estado.textContent = "Cargando perfil...";
+        if (!modalPerfil.open) {
+            modalPerfil.showModal();
+        }
+
+        try {
+            const perfil = await solicitar(
+                `/api/perfil/publico/${encodeURIComponent(idUsuario)}`
+            );
+            obtener("nombre-perfil-publico-foro").textContent =
+                perfil.nombreCompleto;
+            obtener("usuario-perfil-publico-foro").textContent =
+                "@" + perfil.nombreUsuario;
+            obtener("descripcion-perfil-publico-foro").textContent =
+                perfil.descripcionPersonal || "Este usuario aún no ha agregado una descripción.";
+            enlacePublicaciones.href = "/foro.html?autor="
+                + encodeURIComponent(perfil.idUsuario);
+            estado.textContent = "";
+            contenido.hidden = false;
+        } catch (error) {
+            estado.textContent = error.message;
+        }
     }
 
     function nombresCarreras(publicacion) {
