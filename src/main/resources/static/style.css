@@ -69,20 +69,24 @@ section h2 {
     color: white;
 }
 
+.enlace-autor-foro {
+    border: 0;
+    padding: 0;
+    background: transparent;
+    color: var(--primary);
+    cursor: pointer;
+    font: inherit;
+    font-weight: 600;
+}
+
+.enlace-autor-foro:hover {
+    text-decoration: underline;
+}
+
 #acciones {
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
-}
-
-.menu-principal {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-}
-
-.menu-principal .btn {
-    margin-left: 0;
 }
 
 .vista-encabezado {
@@ -109,6 +113,13 @@ section h2 {
     border: 1px solid var(--border);
     border-radius: 10px;
     padding: 1.25rem;
+}
+
+.perfil-card-encabezado {
+    align-items: center;
+    display: flex;
+    gap: 1rem;
+    justify-content: space-between;
 }
 
 .datos-cuenta {
@@ -317,9 +328,7 @@ footer {
 }
 
 .login-form input[type="email"],
-.login-form input[type="text"],
-.login-form input[type="password"],
-.login-form select {
+.login-form input[type="password"] {
     width: 100%;
     padding: 0.6rem 0.75rem;
     border: 1px solid var(--border);
@@ -329,29 +338,9 @@ footer {
     background: var(--bg);
 }
 
-.login-form input:focus,
-.login-form select:focus {
+.login-form input:focus {
     outline: 2px solid var(--primary);
     outline-offset: 1px;
-}
-
-.campo-error {
-    display: none;
-    color: #dc2626;
-    font-size: 0.85rem;
-    margin: -0.75rem 0 0.75rem;
-}
-
-.cambio-vista {
-    text-align: center;
-    margin-top: 1rem;
-    color: var(--text-muted);
-    font-size: 0.9rem;
-}
-
-.cambio-vista a {
-    color: var(--primary);
-    font-weight: 600;
 }
 
 .login-form .btn {

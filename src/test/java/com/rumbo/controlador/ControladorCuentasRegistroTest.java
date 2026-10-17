@@ -487,6 +487,93 @@ class ControladorCuentasRegistroTest {
     }
 
     @Test
+    void estudianteSolicitaCambioDeNombreSinModificarloDeInmediato() throws Exception {
+        guardarUsuario(
+                "usr-solicitud-perfil",
+                "nombre_actual",
+                "Nombre actual",
+                "solicitud.perfil@correo.com",
+                Rol.ESTUDIANTE,
+                EstadoVerificacion.NO_VERIFICADO
+        );
+        MockHttpSession sesion = iniciarSesion("solicitud.perfil@correo.com");
+
+        mockMvc.perform(post("/api/perfil/solicitudes")
+                        .session(sesion)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {
+                                  "nombreUsuario":"nombre_nuevo",
+                                  "nombreCompleto":"Nombre nuevo"
+                                }
+                                """))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.estado").value("pendiente"))
+                .andExpect(jsonPath("$.nombreUsuarioSolicitado").value("nombre_nuevo"));
+
+        mockMvc.perform(get("/api/perfil").session(sesion))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.nombreUsuario").value("nombre_actual"))
+                .andExpect(jsonPath("$.nombreCompleto").value("Nombre actual"));
+
+        mockMvc.perform(post("/api/perfil/solicitudes")
+                        .session(sesion)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {
+                                  "nombreUsuario":"otro_nombre",
+                                  "nombreCompleto":"Otro nombre"
+                                }
+                                """))
+                .andExpect(status().isConflict());
+    }
+
+    @Test
+    void usuarioAutenticadoConsultaPerfilPublicoDeEstudiante() throws Exception {
+        guardarUsuario(
+                "usr-publico",
+                "perfil_publico",
+                "Perfil Público",
+                "perfil.publico@correo.com",
+                Rol.ESTUDIANTE,
+                EstadoVerificacion.NO_VERIFICADO
+        );
+        completarPerfilEstudiante("usr-publico");
+
+        guardarUsuario(
+                "usr-lector",
+                "lector",
+                "Lector",
+                "lector@correo.com",
+                Rol.COLABORADOR
+        );
+        MockHttpSession sesion = iniciarSesion("lector@correo.com");
+
+        mockMvc.perform(get("/api/perfil/publico/usr-publico").session(sesion))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.idUsuario").value("usr-publico"))
+                .andExpect(jsonPath("$.nombreUsuario").value("perfil_publico"))
+                .andExpect(jsonPath("$.nombreCompleto").value("Perfil Público"))
+                .andExpect(jsonPath("$.descripcionPersonal").value("Descripcion de prueba"))
+                .andExpect(jsonPath("$.correo").doesNotExist());
+    }
+
+    @Test
+    void perfilPublicoRechazaComoObjetivoUnRolAdministrativo() throws Exception {
+        guardarUsuario(
+                "usr-admin-objetivo",
+                "admin_objetivo",
+                "Admin objetivo",
+                "admin.objetivo@rumbo.test",
+                Rol.ADMIN
+        );
+        MockHttpSession sesion = iniciarSesion("admin.objetivo@rumbo.test");
+
+        mockMvc.perform(get("/api/perfil/publico/usr-admin-objetivo").session(sesion))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
     void rolesAdministrativosPuedenVerPeroNoEditarSuPerfil() throws Exception {
         Rol[] rolesSoloLectura = {
                 Rol.SUPERVISOR_DE_USUARIOS,

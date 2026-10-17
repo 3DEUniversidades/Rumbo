@@ -23,13 +23,39 @@
         </div>
 
         <section class="perfil-card">
-            <h2>Datos de tu cuenta</h2>
+            <div class="perfil-card-encabezado">
+                <h2>Datos de tu cuenta</h2>
+                <button id="editar-datos-cuenta" class="btn btn-secundario"
+                        type="button" hidden>Editar</button>
+            </div>
             <dl class="datos-cuenta">
                 <div><dt>Nombre de usuario</dt><dd id="perfil-nombre-usuario"></dd></div>
                 <div><dt>Nombre completo</dt><dd id="perfil-nombre-completo"></dd></div>
                 <div><dt>Correo electrónico</dt><dd id="perfil-correo"></dd></div>
                 <div><dt>Rol</dt><dd id="perfil-rol"></dd></div>
             </dl>
+        </section>
+
+        <section id="seccion-solicitud-perfil" class="perfil-card" hidden>
+            <h2>Solicitar cambio de datos</h2>
+            <p class="texto-secundario">
+                Los cambios de nombre de usuario y nombre completo requieren
+                revisión antes de aplicarse.
+            </p>
+            <p id="estado-solicitud-perfil" class="mensaje-formulario"
+               role="status"></p>
+            <form id="formulario-solicitud-perfil">
+                <label for="solicitud-nombre-usuario">Nombre de usuario</label>
+                <input id="solicitud-nombre-usuario" type="text" required disabled>
+
+                <label for="solicitud-nombre-completo">Nombre completo</label>
+                <input id="solicitud-nombre-completo" type="text" required disabled>
+
+                <button id="solicitar-cambio-perfil" class="btn" type="submit"
+                        disabled>
+                    Solicitar cambio
+                </button>
+            </form>
         </section>
 
         <section id="seccion-edicion-perfil" class="perfil-card">
@@ -59,6 +85,6 @@
     <p id="error-perfil" class="mensaje-error" hidden></p>
 
     <script src="/js/sesion.js"></script>
-    <script src="/js/perfil.js"></script>
+    <script src="/js/perfil.js?v=5"></script>
 </body>
 </html>

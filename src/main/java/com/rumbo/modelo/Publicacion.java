@@ -110,6 +110,6 @@ public class Publicacion {
 
     public void setEstado(Estado estado) {
         this.estado = estado;
-    }   
+    }
 
 }

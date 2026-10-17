@@ -32,7 +32,7 @@ public class ControladorComparador {
             @RequestParam(required = false) List<Long> ids, HttpSession sesion) {
 
         gestorPermisos.exigirSesion(sesion);
-                
+
         if (ids == null || ids.size() < 2) {
             return ResponseEntity.badRequest()
                     .body(Map.of("error", "Selecciona al menos dos carreras."));
