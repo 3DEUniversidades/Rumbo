@@ -3,12 +3,16 @@ document.addEventListener("DOMContentLoaded", async () => {
     const mensaje = document.getElementById("mensaje-inicio");
     const botonCerrarSesion = document.getElementById("cerrar-sesion");
     const enlaceForo = document.getElementById("enlace-foro");
+    const enlaceLineaTiempo =
+    document.getElementById("enlace-linea-tiempo");
 
     acciones.hidden = true;
 
     try {
         const sesion = await obtenerSesion();
         if (!sesion) return;
+
+        enlaceLineaTiempo.hidden = sesion.rol !== "ESTUDIANTE";
 
         document.getElementById("saludo").textContent =
             "Hola, " + sesion.nombreCompleto;
