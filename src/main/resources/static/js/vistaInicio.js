@@ -12,7 +12,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         const sesion = await obtenerSesion();
         if (!sesion) return;
 
-        enlaceLineaTiempo.hidden = sesion.rol !== "ESTUDIANTE";
+        const rol = String(sesion.rol || "").toUpperCase();
+        enlaceLineaTiempo.hidden = rol !== "ESTUDIANTE";
 
         document.getElementById("saludo").textContent =
             "Hola, " + sesion.nombreCompleto;
