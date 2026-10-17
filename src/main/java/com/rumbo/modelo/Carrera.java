@@ -78,13 +78,6 @@ public class Carrera {
     @Column(length = 500)
     private String urlCarreraOficial;
 
-
-<<<<<<< HEAD
-// Metodos
-=======
-    // metodos
->>>>>>> origin/developer
-
     protected Carrera() {
         // Lo necesita JPA para recuperar carreras de la base de datos.
     }
