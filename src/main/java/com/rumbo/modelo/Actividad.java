@@ -27,6 +27,18 @@ public class Actividad {
     @Column(name = "tipo_actividad")
     private String tipoActividad;
 
+    // Eliminacion logica: conserva el historial personal de los estudiantes.
+    @Column(nullable = false, columnDefinition = "boolean default false")
+    private boolean eliminada = false;
+
+    public boolean isEliminada() {
+        return eliminada;
+    }
+
+    public void retirarDeLineaDeTiempo() {
+        this.eliminada = true;
+    }
+
     protected Actividad() {
     }
 

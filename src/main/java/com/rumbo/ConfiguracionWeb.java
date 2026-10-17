@@ -96,7 +96,8 @@ public class ConfiguracionWeb implements WebMvcConfigurer {
                 new InterceptorPantallasRol(gestorPermisos)
         )
         .addPathPatterns(
-                "/gestion-carreras.html"
+                "/gestion-carreras.html",
+                "/gestion-actividades.html"
         )
         .order(1);
     }
@@ -126,7 +127,8 @@ public class ConfiguracionWeb implements WebMvcConfigurer {
 
             String rutaSolicitada = solicitud.getRequestURI()
                     .substring(solicitud.getContextPath().length());
-            if ("/gestion-carreras.html".equals(rutaSolicitada)) {
+            if ("/gestion-carreras.html".equals(rutaSolicitada)
+                    || "/gestion-actividades.html".equals(rutaSolicitada)) {
                 if (sesionUsuario.getRol() != Rol.ENCARGADO_DE_CARRERAS) {
                     respuesta.sendError(
                             HttpServletResponse.SC_FORBIDDEN,

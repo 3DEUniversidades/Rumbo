@@ -209,3 +209,25 @@ ON CONFLICT (id_actividad) DO NOTHING;
 INSERT INTO actividad (id_actividad, fecha, descripcion, contexto, instrucciones, acciones_a_realizar, metodo_recomendado, herramientas_disponibles, informacion_a_guardar, tipo_actividad)
 VALUES ('act-0004', '2026-04-20', 'Toma de decisión y planificación', 'Momento de elegir la carrera y diseñar el plan de estudio', 'Reúne toda tu información y toma una decisión fundamentada', 'Revisar bitácora, comparar opciones y elegir la carrera que mejor se alinee', 'Matriz de decisión ponderada', 'Bitácora, hoja de cálculo o cuaderno', 'Carrera elegida y razones de tu decisión', 'Decisión')
 ON CONFLICT (id_actividad) DO NOTHING;
+
+
+-- T-10: ejemplos de actividades configurables, sin duplicar ni reactivar las retiradas.
+INSERT INTO actividad (id_actividad, fecha, descripcion, contexto, instrucciones,
+acciones_a_realizar, metodo_recomendado, herramientas_disponibles, informacion_a_guardar, tipo_actividad)
+VALUES ('act-t10-cita', '2026-10-20', 'Preparar una cita de orientacion universitaria',
+'Conversar con orientacion sobre las carreras de interes',
+'Consulta los canales oficiales de la universidad para solicitar una cita',
+'Preparar preguntas y confirmar la disponibilidad de una cita',
+'Entrevista orientada por preguntas', 'Canales oficiales y agenda personal',
+'Fecha acordada, preguntas y conclusiones', 'Cita universitaria')
+ON CONFLICT (id_actividad) DO NOTHING;
+
+INSERT INTO actividad (id_actividad, fecha, descripcion, contexto, instrucciones,
+acciones_a_realizar, metodo_recomendado, herramientas_disponibles, informacion_a_guardar, tipo_actividad)
+VALUES ('act-t10-familia', '2026-10-22', 'Conversar con tu familia sobre tus opciones',
+'Reflexionar sobre expectativas y apoyos para la decision',
+'Busca un momento tranquilo para compartir tus opciones de carrera',
+'Explicar tus intereses y escuchar las perspectivas de tu familia',
+'Conversacion guiada', 'Lista de carreras y preguntas personales',
+'Acuerdos, inquietudes y conclusiones personales', 'Acompanamiento familiar')
+ON CONFLICT (id_actividad) DO NOTHING;

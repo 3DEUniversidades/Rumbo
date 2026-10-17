@@ -109,7 +109,7 @@ public List<ActividadEstudianteRespuesta> consultarLineaDeTiempo(
     }
 
     List<Actividad> actividades =
-            actividadRepository.findAllByOrderByFechaAsc();
+            actividadRepository.findByEliminadaFalseOrderByFechaAsc();
 
     Map<String, RegistroActividadEstudiante> registrosPorActividad =
             registroRepository.findByUsuario_IdUsuario(idUsuario)
@@ -148,7 +148,7 @@ public ActividadEstudianteRespuesta consultarDetalleActividad(
         throw new IllegalArgumentException("Usuario no encontrado");
     }
 
-    Actividad actividad = actividadRepository.findById(idActividad)
+    Actividad actividad = actividadRepository.findByIdActividadAndEliminadaFalse(idActividad)
             .orElseThrow(() -> new ExcepcionActividad(
                     "Actividad no encontrada: " + idActividad
             ));
@@ -256,7 +256,7 @@ private RegistroActividadEstudiante obtenerOCrearRegistro(
                     "Usuario no encontrado"
             ));
 
-    Actividad actividad = actividadRepository.findById(idActividad)
+    Actividad actividad = actividadRepository.findByIdActividadAndEliminadaFalse(idActividad)
             .orElseThrow(() -> new ExcepcionActividad(
                     "Actividad no encontrada: " + idActividad
             ));
