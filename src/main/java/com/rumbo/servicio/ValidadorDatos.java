@@ -1,6 +1,9 @@
 package com.rumbo.servicio;
 
 import com.rumbo.dto.RegistroRequestDTO;
+import com.rumbo.dto.ActividadSolicitud;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import com.rumbo.modelo.Rol;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -130,5 +133,44 @@ public class ValidadorDatos {
         }
 
         return errores;
+    }
+
+    public void exigirActividadValida(ActividadSolicitud solicitud) {
+        Map<String, String> errores = new LinkedHashMap<>();
+        if (solicitud == null) {
+            throw new ExcepcionValidacion(Map.of("general", "Faltan los datos de la actividad"));
+        }
+        validarTextoActividad("fecha", solicitud.fecha(), errores);
+        validarTextoActividad("descripcion", solicitud.descripcion(), errores);
+        validarTextoActividad("contexto", solicitud.contexto(), errores);
+        validarTextoActividad("instrucciones", solicitud.instrucciones(), errores);
+        validarTextoActividad("accionesARealizar", solicitud.accionesARealizar(), errores);
+        validarTextoActividad("metodoRecomendado", solicitud.metodoRecomendado(), errores);
+        validarTextoActividad("herramientasDisponibles", solicitud.herramientasDisponibles(), errores);
+        validarTextoActividad("informacionAGuardar", solicitud.informacionAGuardar(), errores);
+        validarTextoActividad("tipoActividad", solicitud.tipoActividad(), errores);
+
+        if (!errores.containsKey("fecha")) {
+            String fecha = solicitud.fecha().strip();
+            try {
+                if (!fecha.matches("[0-9]{4}-[0-9]{2}-[0-9]{2}")) {
+                    throw new DateTimeParseException("Formato incorrecto", fecha, 0);
+                }
+                LocalDate.parse(fecha);
+            } catch (DateTimeParseException e) {
+                errores.put("fecha", "Usa una fecha valida con formato AAAA-MM-DD");
+            }
+        }
+        if (!errores.isEmpty()) {
+            throw new ExcepcionValidacion(errores);
+        }
+    }
+
+    private void validarTextoActividad(String campo, String valor, Map<String, String> errores) {
+        if (valor == null || valor.isBlank()) {
+            errores.put(campo, "Este campo es obligatorio");
+        } else if (valor.strip().length() > 255) {
+            errores.put(campo, "El maximo es de 255 caracteres");
+        }
     }
 }

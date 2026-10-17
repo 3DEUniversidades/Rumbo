@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#2563eb">
+    <title>Rumbo - Gestión de actividades</title>
+    <link rel="stylesheet" href="/style.css?v=t10-1">
+    <link rel="stylesheet" href="/css/gestionActividades.css?v=t10-1">
+</head>
+<body>
+<header><h1>Rumbo</h1><p>Gestión de actividades de orientación</p></header>
+<main>
+    <p id="acceso-actividades" role="alert">Comprobando acceso...</p>
+    <section id="gestion-actividades" hidden>
+        <div class="encabezado-actividades">
+            <div><h2>Actividades de la línea de tiempo</h2>
+                <p>Crea y actualiza las actividades que verán los estudiantes.</p></div>
+            <a class="btn btn-secundario" href="/inicio.html">Volver al inicio</a>
+        </div>
+        <div class="acciones-actividades">
+            <button type="button" class="btn" id="nueva-actividad">Crear actividad</button>
+            <button type="button" class="btn btn-secundario" id="actualizar-actividades">Actualizar lista</button>
+        </div>
+        <p id="mensaje-actividades" role="status" aria-live="polite"></p>
+        <div id="catalogo-actividades"></div>
+    </section>
+</main>
+<dialog id="editor-actividad" aria-labelledby="titulo-editor-actividad">
+    <form id="formulario-actividad">
+        <h2 id="titulo-editor-actividad">Crear actividad</h2>
+        <p>Todos los campos son obligatorios. Máximo 255 caracteres por campo.</p>
+        <fieldset id="campos-actividad">
+            <legend>Información de la actividad</legend>
+            <label>Fecha<input name="fecha" type="date" required></label>
+            <label>Descripción<input name="descripcion" type="text" maxlength="255" required></label>
+            <label>Tipo<input name="tipoActividad" type="text" maxlength="255" required
+                list="tipos-actividad" placeholder="Escribe un tipo o elige una sugerencia"></label>
+            <datalist id="tipos-actividad">
+                <option value="Prueba de intereses"></option><option value="Prueba de habilidades"></option>
+                <option value="Cita universitaria"></option><option value="Acompañamiento familiar"></option>
+            </datalist>
+            <label>Contexto<textarea name="contexto" rows="2" maxlength="255" required></textarea></label>
+            <label>Instrucciones<textarea name="instrucciones" rows="3" maxlength="255" required></textarea></label>
+            <label>Acciones a realizar<textarea name="accionesARealizar" rows="2" maxlength="255" required></textarea></label>
+            <label>Método recomendado<textarea name="metodoRecomendado" rows="2" maxlength="255" required></textarea></label>
+            <label>Herramientas disponibles<textarea name="herramientasDisponibles" rows="2" maxlength="255" required></textarea></label>
+            <label>Información que debe guardar el estudiante<textarea name="informacionAGuardar" rows="2" maxlength="255" required></textarea></label>
+        </fieldset>
+        <p id="error-actividad" role="alert"></p>
+        <div class="acciones-actividades">
+            <button type="submit" class="btn" id="guardar-actividad">Guardar</button>
+            <button type="button" class="btn btn-secundario" id="cancelar-actividad">Cancelar</button>
+        </div>
+    </form>
+</dialog>
+<footer><p>Rumbo © 2026</p></footer>
+<script src="/js/sesion.js"></script>
+<script src="/js/vistaGestionActividades.js?v=t10-1"></script>
+</body>
+</html>
