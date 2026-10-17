@@ -35,6 +35,8 @@ document.addEventListener("DOMContentLoaded", async function () {
         estadoSolicitud.textContent =
             "Ya tienes una solicitud pendiente de revisión.";
         botonSolicitud.disabled = true;
+        botonEditarCuenta.disabled = true;
+        botonEditarCuenta.textContent = "Solicitud pendiente";
     };
 
     try {
@@ -44,8 +46,9 @@ document.addEventListener("DOMContentLoaded", async function () {
         }
         const perfil = await consultarPerfil();
         mostrarCuenta(perfil);
-        const puedeEditar = sesion.rol === "ESTUDIANTE"
-            || sesion.rol === "COLABORADOR";
+        const rol = String(sesion.rol || "").toUpperCase();
+        const puedeEditar = rol === "ESTUDIANTE"
+            || rol === "COLABORADOR";
 
         if (!puedeEditar) {
             seccionEdicion.hidden = true;
@@ -60,7 +63,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                 estadoSolicitud.textContent = exception.message;
                 estadoSolicitud.className = "mensaje-formulario mensaje-error";
             }
-            mostrarFormulario(perfil, [], sesion.rol);
+            mostrarFormulario(perfil, [], rol);
         }
 
         contenido.hidden = false;
@@ -119,6 +122,9 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     botonEditarCuenta.addEventListener("click", function () {
         if (solicitudPendiente) {
+            estadoSolicitud.textContent =
+                "Ya tienes una solicitud pendiente de revisión.";
+            estadoSolicitud.className = "mensaje-formulario";
             return;
         }
         campoNombreUsuario.disabled = false;
@@ -177,6 +183,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             campoNombreUsuario.disabled = true;
             campoNombreCompleto.disabled = true;
             botonEditarCuenta.disabled = true;
+            botonEditarCuenta.textContent = "Solicitud pendiente";
         } catch (exception) {
             estadoSolicitud.textContent = exception.message;
             estadoSolicitud.className = "mensaje-formulario mensaje-error";
