@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rumbo - Supervisión de usuarios</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <header>
+        <h1>Supervisión de usuarios</h1>
+        <p>Revisa solicitudes de verificación y actualización de perfil</p>
+    </header>
+    <main>
+        <div class="vista-encabezado">
+            <h2>Tablero del supervisor</h2>
+            <a href="/inicio.html" class="btn btn-secundario">Volver</a>
+        </div>
+        <p id="mensaje-supervision" class="estado-vista" role="status"></p>
+        <section class="perfil-card">
+            <h2>Verificación inicial</h2>
+            <div id="lista-verificaciones"></div>
+        </section>
+        <section class="perfil-card">
+            <h2>Actualización de perfiles</h2>
+            <div id="lista-perfiles"></div>
+        </section>
+        <section class="perfil-card">
+            <h2>Mis notificaciones</h2>
+            <div id="lista-notificaciones"></div>
+        </section>
+    </main>
+    <script src="/js/sesion.js"></script>
+    <script src="/js/vistaSupervisionUsuarios.js"></script>
+</body>
+</html>

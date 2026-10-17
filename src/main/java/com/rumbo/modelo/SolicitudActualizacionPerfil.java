@@ -9,6 +9,8 @@ import jakarta.persistence.Table;
 public class SolicitudActualizacionPerfil {
 
     public static final String ESTADO_PENDIENTE = "pendiente";
+    public static final String ESTADO_APROBADA = "aprobada";
+    public static final String ESTADO_RECHAZADA = "rechazada";
 
     @Id
     private String idSolicitud;
@@ -17,6 +19,9 @@ public class SolicitudActualizacionPerfil {
     private String nombreCompletoSolicitado;
     private String estado;
     private String fechaSolicitud;
+    private String idSupervisor;
+    private String fechaDecision;
+    private String motivoDecision;
 
     protected SolicitudActualizacionPerfil() {
     }
@@ -55,5 +60,25 @@ public class SolicitudActualizacionPerfil {
 
     public String getFechaSolicitud() {
         return fechaSolicitud;
+    }
+
+    public String getIdSupervisor() {
+        return idSupervisor;
+    }
+
+    public String getFechaDecision() {
+        return fechaDecision;
+    }
+
+    public String getMotivoDecision() {
+        return motivoDecision;
+    }
+
+    public void decidir(String estado, String idSupervisor, String fechaDecision,
+                       String motivoDecision) {
+        this.estado = estado;
+        this.idSupervisor = idSupervisor;
+        this.fechaDecision = fechaDecision;
+        this.motivoDecision = motivoDecision;
     }
 }
