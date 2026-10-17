@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#2563eb">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/style.css">
+    <title>Rumbo - Comparador de carreras</title>
+</head>
+<body>
+    <header>
+        <h1>Rumbo</h1>
+        <p>Comparador de carreras</p>
+    </header>
+
+    <main class="main-ancho" id="comparador">
+        <section>
+            <div class="vista-encabezado">
+                <div>
+                    <h2>Explora tus opciones</h2>
+                    <p class="texto-secundario">
+                        Busca, selecciona y compara las carreras que te interesan.
+                    </p>
+                </div>
+                <a href="/inicio.html" class="btn btn-secundario">
+                    Volver al inicio
+                </a>
+            </div>
+
+            <div class="filtros-comparador">
+                <label>
+                    Buscar
+                    <input id="buscar-comparador" type="search"
+                           placeholder="Nombre, área u oportunidad laboral">
+                </label>
+
+                <label>
+                    Facultad
+                    <select id="facultad-comparador">
+                        <option value="">Todas</option>
+                    </select>
+                </label>
+
+                <label>
+                    Duración
+                    <select id="duracion-comparador">
+                        <option value="">Todas</option>
+                    </select>
+                </label>
+
+                <label>
+                    Costo máximo del primer semestre (GTQ)
+                    <input id="costo-comparador" type="number"
+                           min="0" step="0.01" placeholder="Sin límite">
+                </label>
+
+                <label>
+                    Carreras que deseas comparar
+                    <select id="cantidad-comparador">
+                        <option value="2">2</option>
+                    </select>
+                </label>
+            </div>
+
+            <p id="estado-comparador" class="estado-vista"
+               role="status" aria-live="polite"></p>
+
+            <div id="catalogo-comparador" class="lista-carreras"></div>
+        </section>
+
+        <section>
+            <h2>Tu selección</h2>
+            <p id="contador-comparador" class="texto-secundario"></p>
+            <div id="seleccion-comparador" class="seleccion-comparador"></div>
+
+            <button id="comparar-carreras" class="btn" type="button" disabled>
+                Comparar
+            </button>
+        </section>
+
+        <section id="resultado-comparador" hidden>
+            <h2>Tablero de comparación</h2>
+
+            <p class="texto-secundario">
+                Mayor o menor describe una cifra, no indica cuál carrera es mejor.
+                El costo es una referencia del periodo mostrado, no de toda la carrera.
+            </p>
+
+            <div class="tabla-contenedor">
+                <table id="tabla-comparador"
+                       class="tabla-gestion tabla-comparador"></table>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>Rumbo &copy; 2026</p>
+    </footer>
+
+    <script src="/js/vistaComparadorCarreras.js"></script>
+</body>
+</html>

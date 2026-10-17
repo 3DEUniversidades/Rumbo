@@ -12,7 +12,7 @@
 <body>
     <header>
         <h1>Rumbo</h1>
-        <p>Tu guia de orientacion vocacional</p>
+        <p id="encabezado-usuario">Tu guia de orientacion vocacional</p>
     </header>
 
     <main>
@@ -21,16 +21,41 @@
             <p class="texto-secundario">Elige hacia donde quieres continuar tu proceso.</p>
         </section>
 
-        <section id="acciones">
-            <a href="/carreras.html" class="btn">Ver carreras</a>
-            <a href="/linea-tiempo.html" class="btn btn-secundario">Ver mi linea de tiempo</a>
+        <section id="acciones" hidden aria-label="Menú principal">
+            <nav class="menu-principal">
+                <a id="enlace-linea-tiempo"
+                href="/linea-tiempo.html"
+                class="btn"
+                hidden>
+                Mi línea de tiempo
+                </a>
+                <a href="/comparador-carreras.html" class="btn">
+                    Comparador de carreras
+                </a>
+
+                <a id="enlace-foro" href="/foro.html"
+                   class="btn btn-secundario" hidden>
+                    Foro
+                </a>
+
+                <a href="/perfil.html" class="btn btn-secundario">
+                    Ver perfil
+                </a>
+
+                <button id="cerrar-sesion" class="btn btn-secundario" type="button">
+                    Cerrar sesión
+                </button>
+            </nav>
         </section>
+
+        <p id="mensaje-inicio" class="estado-vista" role="status"></p>
     </main>
 
     <footer>
         <p>Rumbo &copy; 2026</p>
     </footer>
 
+    <script src="/js/sesion.js"></script>
     <script src="/js/vistaInicio.js"></script>
 </body>
 </html>
