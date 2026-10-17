@@ -3,53 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#2563eb">
-    <meta name="description" content="Rumbo - Iniciar sesion">
+    <meta name="theme-color" content="#0B6B3A">
+    <meta name="description" content="Rumbo - Iniciar sesión">
     <link rel="manifest" href="/manifest.json">
-    <title>Rumbo - Iniciar sesion</title>
+    <title>Rumbo - Iniciar sesión</title>
     <link rel="stylesheet" href="/style.css">
 </head>
 <body>
+    <a href="#login" class="saltar-contenido">Saltar al contenido</a>
+
     <header>
         <h1>Rumbo</h1>
-        <p>Tu guia de orientacion vocacional</p>
+        <p>Tu guía de orientación vocacional</p>
     </header>
 
     <main>
         <section id="login">
-            <h2>Iniciar sesion</h2>
+            <h2 style="text-align: center; margin-bottom: var(--space-4);">Iniciar sesión</h2>
             <form id="login-form" class="login-form">
-                <label for="correo">Correo electronico</label>
-                <input type="email" id="correo" name="correo" required autocomplete="email">
+                <label for="correo">Correo electrónico</label>
+                <input type="email" id="correo" name="correo" required autocomplete="email" placeholder="usuario@correo.com">
 
-                <label for="contrasenia">Contrasena</label>
-                <input type="password" id="contrasenia" name="contrasenia" required autocomplete="current-password">
+                <label for="contrasenia">Contraseña</label>
+                <input type="password" id="contrasenia" name="contrasenia" required autocomplete="current-password" placeholder="Tu contraseña">
 
                 <button type="submit" class="btn">Ingresar</button>
 
-                <p id="mensaje-error" class="mensaje-error"></p>
-                <p id="mensaje-exito" class="mensaje-exito"></p>
+                <p id="mensaje-error" class="mensaje-error" role="alert"></p>
+                <p id="mensaje-exito" class="mensaje-exito" role="status"></p>
             </form>
-            <p class="cambio-vista">¿No tienes cuenta? <a href="#" id="ir-a-registro">Registrate</a></p>
+            <p class="cambio-vista">¿No tienes cuenta? <a href="#" id="ir-a-registro">Regístrate</a></p>
         </section>
 
         <section id="registro" hidden>
-            <h2>Crear cuenta</h2>
+            <h2 style="text-align: center; margin-bottom: var(--space-4);">Crear cuenta</h2>
             <form id="registro-form" class="login-form" novalidate>
                 <label for="registro-nombreUsuario">Nombre de usuario</label>
-                <input type="text" id="registro-nombreUsuario" name="nombreUsuario" required autocomplete="username">
+                <input type="text" id="registro-nombreUsuario" name="nombreUsuario" required autocomplete="username" placeholder="juanperez">
                 <span class="campo-error" data-campo="nombreUsuario"></span>
 
                 <label for="registro-nombreCompleto">Nombre completo</label>
-                <input type="text" id="registro-nombreCompleto" name="nombreCompleto" required autocomplete="name">
+                <input type="text" id="registro-nombreCompleto" name="nombreCompleto" required autocomplete="name" placeholder="Juan Pérez">
                 <span class="campo-error" data-campo="nombreCompleto"></span>
 
-                <label for="registro-correo">Correo electronico</label>
-                <input type="email" id="registro-correo" name="correo" required autocomplete="email">
+                <label for="registro-correo">Correo electrónico</label>
+                <input type="email" id="registro-correo" name="correo" required autocomplete="email" placeholder="juan@correo.com">
                 <span class="campo-error" data-campo="correo"></span>
 
-                <label for="registro-contrasenia">Contrasena</label>
-                <input type="password" id="registro-contrasenia" name="contrasenia" required minlength="8" autocomplete="new-password">
+                <label for="registro-contrasenia">Contraseña</label>
+                <input type="password" id="registro-contrasenia" name="contrasenia" required minlength="8" autocomplete="new-password" placeholder="Mínimo 8 caracteres">
                 <span class="campo-error" data-campo="contrasenia"></span>
 
                 <label for="registro-rol">Rol</label>
@@ -62,10 +64,10 @@
 
                 <button type="submit" class="btn">Registrarme</button>
 
-                <p id="registro-error" class="mensaje-error"></p>
-                <p id="registro-exito" class="mensaje-exito"></p>
+                <p id="registro-error" class="mensaje-error" role="alert"></p>
+                <p id="registro-exito" class="mensaje-exito" role="status"></p>
             </form>
-            <p class="cambio-vista">¿Ya tienes cuenta? <a href="#" id="ir-a-login">Inicia sesion</a></p>
+            <p class="cambio-vista">¿Ya tienes cuenta? <a href="#" id="ir-a-login">Inicia sesión</a></p>
         </section>
     </main>
 

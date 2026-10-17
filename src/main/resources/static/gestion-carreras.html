@@ -3,229 +3,360 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#2563eb">
+    <meta name="theme-color" content="#0B6B3A">
+    <meta name="description" content="Rumbo - Gestión y administración del catálogo de carreras">
     <title>Rumbo - Gestión de carreras</title>
     <link rel="manifest" href="/manifest.json">
     <link rel="stylesheet" href="/style.css">
 </head>
 <body>
-    <header>
-        <h1>Rumbo</h1>
-        <p>Gestión de carreras</p>
+    <a href="#gestion-carreras" class="saltar-contenido">Saltar al contenido</a>
+
+    <!-- Barra superior para tablet y móvil -->
+    <header class="barra-superior-movil">
+        <button id="btn-abrir-menu" class="btn-menu-hamburguesa" type="button" aria-label="Abrir menú de navegación" aria-expanded="false" aria-controls="barra-lateral">
+            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+        </button>
+        <span class="marca-nombre" style="font-weight: 700; font-size: 1.25rem;">Rumbo</span>
+        <div style="width: 44px;"></div>
     </header>
 
-    <p id="estado-acceso" role="alert"></p>
+    <div id="backdrop-menu" class="backdrop-barra-lateral"></div>
 
-    <main id="gestion-carreras" class="main-ancho" hidden>
-        <section>
-            <div class="vista-encabezado">
-                <div>
-                    <h2>Tablero de carreras</h2>
-                    <p class="texto-secundario">
-                        Actualiza la información del catálogo y del comparador.
-                    </p>
-                </div>
-                <a href="/inicio.html"
-                   class="btn btn-secundario">
-                    Volver a mi pantalla
+    <div class="app-layout">
+        <!-- Barra lateral compartida por rol -->
+        <aside id="barra-lateral" class="barra-lateral" aria-label="Navegación principal">
+            <!-- Zona 1: Marca -->
+            <div class="barra-lateral-marca">
+                <a href="/inicio.html" aria-label="Rumbo - Ir al inicio">
+                    <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polygon points="12 2 19 21 12 17 5 21 12 2" stroke-linejoin="round"/>
+                    </svg>
+                    <span>Rumbo</span>
                 </a>
             </div>
 
-            <div id="mensaje-gestion" class="mensaje-gestion"
-                 role="status" hidden></div>
+            <!-- Zona 2: Navegación principal -->
+            <nav id="acciones" class="barra-lateral-nav" aria-label="Menú principal">
+                <a id="enlace-inicio" href="/inicio.html" class="nav-item">
+                    <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                    <span>Inicio</span>
+                </a>
 
-            <div id="estado-gestion" class="estado-vista">
-                Cargando carreras...
-            </div>
+                <a id="enlace-linea-tiempo" href="/linea-tiempo.html" class="nav-item" hidden>
+                    <svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                    <span>Línea de tiempo</span>
+                </a>
 
-            <div class="tabla-contenedor">
-                <table id="tabla-carreras" class="tabla-gestion" hidden>
-                    <thead>
-                        <tr>
-                            <th>Carrera</th>
-                            <th>Facultad</th>
-                            <th>Duración</th>
-                            <th>Costo primer semestre</th>
-                            <th>Modalidad</th>
-                            <th>Créditos</th>
-                            <th>Salario estimado</th>
-                            <th>Empleabilidad</th>
-                            <th>Enlaces</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody id="cuerpo-carreras"></tbody>
-                </table>
-            </div>
-        </section>
+                <a id="enlace-pruebas" href="/test-vocacional.html" class="nav-item" hidden>
+                    <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"></path><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+                    <span>Pruebas</span>
+                </a>
 
-        <section>
-            <div class="vista-encabezado">
-                <div>
-                    <h2>Historial de actualizaciones</h2>
-                    <p class="texto-secundario">
-                        Valor anterior, valor nuevo, fecha y responsable.
-                    </p>
+                <a id="enlace-bitacora" href="/bitacora.html" class="nav-item" hidden>
+                    <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+                    <span>Bitácora</span>
+                </a>
+
+                <a id="enlace-carreras" href="/carreras.html" class="nav-item" hidden>
+                    <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg>
+                    <span>Carreras</span>
+                </a>
+
+                <a id="enlace-comparador" href="/comparador-carreras.html" class="nav-item" hidden>
+                    <svg aria-hidden="true" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="18" rx="1"></rect><rect x="14" y="3" width="7" height="18" rx="1"></rect></svg>
+                    <span>Comparador</span>
+                </a>
+
+                <a id="enlace-foro" href="/foro.html" class="nav-item" hidden>
+                    <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                    <span>Foro</span>
+                </a>
+
+                <a id="enlace-supervision" href="/supervision-usuarios.html" class="nav-item" hidden>
+                    <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                    <span>Supervisión de usuarios</span>
+                </a>
+
+                <a id="enlace-cambios-perfil" href="/supervision-usuarios.html#perfiles" class="nav-item" hidden>
+                    <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                    <span>Cambios de perfil</span>
+                </a>
+
+                <a id="enlace-revision-mensajes" href="/roles/supervisor-mensajes.html" class="nav-item" hidden>
+                    <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                    <span>Revisión de mensajes</span>
+                </a>
+
+                <a id="enlace-gestion-carreras" href="/gestion-carreras.html" class="nav-item activo" aria-current="page" hidden>
+                    <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+                    <span>Gestión de carreras</span>
+                </a>
+
+                <a id="enlace-gestion-actividades" href="/gestion-actividades.html" class="nav-item" hidden>
+                    <svg aria-hidden="true" viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
+                    <span>Gestionar actividades</span>
+                </a>
+            </nav>
+
+            <!-- Zona 3: Zona del usuario -->
+            <div class="barra-lateral-usuario">
+                <div id="usuario-notificaciones-contenedor" class="usuario-notificaciones" hidden>
+                    <a href="/inicio.html#notificaciones-inicio" class="nav-item-sub" id="enlace-notificaciones" aria-label="Notificaciones">
+                        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+                        <span>Notificaciones</span>
+                        <span id="badge-notificaciones-no-leidas" class="contador-badge" hidden>0</span>
+                    </a>
                 </div>
 
-                <div class="filtro-historial">
-                    <label for="filtro-carrera">Carrera</label>
-                    <select id="filtro-carrera">
-                        <option value="">Todas</option>
-                    </select>
-                </div>
-            </div>
+                <a id="enlace-perfil" href="/perfil.html" class="nav-item-sub">
+                    <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                    <span id="texto-enlace-perfil">Mi cuenta</span>
+                </a>
 
-            <div id="estado-historial" class="estado-vista">
-                Cargando historial...
-            </div>
+                <button id="cerrar-sesion" class="btn-cerrar-sesion" type="button" aria-label="Cerrar sesión">
+                    <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                    <span>Cerrar sesión</span>
+                </button>
 
-            <div class="tabla-contenedor">
-                <table id="tabla-historial" class="tabla-gestion" hidden>
-                    <thead>
-                        <tr>
-                            <th>Fecha</th>
-                            <th>Carrera</th>
-                            <th>Campo</th>
-                            <th>Valor anterior</th>
-                            <th>Valor nuevo</th>
-                            <th>Responsable</th>
-                        </tr>
-                    </thead>
-                    <tbody id="cuerpo-historial"></tbody>
-                </table>
-            </div>
-        </section>
-    </main>
-
-    <dialog id="modal-edicion" class="modal-carrera modal-edicion">
-        <article>
-            <button id="cerrar-modal-edicion" class="modal-cerrar"
-                    type="button" aria-label="Cerrar">
-                &times;
-            </button>
-
-            <h2 id="edicion-titulo">Editar carrera</h2>
-
-            <form id="form-edicion" class="form-gestion">
-                <label for="f-nombre">Nombre</label>
-                <input id="f-nombre" type="text" maxlength="120" required>
-
-                <label for="f-facultad">Facultad</label>
-                <input id="f-facultad" type="text" maxlength="120">
-
-                <label for="f-descripcion">Descripción</label>
-                <textarea id="f-descripcion" rows="3"
-                          maxlength="4000"></textarea>
-
-                <div class="fila-2">
-                    <div>
-                        <label for="f-duracion">Duración en años</label>
-                        <input id="f-duracion" type="number"
-                               min="1" max="15" step="1" required>
+                <a href="/perfil.html" class="usuario-bloque" id="usuario-bloque-perfil" aria-label="Mi cuenta">
+                    <div class="usuario-avatar" id="usuario-iniciales">--</div>
+                    <div class="usuario-info">
+                        <span class="usuario-nombre" id="usuario-nombre">Cargando...</span>
+                        <span class="usuario-rol-badge" id="usuario-rol-etiqueta">Rol</span>
                     </div>
-                    <div>
-                        <label for="f-modalidad">Modalidad</label>
-                        <input id="f-modalidad" type="text" maxlength="80">
-                    </div>
-                </div>
+                </a>
+            </div>
+        </aside>
 
-                <fieldset class="grupo-form">
-                    <legend>Costo de referencia</legend>
-                    <p class="ayuda-form">
-                        Total del primer semestre de primer ingreso,
-                        incluida inscripción. No es el costo de toda la carrera.
-                    </p>
+        <!-- Contenido principal -->
+        <div class="contenido-principal-app">
+            <header>
+                <h1>Gestión de Carreras</h1>
+                <p>Administra la oferta académica, información de costos y perfiles profesionales</p>
+            </header>
 
-                    <div class="fila-2">
+            <p id="estado-acceso" class="estado-vista" role="alert" style="margin: var(--space-3) var(--space-4);"></p>
+
+            <main id="gestion-carreras" hidden>
+                <!-- Sección: Tablero de carreras -->
+                <section class="tarjeta" style="margin-bottom: var(--space-4);">
+                    <div class="vista-encabezado">
                         <div>
-                            <label for="f-costo">Costo en GTQ</label>
-                            <input id="f-costo" type="number"
-                                   min="0" max="1000000000"
-                                   step="0.01" required>
-                        </div>
-                        <div>
-                            <label for="f-costo-anio">Año del tarifario</label>
-                            <input id="f-costo-anio" type="number"
-                                   min="2000" max="2100" step="1">
+                            <h2>Tablero de carreras</h2>
+                            <p class="texto-secundario">
+                                Actualiza la información del catálogo y del comparador.
+                            </p>
                         </div>
                     </div>
 
-                    <label for="f-costo-periodo">
-                        Periodo y alcance del costo
-                    </label>
-                    <input id="f-costo-periodo" type="text" maxlength="200">
-                </fieldset>
+                    <div id="mensaje-gestion" class="mensaje-gestion"
+                         role="status" hidden></div>
 
-                <label for="f-creditos">Créditos del plan</label>
-                <input id="f-creditos" type="number"
-                       min="1" max="1000" step="1">
+                    <div id="estado-gestion" class="estado-vista">
+                        Cargando carreras...
+                    </div>
 
-                <label for="f-areas">Áreas de formación, una por línea</label>
-                <textarea id="f-areas" rows="4"></textarea>
+                    <div class="tabla-contenedor">
+                        <table id="tabla-carreras" class="tabla-gestion" hidden>
+                            <thead>
+                                <tr>
+                                    <th>Carrera</th>
+                                    <th>Facultad</th>
+                                    <th>Duración</th>
+                                    <th>Costo primer semestre</th>
+                                    <th>Modalidad</th>
+                                    <th>Créditos</th>
+                                    <th>Salario estimado</th>
+                                    <th>Empleabilidad</th>
+                                    <th>Enlaces</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="cuerpo-carreras"></tbody>
+                        </table>
+                    </div>
+                </section>
 
-                <label for="f-competencias">Competencias, una por línea</label>
-                <textarea id="f-competencias" rows="4"></textarea>
-
-                <label for="f-oportunidades">
-                    Oportunidades laborales, una por línea
-                </label>
-                <textarea id="f-oportunidades" rows="4"></textarea>
-
-                <fieldset class="grupo-form">
-                    <legend>Información laboral</legend>
-                    <p class="ayuda-form">
-                        Deja vacíos los datos desconocidos.
-                        Vacío significa “No disponible”.
-                    </p>
-
-                    <div class="fila-2">
+                <!-- Sección: Historial de actualizaciones -->
+                <section class="tarjeta" style="margin-bottom: var(--space-4);">
+                    <div class="vista-encabezado">
                         <div>
-                            <label for="f-salario">Salario estimado en GTQ</label>
-                            <input id="f-salario" type="number"
-                                   min="0" max="1000000000" step="0.01">
+                            <h2>Historial de actualizaciones</h2>
+                            <p class="texto-secundario">
+                                Valor anterior, valor nuevo, fecha y responsable de cada modificación.
+                            </p>
                         </div>
-                        <div>
-                            <label for="f-empleabilidad">
-                                Empleabilidad, de 0 a 100
+
+                        <div class="filtro-historial">
+                            <label for="filtro-carrera" style="display: flex; align-items: center; gap: var(--space-2); font-weight: 600;">
+                                Carrera:
+                                <select id="filtro-carrera">
+                                    <option value="">Todas</option>
+                                </select>
                             </label>
-                            <input id="f-empleabilidad" type="number"
-                                   min="0" max="100" step="0.01">
                         </div>
                     </div>
 
-                    <label for="f-contexto-laboral">Contexto laboral</label>
-                    <textarea id="f-contexto-laboral" rows="3"
-                              maxlength="4000"></textarea>
-                </fieldset>
+                    <div id="estado-historial" class="estado-vista">
+                        Cargando historial...
+                    </div>
 
-                <label for="f-pdf">URL HTTPS del PDF oficial</label>
-                <input id="f-pdf" type="url" maxlength="500">
+                    <div class="tabla-contenedor">
+                        <table id="tabla-historial" class="tabla-gestion" hidden>
+                            <thead>
+                                <tr>
+                                    <th>Fecha</th>
+                                    <th>Carrera</th>
+                                    <th>Campo</th>
+                                    <th>Valor anterior</th>
+                                    <th>Valor nuevo</th>
+                                    <th>Responsable</th>
+                                </tr>
+                            </thead>
+                            <tbody id="cuerpo-historial"></tbody>
+                        </table>
+                    </div>
+                </section>
+            </main>
 
-                <label for="f-url">URL HTTPS de la carrera</label>
-                <input id="f-url" type="url" maxlength="500">
-
-                <div id="error-edicion" class="mensaje-error"
-                     role="alert"></div>
-
-                <div class="acciones-form">
-                    <button id="cancelar-edicion" type="button"
-                            class="btn btn-secundario">
-                        Cancelar
+            <!-- Diálogo modal para edición de carrera -->
+            <dialog id="modal-edicion" class="modal-carrera modal-edicion" aria-labelledby="edicion-titulo">
+                <article>
+                    <button id="cerrar-modal-edicion" class="modal-cerrar"
+                            type="button" aria-label="Cerrar">
+                        &times;
                     </button>
 
-                    <button id="guardar-edicion" type="submit"
-                            class="btn">
-                        Guardar cambios
-                    </button>
-                </div>
-            </form>
-        </article>
-    </dialog>
+                    <h2 id="edicion-titulo">Editar carrera</h2>
 
-    <footer><p>Rumbo &copy; 2026</p></footer>
+                    <form id="form-edicion" class="form-gestion">
+                        <label for="f-nombre">Nombre de la carrera</label>
+                        <input id="f-nombre" type="text" maxlength="120" required>
+
+                        <label for="f-facultad">Facultad</label>
+                        <input id="f-facultad" type="text" maxlength="120">
+
+                        <label for="f-descripcion">Descripción</label>
+                        <textarea id="f-descripcion" rows="3"
+                                  maxlength="4000"></textarea>
+
+                        <div class="fila-2">
+                            <div>
+                                <label for="f-duracion">Duración en años</label>
+                                <input id="f-duracion" type="number"
+                                       min="1" max="15" step="1" required>
+                            </div>
+                            <div>
+                                <label for="f-modalidad">Modalidad</label>
+                                <input id="f-modalidad" type="text" maxlength="80">
+                            </div>
+                        </div>
+
+                        <fieldset class="grupo-form">
+                            <legend>Costo de referencia</legend>
+                            <p class="ayuda-form">
+                                Total del primer semestre de primer ingreso,
+                                incluida inscripción. No es el costo de toda la carrera.
+                            </p>
+
+                            <div class="fila-2">
+                                <div>
+                                    <label for="f-costo">Costo en GTQ</label>
+                                    <input id="f-costo" type="number"
+                                           min="0" max="1000000000"
+                                           step="0.01" required>
+                                </div>
+                                <div>
+                                    <label for="f-costo-anio">Año del tarifario</label>
+                                    <input id="f-costo-anio" type="number"
+                                           min="2000" max="2100" step="1">
+                                </div>
+                            </div>
+
+                            <label for="f-costo-periodo">
+                                Periodo y alcance del costo
+                            </label>
+                            <input id="f-costo-periodo" type="text" maxlength="200">
+                        </fieldset>
+
+                        <label for="f-creditos">Créditos del plan de estudios</label>
+                        <input id="f-creditos" type="number"
+                               min="1" max="1000" step="1">
+
+                        <label for="f-areas">Áreas de formación, una por línea</label>
+                        <textarea id="f-areas" rows="4"></textarea>
+
+                        <label for="f-competencias">Competencias, una por línea</label>
+                        <textarea id="f-competencias" rows="4"></textarea>
+
+                        <label for="f-oportunidades">
+                            Oportunidades laborales, una por línea
+                        </label>
+                        <textarea id="f-oportunidades" rows="4"></textarea>
+
+                        <fieldset class="grupo-form">
+                            <legend>Información laboral</legend>
+                            <p class="ayuda-form">
+                                Deja vacíos los datos desconocidos. Vacío significa “No disponible”.
+                            </p>
+
+                            <div class="fila-2">
+                                <div>
+                                    <label for="f-salario">Salario estimado en GTQ</label>
+                                    <input id="f-salario" type="number"
+                                           min="0" max="1000000000" step="0.01">
+                                </div>
+                                <div>
+                                    <label for="f-empleabilidad">
+                                        Empleabilidad (de 0 a 100)
+                                    </label>
+                                    <input id="f-empleabilidad" type="number"
+                                           min="0" max="100" step="0.01">
+                                </div>
+                            </div>
+
+                            <label for="f-contexto-laboral">Contexto laboral</label>
+                            <textarea id="f-contexto-laboral" rows="3"
+                                      maxlength="4000"></textarea>
+                        </fieldset>
+
+                        <label for="f-pdf">URL HTTPS del folleto o PDF oficial</label>
+                        <input id="f-pdf" type="url" maxlength="500">
+
+                        <label for="f-url">URL HTTPS de la carrera en el portal oficial</label>
+                        <input id="f-url" type="url" maxlength="500">
+
+                        <div id="error-edicion" class="mensaje-error"
+                             role="alert"></div>
+
+                        <div class="acciones-form">
+                            <button id="cancelar-edicion" type="button"
+                                    class="btn btn-secundario">
+                                Cancelar
+                            </button>
+
+                            <button id="guardar-edicion" type="submit"
+                                    class="btn btn-principal">
+                                Guardar cambios
+                            </button>
+                        </div>
+                    </form>
+                </article>
+            </dialog>
+
+            <footer>
+                <p>Rumbo &copy; 2026 · Orientación Vocacional UVG</p>
+            </footer>
+        </div>
+    </div>
 
     <script src="/js/sesion.js"></script>
+    <script src="/js/barraLateral.js"></script>
     <script src="/js/vistaGestionCarreras.js"></script>
 </body>
 </html>

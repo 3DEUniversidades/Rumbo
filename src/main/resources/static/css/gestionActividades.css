@@ -1,26 +1,26 @@
 [hidden] { display: none !important; }
-.encabezado-actividades { display: flex; justify-content: space-between; gap: 1rem; align-items: start; margin-bottom: 1.25rem; }
-.encabezado-actividades p { line-height: 1.5; color: var(--text-muted); }
-.acciones-actividades { display: flex; flex-wrap: wrap; gap: .65rem; margin: 1rem 0; }
-.acciones-actividades .btn { margin-left: 0; font: inherit; font-weight: 600; border: 1px solid var(--primary); cursor: pointer; }
-.acciones-actividades button:disabled { opacity: .6; cursor: wait; }
-#mensaje-actividades { margin: 1rem 0; line-height: 1.5; white-space: pre-wrap; }
-#catalogo-actividades { display: grid; gap: 1rem; }
-.tarjeta-gestion-actividad { padding: 1.25rem; border: 1px solid var(--border); border-radius: 10px; background: var(--surface); }
-.tarjeta-gestion-actividad h3 { margin-bottom: .5rem; }
+.encabezado-actividades { display: flex; justify-content: space-between; gap: var(--space-4); align-items: flex-start; margin-bottom: var(--space-4); }
+.encabezado-actividades p { line-height: 1.5; color: var(--color-text-muted); }
+.acciones-actividades { display: flex; flex-wrap: wrap; gap: var(--space-2); margin: var(--space-4) 0; }
+.acciones-actividades .btn { margin-left: 0; font: inherit; font-weight: 600; cursor: pointer; }
+.acciones-actividades button:disabled { opacity: 0.6; cursor: wait; }
+#mensaje-actividades { margin: var(--space-4) 0; line-height: 1.5; white-space: pre-wrap; }
+#catalogo-actividades { display: grid; gap: var(--space-4); }
+.tarjeta-gestion-actividad { padding: var(--space-4) var(--space-6); border: 1px solid var(--color-border); border-radius: var(--radius-md); background: var(--color-surface); box-shadow: var(--shadow-soft); }
+.tarjeta-gestion-actividad h3 { margin-bottom: var(--space-2); }
 .tarjeta-gestion-actividad p { line-height: 1.6; overflow-wrap: anywhere; }
-.tarjeta-gestion-actividad details { margin-top: .75rem; }
-.tarjeta-gestion-actividad summary { color: var(--primary); cursor: pointer; font-weight: 600; }
-.tarjeta-gestion-actividad dt { margin-top: .75rem; font-weight: 700; }
-.tarjeta-gestion-actividad dd { margin: .25rem 0 0; white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.5; }
-#editor-actividad { position: fixed; inset: 0; margin: auto; width: min(94vw, 700px); max-height: 90vh; overflow-y: auto; padding: 1.5rem; border: 1px solid var(--border); border-radius: 12px; background: var(--surface); color: var(--text); }
-#editor-actividad::backdrop { background: rgb(15 23 42 / 50%); }
-#formulario-actividad > p { margin: .75rem 0; line-height: 1.5; }
-#campos-actividad { border: 1px solid var(--border); border-radius: 8px; padding: 1rem; }
-#campos-actividad legend { padding: 0 .4rem; font-weight: 700; }
-#campos-actividad label { display: block; font-weight: 600; margin-bottom: .8rem; }
-#campos-actividad input, #campos-actividad textarea { display: block; width: 100%; margin-top: .35rem; padding: .65rem; border: 1px solid var(--border); border-radius: 6px; background: var(--surface); color: var(--text); font: inherit; }
+.tarjeta-gestion-actividad details { margin-top: var(--space-3); }
+.tarjeta-gestion-actividad summary { color: var(--color-primary); cursor: pointer; font-weight: 600; }
+.tarjeta-gestion-actividad dt { margin-top: var(--space-3); font-weight: 700; color: var(--color-primary-dark); }
+.tarjeta-gestion-actividad dd { margin: var(--space-1) 0 0; white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.5; }
+#editor-actividad { position: fixed; inset: 0; margin: auto; width: min(94vw, 700px); max-height: 90vh; overflow-y: auto; padding: var(--space-6); border: 1px solid var(--color-border); border-radius: var(--radius-md); background: var(--color-surface); color: var(--color-text); box-shadow: var(--shadow-modal); }
+#editor-actividad::backdrop { background: var(--color-backdrop); }
+#formulario-actividad > p { margin: var(--space-3) 0; line-height: 1.5; }
+#campos-actividad { border: 1px solid var(--color-border); border-radius: var(--radius-sm); padding: var(--space-4); }
+#campos-actividad legend { padding: 0 var(--space-1); font-weight: 700; color: var(--color-primary); }
+#campos-actividad label { display: block; font-weight: 600; margin-bottom: var(--space-3); }
+#campos-actividad input, #campos-actividad textarea { display: block; width: 100%; margin-top: var(--space-1); padding: var(--space-2) var(--space-3); border: 1px solid var(--color-border); border-radius: var(--radius-sm); background: var(--color-surface); color: var(--color-text); font: inherit; }
 #campos-actividad textarea { resize: vertical; }
-#campos-actividad :focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
-#error-actividad { color: #b91c1c; white-space: pre-wrap; }
+#campos-actividad :focus-visible { outline: 2px solid var(--color-primary); outline-offset: 2px; }
+#error-actividad { color: var(--color-error); white-space: pre-wrap; }
 @media(max-width: 640px) { .encabezado-actividades { flex-direction: column; } }

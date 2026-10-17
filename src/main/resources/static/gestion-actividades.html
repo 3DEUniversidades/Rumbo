@@ -3,59 +3,232 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#2563eb">
+    <meta name="theme-color" content="#0B6B3A">
+    <meta name="description" content="Rumbo - Gestión de actividades de orientación">
     <title>Rumbo - Gestión de actividades</title>
-    <link rel="stylesheet" href="/style.css?v=t10-1">
-    <link rel="stylesheet" href="/css/gestionActividades.css?v=t10-1">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/css/gestionActividades.css">
 </head>
 <body>
-<header><h1>Rumbo</h1><p>Gestión de actividades de orientación</p></header>
-<main>
-    <p id="acceso-actividades" role="alert">Comprobando acceso...</p>
-    <section id="gestion-actividades" hidden>
-        <div class="encabezado-actividades">
-            <div><h2>Actividades de la línea de tiempo</h2>
-                <p>Crea y actualiza las actividades que verán los estudiantes.</p></div>
-            <a class="btn btn-secundario" href="/inicio.html">Volver al inicio</a>
+    <a href="#contenido-principal" class="saltar-contenido">Saltar al contenido</a>
+
+    <!-- Barra superior para tablet y móvil -->
+    <header class="barra-superior-movil">
+        <button id="btn-abrir-menu" class="btn-menu-hamburguesa" type="button" aria-label="Abrir menú de navegación" aria-expanded="false" aria-controls="barra-lateral">
+            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+        </button>
+        <span class="marca-nombre" style="font-weight: 700; font-size: 1.25rem;">Rumbo</span>
+        <div style="width: 44px;"></div>
+    </header>
+
+    <div id="backdrop-menu" class="backdrop-barra-lateral"></div>
+
+    <div class="app-layout">
+        <!-- Barra lateral compartida por rol -->
+        <aside id="barra-lateral" class="barra-lateral" aria-label="Navegación principal">
+            <!-- Zona 1: Marca -->
+            <div class="barra-lateral-marca">
+                <a href="/inicio.html" aria-label="Rumbo - Ir al inicio">
+                    <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polygon points="12 2 19 21 12 17 5 21 12 2" stroke-linejoin="round"/>
+                    </svg>
+                    <span>Rumbo</span>
+                </a>
+            </div>
+
+            <!-- Zona 2: Navegación principal -->
+            <nav id="acciones" class="barra-lateral-nav" aria-label="Menú principal">
+                <a id="enlace-inicio" href="/inicio.html" class="nav-item">
+                    <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                    <span>Inicio</span>
+                </a>
+
+                <a id="enlace-linea-tiempo" href="/linea-tiempo.html" class="nav-item" hidden>
+                    <svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                    <span>Línea de tiempo</span>
+                </a>
+
+                <a id="enlace-pruebas" href="/test-vocacional.html" class="nav-item" hidden>
+                    <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"></path><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+                    <span>Pruebas</span>
+                </a>
+
+                <a id="enlace-bitacora" href="/bitacora.html" class="nav-item" hidden>
+                    <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+                    <span>Bitácora</span>
+                </a>
+
+                <a id="enlace-carreras" href="/carreras.html" class="nav-item" hidden>
+                    <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg>
+                    <span>Carreras</span>
+                </a>
+
+                <a id="enlace-comparador" href="/comparador-carreras.html" class="nav-item" hidden>
+                    <svg aria-hidden="true" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="18" rx="1"></rect><rect x="14" y="3" width="7" height="18" rx="1"></rect></svg>
+                    <span>Comparador</span>
+                </a>
+
+                <a id="enlace-foro" href="/foro.html" class="nav-item" hidden>
+                    <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                    <span>Foro</span>
+                </a>
+
+                <a id="enlace-supervision" href="/supervision-usuarios.html" class="nav-item" hidden>
+                    <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                    <span>Supervisión de usuarios</span>
+                </a>
+
+                <a id="enlace-cambios-perfil" href="/supervision-usuarios.html#perfiles" class="nav-item" hidden>
+                    <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                    <span>Cambios de perfil</span>
+                </a>
+
+                <a id="enlace-revision-mensajes" href="/roles/supervisor-mensajes.html" class="nav-item" hidden>
+                    <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                    <span>Revisión de mensajes</span>
+                </a>
+
+                <a id="enlace-gestion-carreras" href="/gestion-carreras.html" class="nav-item" hidden>
+                    <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+                    <span>Gestión de carreras</span>
+                </a>
+
+                <a id="enlace-gestion-actividades" href="/gestion-actividades.html" class="nav-item activo" aria-current="page" hidden>
+                    <svg aria-hidden="true" viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
+                    <span>Gestionar actividades</span>
+                </a>
+            </nav>
+
+            <!-- Zona 3: Zona del usuario -->
+            <div class="barra-lateral-usuario">
+                <div id="usuario-notificaciones-contenedor" class="usuario-notificaciones" hidden>
+                    <a href="/inicio.html#notificaciones-inicio" class="nav-item-sub" id="enlace-notificaciones" aria-label="Notificaciones">
+                        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+                        <span>Notificaciones</span>
+                        <span id="badge-notificaciones-no-leidas" class="contador-badge" hidden>0</span>
+                    </a>
+                </div>
+
+                <a id="enlace-perfil" href="/perfil.html" class="nav-item-sub">
+                    <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                    <span id="texto-enlace-perfil">Mi cuenta</span>
+                </a>
+
+                <button id="cerrar-sesion" class="btn-cerrar-sesion" type="button" aria-label="Cerrar sesión">
+                    <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                    <span>Cerrar sesión</span>
+                </button>
+
+                <a href="/perfil.html" class="usuario-bloque" id="usuario-bloque-perfil" aria-label="Mi cuenta">
+                    <div class="usuario-avatar" id="usuario-iniciales">--</div>
+                    <div class="usuario-info">
+                        <span class="usuario-nombre" id="usuario-nombre">Cargando...</span>
+                        <span class="usuario-rol-badge" id="usuario-rol-etiqueta">Rol</span>
+                    </div>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Contenido principal -->
+        <div class="contenido-principal-app">
+            <header>
+                <h1>Gestión de Actividades</h1>
+                <p>Crea, actualiza y programa actividades vocacionales para los estudiantes</p>
+            </header>
+
+            <main id="contenido-principal">
+                <p id="acceso-actividades" class="estado-vista" role="alert" style="margin: var(--space-3) 0;">Comprobando acceso...</p>
+
+                <section id="gestion-actividades" class="tarjeta" style="margin-bottom: var(--space-4);" hidden>
+                    <div class="vista-encabezado">
+                        <div>
+                            <h2>Actividades de la línea de tiempo</h2>
+                            <p class="texto-secundario">
+                                Define hitos, talleres, pruebas y citas orientadas a la toma de decisión vocacional.
+                            </p>
+                        </div>
+                        <div class="acciones-actividades">
+                            <button type="button" class="btn btn-principal" id="nueva-actividad">Crear actividad</button>
+                            <button type="button" class="btn btn-secundario" id="actualizar-actividades">Actualizar lista</button>
+                        </div>
+                    </div>
+
+                    <p id="mensaje-actividades" class="estado-vista" role="status" aria-live="polite"></p>
+
+                    <div id="catalogo-actividades" class="lista-carreras"></div>
+                </section>
+            </main>
+
+            <!-- Diálogo modal para crear/editar actividad -->
+            <dialog id="editor-actividad" class="modal-carrera modal-edicion" aria-labelledby="titulo-editor-actividad">
+                <article>
+                    <form id="formulario-actividad" class="form-gestion">
+                        <h2 id="titulo-editor-actividad">Crear actividad</h2>
+                        <p class="ayuda-form" style="margin-bottom: var(--space-3);">
+                            Todos los campos son obligatorios. Máximo 255 caracteres por campo.
+                        </p>
+
+                        <fieldset id="campos-actividad" class="grupo-form">
+                            <legend>Información de la actividad</legend>
+
+                            <label for="campo-actividad-fecha">Fecha sugerida o límite</label>
+                            <input id="campo-actividad-fecha" name="fecha" type="date" required>
+
+                            <label for="campo-actividad-descripcion">Descripción breve</label>
+                            <input id="campo-actividad-descripcion" name="descripcion" type="text" maxlength="255" required placeholder="Ej. Taller de exploración de ingeniería">
+
+                            <label for="campo-actividad-tipo">Tipo de actividad</label>
+                            <input id="campo-actividad-tipo" name="tipoActividad" type="text" maxlength="255" required
+                                   list="tipos-actividad" placeholder="Escribe un tipo o elige una sugerencia">
+                            <datalist id="tipos-actividad">
+                                <option value="Prueba de intereses"></option>
+                                <option value="Prueba de habilidades"></option>
+                                <option value="Cita universitaria"></option>
+                                <option value="Acompañamiento familiar"></option>
+                            </datalist>
+
+                            <label for="campo-actividad-contexto">Contexto</label>
+                            <textarea id="campo-actividad-contexto" name="contexto" rows="2" maxlength="255" required placeholder="¿Por qué es relevante esta actividad?"></textarea>
+
+                            <label for="campo-actividad-instrucciones">Instrucciones</label>
+                            <textarea id="campo-actividad-instrucciones" name="instrucciones" rows="3" maxlength="255" required placeholder="Pasos que debe seguir el estudiante..."></textarea>
+
+                            <label for="campo-actividad-acciones">Acciones a realizar</label>
+                            <textarea id="campo-actividad-acciones" name="accionesARealizar" rows="2" maxlength="255" required placeholder="Acciones concretas a ejecutar..."></textarea>
+
+                            <label for="campo-actividad-metodo">Método recomendado</label>
+                            <textarea id="campo-actividad-metodo" name="metodoRecomendado" rows="2" maxlength="255" required placeholder="Ej. En línea, presencial, individual..."></textarea>
+
+                            <label for="campo-actividad-herramientas">Herramientas disponibles</label>
+                            <textarea id="campo-actividad-herramientas" name="herramientasDisponibles" rows="2" maxlength="255" required placeholder="Plataforma de tests, enlaces, folletos..."></textarea>
+
+                            <label for="campo-actividad-guardar">Información que debe guardar el estudiante</label>
+                            <textarea id="campo-actividad-guardar" name="informacionAGuardar" rows="2" maxlength="255" required placeholder="Notas en bitácora, resultados de test, etc."></textarea>
+                        </fieldset>
+
+                        <p id="error-actividad" class="mensaje-error" role="alert"></p>
+
+                        <div class="acciones-form">
+                            <button type="button" class="btn btn-secundario" id="cancelar-actividad">Cancelar</button>
+                            <button type="submit" class="btn btn-principal" id="guardar-actividad">Guardar</button>
+                        </div>
+                    </form>
+                </article>
+            </dialog>
+
+            <footer>
+                <p>Rumbo &copy; 2026 · Orientación Vocacional UVG</p>
+            </footer>
         </div>
-        <div class="acciones-actividades">
-            <button type="button" class="btn" id="nueva-actividad">Crear actividad</button>
-            <button type="button" class="btn btn-secundario" id="actualizar-actividades">Actualizar lista</button>
-        </div>
-        <p id="mensaje-actividades" role="status" aria-live="polite"></p>
-        <div id="catalogo-actividades"></div>
-    </section>
-</main>
-<dialog id="editor-actividad" aria-labelledby="titulo-editor-actividad">
-    <form id="formulario-actividad">
-        <h2 id="titulo-editor-actividad">Crear actividad</h2>
-        <p>Todos los campos son obligatorios. Máximo 255 caracteres por campo.</p>
-        <fieldset id="campos-actividad">
-            <legend>Información de la actividad</legend>
-            <label>Fecha<input name="fecha" type="date" required></label>
-            <label>Descripción<input name="descripcion" type="text" maxlength="255" required></label>
-            <label>Tipo<input name="tipoActividad" type="text" maxlength="255" required
-                list="tipos-actividad" placeholder="Escribe un tipo o elige una sugerencia"></label>
-            <datalist id="tipos-actividad">
-                <option value="Prueba de intereses"></option><option value="Prueba de habilidades"></option>
-                <option value="Cita universitaria"></option><option value="Acompañamiento familiar"></option>
-            </datalist>
-            <label>Contexto<textarea name="contexto" rows="2" maxlength="255" required></textarea></label>
-            <label>Instrucciones<textarea name="instrucciones" rows="3" maxlength="255" required></textarea></label>
-            <label>Acciones a realizar<textarea name="accionesARealizar" rows="2" maxlength="255" required></textarea></label>
-            <label>Método recomendado<textarea name="metodoRecomendado" rows="2" maxlength="255" required></textarea></label>
-            <label>Herramientas disponibles<textarea name="herramientasDisponibles" rows="2" maxlength="255" required></textarea></label>
-            <label>Información que debe guardar el estudiante<textarea name="informacionAGuardar" rows="2" maxlength="255" required></textarea></label>
-        </fieldset>
-        <p id="error-actividad" role="alert"></p>
-        <div class="acciones-actividades">
-            <button type="submit" class="btn" id="guardar-actividad">Guardar</button>
-            <button type="button" class="btn btn-secundario" id="cancelar-actividad">Cancelar</button>
-        </div>
-    </form>
-</dialog>
-<footer><p>Rumbo © 2026</p></footer>
-<script src="/js/sesion.js"></script>
-<script src="/js/vistaGestionActividades.js?v=t10-1"></script>
+    </div>
+
+    <script src="/js/sesion.js"></script>
+    <script src="/js/barraLateral.js"></script>
+    <script src="/js/vistaGestionActividades.js"></script>
 </body>
 </html>

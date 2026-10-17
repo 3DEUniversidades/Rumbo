@@ -3,88 +3,217 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#2563eb">
+    <meta name="theme-color" content="#0B6B3A">
+    <link rel="manifest" href="/manifest.json">
     <title>Rumbo - Mi perfil</title>
     <link rel="stylesheet" href="/style.css">
 </head>
 <body>
-    <header>
-        <h1>Mi perfil</h1>
-        <p>Actualiza la información de tu proceso en Rumbo</p>
+    <a href="#contenido-perfil" class="saltar-contenido">Saltar al contenido</a>
+
+    <!-- Barra superior para tablet y móvil -->
+    <header class="barra-superior-movil">
+        <button id="btn-abrir-menu" class="btn-menu-hamburguesa" type="button" aria-label="Abrir menú de navegación" aria-expanded="false" aria-controls="barra-lateral">
+            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+        </button>
+        <span class="marca-nombre" style="font-weight: 700; font-size: 1.25rem;">Rumbo</span>
+        <div style="width: 44px;"></div>
     </header>
 
-    <main id="contenido-perfil" hidden>
-        <div class="vista-encabezado">
-            <div>
-                <h2 id="titulo-perfil">Perfil</h2>
-                <p id="estado-perfil" class="estado-vista"></p>
+    <div id="backdrop-menu" class="backdrop-barra-lateral"></div>
+
+    <div class="app-layout">
+        <!-- Barra lateral compartida por rol -->
+        <aside id="barra-lateral" class="barra-lateral" aria-label="Navegación principal">
+            <!-- Zona 1: Marca -->
+            <div class="barra-lateral-marca">
+                <a href="/inicio.html" aria-label="Rumbo - Ir al inicio">
+                    <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polygon points="12 2 19 21 12 17 5 21 12 2" stroke-linejoin="round"/>
+                    </svg>
+                    <span>Rumbo</span>
+                </a>
             </div>
-            <a id="volver-inicio" class="btn btn-secundario" href="/inicio.html">Volver</a>
-        </div>
 
-        <section class="perfil-card">
-            <div class="perfil-card-encabezado">
-                <h2>Datos de tu cuenta</h2>
-                <button id="editar-datos-cuenta" class="btn btn-secundario"
-                        type="button" hidden>Editar</button>
-            </div>
-            <dl class="datos-cuenta">
-                <div><dt>Nombre de usuario</dt><dd id="perfil-nombre-usuario"></dd></div>
-                <div><dt>Nombre completo</dt><dd id="perfil-nombre-completo"></dd></div>
-                <div><dt>Correo electrónico</dt><dd id="perfil-correo"></dd></div>
-                <div><dt>Rol</dt><dd id="perfil-rol"></dd></div>
-            </dl>
-        </section>
+            <!-- Zona 2: Navegación principal -->
+            <nav id="acciones" class="barra-lateral-nav" aria-label="Menú principal">
+                <a id="enlace-inicio" href="/inicio.html" class="nav-item">
+                    <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                    <span>Inicio</span>
+                </a>
 
-        <section id="seccion-solicitud-perfil" class="perfil-card" hidden>
-            <h2>Solicitar cambio de datos</h2>
-            <p class="texto-secundario">
-                Los cambios de nombre de usuario y nombre completo requieren
-                revisión antes de aplicarse.
-            </p>
-            <p id="estado-solicitud-perfil" class="mensaje-formulario"
-               role="status"></p>
-            <form id="formulario-solicitud-perfil">
-                <label for="solicitud-nombre-usuario">Nombre de usuario</label>
-                <input id="solicitud-nombre-usuario" type="text" required disabled>
+                <a id="enlace-linea-tiempo" href="/linea-tiempo.html" class="nav-item" hidden>
+                    <svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                    <span>Línea de tiempo</span>
+                </a>
 
-                <label for="solicitud-nombre-completo">Nombre completo</label>
-                <input id="solicitud-nombre-completo" type="text" required disabled>
+                <a id="enlace-pruebas" href="/test-vocacional.html" class="nav-item" hidden>
+                    <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"></path><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+                    <span>Pruebas</span>
+                </a>
 
-                <button id="solicitar-cambio-perfil" class="btn" type="submit"
-                        disabled>
-                    Solicitar cambio
+                <a id="enlace-bitacora" href="/bitacora.html" class="nav-item" hidden>
+                    <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+                    <span>Bitácora</span>
+                </a>
+
+                <a id="enlace-carreras" href="/carreras.html" class="nav-item" hidden>
+                    <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg>
+                    <span>Carreras</span>
+                </a>
+
+                <a id="enlace-comparador" href="/comparador-carreras.html" class="nav-item" hidden>
+                    <svg aria-hidden="true" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="18" rx="1"></rect><rect x="14" y="3" width="7" height="18" rx="1"></rect></svg>
+                    <span>Comparador</span>
+                </a>
+
+                <a id="enlace-foro" href="/foro.html" class="nav-item" hidden>
+                    <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                    <span>Foro</span>
+                </a>
+
+                <a id="enlace-supervision" href="/supervision-usuarios.html" class="nav-item" hidden>
+                    <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                    <span>Supervisión de usuarios</span>
+                </a>
+
+                <a id="enlace-cambios-perfil" href="/supervision-usuarios.html#perfiles" class="nav-item" hidden>
+                    <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                    <span>Cambios de perfil</span>
+                </a>
+
+                <a id="enlace-revision-mensajes" href="/roles/supervisor-mensajes.html" class="nav-item" hidden>
+                    <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                    <span>Revisión de mensajes</span>
+                </a>
+
+                <a id="enlace-gestion-carreras" href="/gestion-carreras.html" class="nav-item" hidden>
+                    <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+                    <span>Gestión de carreras</span>
+                </a>
+
+                <a id="enlace-gestion-actividades" href="/gestion-actividades.html" class="nav-item" hidden>
+                    <svg aria-hidden="true" viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
+                    <span>Gestionar actividades</span>
+                </a>
+            </nav>
+
+            <!-- Zona 3: Zona del usuario -->
+            <div class="barra-lateral-usuario">
+                <div id="usuario-notificaciones-contenedor" class="usuario-notificaciones" hidden>
+                    <a href="/inicio.html#notificaciones-inicio" class="nav-item-sub" id="enlace-notificaciones" aria-label="Notificaciones">
+                        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+                        <span>Notificaciones</span>
+                        <span id="badge-notificaciones-no-leidas" class="contador-badge" hidden>0</span>
+                    </a>
+                </div>
+
+                <a id="enlace-perfil" href="/perfil.html" class="nav-item-sub activo" aria-current="page">
+                    <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                    <span id="texto-enlace-perfil">Mi perfil</span>
+                </a>
+
+                <button id="cerrar-sesion" class="btn-cerrar-sesion" type="button" aria-label="Cerrar sesión">
+                    <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                    <span>Cerrar sesión</span>
                 </button>
-            </form>
-        </section>
 
-        <section id="seccion-edicion-perfil" class="perfil-card">
-            <h2>Información personal</h2>
-            <p class="texto-secundario">Completa los datos que quieras mostrar en tu perfil.</p>
-            <p id="mensaje-perfil" class="mensaje-formulario" role="status"></p>
-            <form id="formulario-perfil">
-                <label for="nivel-estudios">Nivel de estudios</label>
-                <input id="nivel-estudios" name="nivelEstudios" type="text" required>
+                <a href="/perfil.html" class="usuario-bloque" id="usuario-bloque-perfil" aria-label="Mi perfil">
+                    <div class="usuario-avatar" id="usuario-iniciales">--</div>
+                    <div class="usuario-info">
+                        <span class="usuario-nombre" id="usuario-nombre">Cargando...</span>
+                        <span class="usuario-rol-badge" id="usuario-rol-etiqueta">Rol</span>
+                    </div>
+                </a>
+            </div>
+        </aside>
 
-                <label id="etiqueta-carrera" for="carrera">Carrera</label>
-                <select id="carrera" name="carreraId" required>
-                    <option value="">Selecciona una carrera</option>
-                </select>
+        <!-- Contenido principal -->
+        <div class="contenido-principal-app">
+            <header>
+                <h1>Mi perfil</h1>
+                <p>Información de tu proceso en Rumbo</p>
+            </header>
 
-                <label id="etiqueta-area-laboral" for="area-laboral">Área laboral</label>
-                <input id="area-laboral" name="areaLaboral" type="text">
+            <main id="contenido-perfil" hidden>
+                <div class="vista-encabezado">
+                    <div>
+                        <h2 id="titulo-perfil">Perfil</h2>
+                        <p id="estado-perfil" class="estado-vista"></p>
+                    </div>
+                    <a id="volver-inicio" class="btn btn-secundario" href="/inicio.html">Volver al inicio</a>
+                </div>
 
-                <label for="descripcion-personal">Descripción personal</label>
-                <textarea id="descripcion-personal" name="descripcionPersonal"
-                          rows="5" required></textarea>
+                <section class="perfil-card">
+                    <div class="perfil-card-encabezado">
+                        <h2>Datos de tu cuenta</h2>
+                        <button id="editar-datos-cuenta" class="btn btn-secundario" type="button" hidden>Editar</button>
+                    </div>
+                    <dl class="datos-cuenta">
+                        <div><dt>Nombre de usuario</dt><dd id="perfil-nombre-usuario"></dd></div>
+                        <div><dt>Nombre completo</dt><dd id="perfil-nombre-completo"></dd></div>
+                        <div><dt>Correo electrónico</dt><dd id="perfil-correo"></dd></div>
+                        <div><dt>Rol</dt><dd id="perfil-rol"></dd></div>
+                    </dl>
+                </section>
 
-                <button id="guardar-perfil" class="btn" type="submit">Guardar perfil</button>
-            </form>
-        </section>
-    </main>
-    <p id="error-perfil" class="mensaje-error" hidden></p>
+                <section id="seccion-solicitud-perfil" class="perfil-card" hidden>
+                    <h2>Solicitar cambio de datos</h2>
+                    <p class="texto-secundario">
+                        Los cambios de nombre de usuario y nombre completo requieren revisión antes de aplicarse.
+                    </p>
+                    <p id="estado-solicitud-perfil" class="mensaje-formulario" role="status"></p>
+                    <form id="formulario-solicitud-perfil">
+                        <label for="solicitud-nombre-usuario">Nombre de usuario</label>
+                        <input id="solicitud-nombre-usuario" type="text" required disabled>
+
+                        <label for="solicitud-nombre-completo">Nombre completo</label>
+                        <input id="solicitud-nombre-completo" type="text" required disabled>
+
+                        <button id="solicitar-cambio-perfil" class="btn" type="submit" disabled>
+                            Solicitar cambio
+                        </button>
+                    </form>
+                </section>
+
+                <section id="seccion-edicion-perfil" class="perfil-card">
+                    <h2>Información personal</h2>
+                    <p class="texto-secundario">Completa los datos que quieras mostrar en tu perfil.</p>
+                    <p id="mensaje-perfil" class="mensaje-formulario" role="status"></p>
+                    <form id="formulario-perfil">
+                        <label for="nivel-estudios">Nivel de estudios</label>
+                        <input id="nivel-estudios" name="nivelEstudios" type="text" required>
+
+                        <label id="etiqueta-carrera" for="carrera">Carrera</label>
+                        <select id="carrera" name="carreraId" required>
+                            <option value="">Selecciona una carrera</option>
+                        </select>
+
+                        <label id="etiqueta-area-laboral" for="area-laboral">Área laboral</label>
+                        <input id="area-laboral" name="areaLaboral" type="text">
+
+                        <label for="descripcion-personal">Descripción personal</label>
+                        <textarea id="descripcion-personal" name="descripcionPersonal" rows="5" required></textarea>
+
+                        <button id="guardar-perfil" class="btn" type="submit">Guardar perfil</button>
+                    </form>
+                </section>
+            </main>
+
+            <p id="error-perfil" class="mensaje-error" hidden></p>
+
+            <footer>
+                <p>Rumbo &copy; 2026</p>
+            </footer>
+        </div>
+    </div>
 
     <script src="/js/sesion.js"></script>
+    <script src="/js/barraLateral.js"></script>
     <script src="/js/perfil.js?v=5"></script>
 </body>
 </html>
