@@ -26,8 +26,18 @@ public class Actividad {
     private String informacionAGuardar;
     @Column(name = "tipo_actividad")
     private String tipoActividad;
-    // TODO: reemplazar por RegistroActividadEstudiante cuando exista el vínculo con Usuario
-    private boolean completada;
+
+    // Eliminacion logica: conserva el historial personal de los estudiantes.
+    @Column(nullable = false, columnDefinition = "boolean default false")
+    private boolean eliminada = false;
+
+    public boolean isEliminada() {
+        return eliminada;
+    }
+
+    public void retirarDeLineaDeTiempo() {
+        this.eliminada = true;
+    }
 
     protected Actividad() {
     }
@@ -35,7 +45,7 @@ public class Actividad {
     public Actividad(String idActividad, String fecha, String descripcion, String contexto,
                      String instrucciones, String accionesARealizar, String metodoRecomendado,
                      String herramientasDisponibles, String informacionAGuardar,
-                     String tipoActividad, boolean completada) {
+                     String tipoActividad) {
         this.idActividad = idActividad;
         this.fecha = fecha;
         this.descripcion = descripcion;
@@ -46,7 +56,6 @@ public class Actividad {
         this.herramientasDisponibles = herramientasDisponibles;
         this.informacionAGuardar = informacionAGuardar;
         this.tipoActividad = tipoActividad;
-        this.completada = completada;
     }
 
     public String getIdActividad() {
@@ -123,13 +132,5 @@ public class Actividad {
 
     public void setTipoActividad(String tipoActividad) {
         this.tipoActividad = tipoActividad;
-    }
-
-    public boolean isCompletada() {
-        return completada;
-    }
-
-    public void setCompletada(boolean completada) {
-        this.completada = completada;
     }
 }

@@ -152,6 +152,129 @@ Al iniciar, `data.sql` siembra un usuario administrador para probar el login:
 
 La contrasena se guarda siempre como hash BCrypt, nunca en texto plano.
 
+## Registro de cuentas
+
+Endpoint publico para crear una cuenta de estudiante o colaborador.
+
+`POST /api/auth/registro`
+
+Solicitud:
+
+```json
+{
+  "nombreUsuario": "juanperez",
+  "nombreCompleto": "Juan Perez",
+  "correo": "juan@uvg.edu.gt",
+  "contrasenia": "contrasenia123",
+  "rol": "ESTUDIANTE"
+}
+```
+
+`rol` acepta unicamente `ESTUDIANTE` o `COLABORADOR`. Un colaborador debe usar un correo
+del dominio institucional configurado en `rumbo.correo.dominio-institucional`
+(por defecto `uvg.edu.gt`). El estudiante queda con estado `NO_VERIFICADO` y el
+colaborador con `VERIFICADO`.
+
+Respuesta `201 Created`:
+
+```json
+{
+  "idUsuario": "3f1c...",
+  "nombreUsuario": "juanperez",
+  "nombreCompleto": "Juan Perez",
+  "correo": "juan@uvg.edu.gt",
+  "rol": "ESTUDIANTE",
+  "estadoVerificacion": "NO_VERIFICADO"
+}
+```
+
+Errores:
+
+| Codigo | Caso | Cuerpo |
+|---|---|---|
+| `400` | Campos vacios, correo mal formado, contrasenia de menos de 8 caracteres, correo no institucional o rol no permitido | `{"error":"Datos invalidos","campos":{"correo":"..."}}` |
+| `409` | Nombre de usuario o correo ya en uso (sin distinguir mayusculas) | `{"error":"El correo electronico ya esta en uso"}` |
+
+La respuesta nunca incluye la contrasena ni su hash.
+
+Ejemplo con curl:
+
+```bash
+curl -X POST http://localhost:8080/api/auth/registro \
+  -H "Content-Type: application/json" \
+  -d "{\"nombreUsuario\":\"juanperez\",\"nombreCompleto\":\"Juan Perez\",\"correo\":\"juan@uvg.edu.gt\",\"contrasenia\":\"contrasenia123\",\"rol\":\"ESTUDIANTE\"}"
+```
+
+## Sesion y permisos
+
+El login crea una sesion HTTP en el servidor mediante la cookie `JSESSIONID`. La
+sesion guarda el id del usuario, su nombre, su rol y la fecha de inicio. El
+frontend no usa `localStorage` como fuente de autenticacion y no se debe enviar
+el rol desde el cliente para autorizar una operacion.
+
+Consultar la sesion actual:
+
+`GET /api/auth/sesion`
+
+Cierra la sesion e invalida la cookie:
+
+`POST /api/auth/logout`
+
+Las rutas protegidas responden `401 Unauthorized` cuando no existe una sesion y
+`403 Forbidden` cuando la sesion existe, pero el rol no tiene permiso. El acceso
+a carreras requiere cualquier sesion autenticada. La linea de tiempo de
+actividades requiere el rol `ESTUDIANTE`.
+
+Después de iniciar sesión, todos los usuarios son dirigidos a `/inicio.html`,
+que concentra la navegación común. El menú muestra el foro solo a usuarios
+verificados y conserva las opciones permitidas por la sesión. La gestión del
+catálogo continúa restringida al rol encargado de carreras.
+
+## Solicitud de verificacion
+
+Un estudiante no verificado puede consultar su estado con
+`GET /api/verificacion/estado` y crear una solicitud con
+`POST /api/verificacion/solicitudes`. El id del usuario se obtiene de la
+sesion del servidor. Una solicitud pendiente bloquea solicitudes duplicadas;
+una solicitud rechazada permite volver a solicitar. Los colaboradores no
+pueden crear solicitudes.
+
+## Perfiles y cambios de cuenta
+
+`GET /api/perfil` permite a cualquier usuario autenticado consultar su propio
+perfil. Estudiantes y colaboradores pueden editar directamente sus datos
+personales, pero los cambios de nombre de usuario y nombre completo se envían
+como solicitud pendiente mediante `POST /api/perfil/solicitudes`. Mientras no
+exista un flujo de revisión implementado, la solicitud no modifica la cuenta.
+
+Los usuarios autenticados pueden consultar el perfil público de estudiantes y
+colaboradores con `GET /api/perfil/publico/{idUsuario}`. La respuesta pública
+solo contiene nombre de usuario, nombre completo y descripción personal. Desde
+el foro, el autor de una publicación o respuesta abre esta información y puede
+navegar a sus publicaciones filtradas.
+
+## Supervisión de usuarios
+
+El menú de inicio muestra la opción **Supervisión de usuarios** únicamente a
+los roles `SUPERVISOR_DE_USUARIOS` y `ADMIN`. La pantalla
+`/supervision-usuarios.html` también está protegida por rol en el backend.
+
+El tablero consulta solicitudes pendientes mediante:
+
+- `GET /api/supervision/usuarios/verificaciones`
+- `GET /api/supervision/usuarios/perfiles`
+
+Las decisiones se envían con `PUT` a la solicitud correspondiente usando
+`{"decision":"APROBAR"}` o `{"decision":"RECHAZAR","motivo":"..."}`.
+Rechazar exige un motivo. Aprobar una verificación cambia al estudiante a
+`VERIFICADO`; aprobar un cambio de perfil aplica el nombre de usuario y nombre
+completo propuestos. Cada decisión crea una notificación y un registro de
+supervisión con supervisor, solicitud, tipo, decisión y fecha.
+
+Las notificaciones del usuario se consultan con
+`GET /api/supervision/usuarios/notificaciones` y se marcan como leídas con
+`PUT /api/supervision/usuarios/notificaciones/{idNotificacion}/leida`.
+
 ## Comandos
 
 | Comando | Descripcion |
