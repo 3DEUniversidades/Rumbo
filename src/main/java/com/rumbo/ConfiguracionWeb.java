@@ -96,6 +96,7 @@ public class ConfiguracionWeb implements WebMvcConfigurer {
                 new InterceptorPantallasRol(gestorPermisos)
         )
         .addPathPatterns(
+                "/test-vocacional.html",
                 "/gestion-carreras.html",
                 "/gestion-actividades.html"
         )
@@ -133,6 +134,14 @@ public class ConfiguracionWeb implements WebMvcConfigurer {
 
             String rutaSolicitada = solicitud.getRequestURI()
                     .substring(solicitud.getContextPath().length());
+            if ("/test-vocacional.html".equals(rutaSolicitada)) {
+                if (sesionUsuario.getRol() != Rol.ESTUDIANTE) {
+                    respuesta.sendError(HttpServletResponse.SC_FORBIDDEN, "Se requiere rol de estudiante");
+                    return false;
+                }
+                return true;
+            }
+
             if ("/gestion-carreras.html".equals(rutaSolicitada)
                     || "/gestion-actividades.html".equals(rutaSolicitada)) {
                 if (sesionUsuario.getRol() != Rol.ENCARGADO_DE_CARRERAS) {
