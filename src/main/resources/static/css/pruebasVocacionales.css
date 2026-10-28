@@ -1,0 +1,23 @@
+[hidden] { display: none !important; }
+.acciones-pruebas { display: flex; flex-wrap: wrap; align-items: end; gap: 1rem; margin: 1.5rem 0; }
+.acciones-pruebas label { display: grid; gap: .4rem; font-weight: 600; }
+.acciones-pruebas select { padding: .6rem; border: 1px solid var(--border, #ccd4d0); border-radius: 8px; background: var(--surface, white); color: var(--text, #24352c); font: inherit; }
+#lista-pruebas { display: grid; gap: 1.25rem; margin-bottom: 1.5rem; }
+.prueba-tarjeta { padding: 1.25rem; border: 1px solid var(--border, #ccd4d0); border-radius: 12px; background: var(--surface, white); }
+.prueba-tarjeta h2 { margin-bottom: .5rem; }
+.prueba-tarjeta p, .prueba-tarjeta dd, .resultado-historial p { line-height: 1.6; white-space: pre-wrap; overflow-wrap: anywhere; }
+.prueba-tarjeta summary { margin: .75rem 0; cursor: pointer; font-weight: 600; }
+.prueba-tarjeta dt { margin-top: .8rem; font-weight: 700; }
+.prueba-tarjeta dd { margin: .25rem 0 0; }
+.enlaces-prueba { display: flex; flex-wrap: wrap; gap: .65rem; margin: 1rem 0; }
+.formulario-resultado-prueba { margin-top: 1rem; }
+.formulario-resultado-prueba fieldset { min-width: 0; border: 1px solid var(--border, #ccd4d0); border-radius: 8px; padding: 1rem; }
+.formulario-resultado-prueba legend { font-weight: 700; padding: 0 .4rem; }
+.formulario-resultado-prueba label { display: block; margin-bottom: .9rem; font-weight: 600; }
+.formulario-resultado-prueba input, .formulario-resultado-prueba textarea { display: block; width: 100%; margin-top: .4rem; padding: .65rem; border-radius: 6px; border: 1px solid var(--border, #ccd4d0); font: inherit; color: var(--text, #24352c); background: var(--surface, white); }
+.formulario-resultado-prueba textarea { resize: vertical; }
+.formulario-resultado-prueba :focus-visible { outline: 2px solid #0b6b3a; outline-offset: 2px; }
+.formulario-resultado-prueba fieldset:disabled { opacity: .65; }
+.mensaje-resultado-prueba { margin-top: .75rem; line-height: 1.5; white-space: pre-wrap; }
+.resultado-historial { padding: 1rem 0; border-bottom: 1px solid var(--border, #ccd4d0); }
+#estado-pruebas { margin: 1rem 0; line-height: 1.5; }

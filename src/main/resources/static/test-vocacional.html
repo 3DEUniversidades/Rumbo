@@ -7,6 +7,7 @@
     <link rel="manifest" href="/manifest.json">
     <title>Rumbo - Pruebas Vocacionales</title>
     <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/css/pruebasVocacionales.css?v=t11-2">
 </head>
 <body>
     <a href="#contenido-principal" class="saltar-contenido">Saltar al contenido</a>
@@ -136,26 +137,42 @@
         <div class="contenido-principal-app">
             <header>
                 <h1>Pruebas Vocacionales</h1>
-                <p>Descubre qué carreras se alinean con tus intereses y habilidades</p>
+                <p>Herramientas externas y registro privado de tus resultados</p>
             </header>
 
             <main id="contenido-principal">
                 <div class="vista-encabezado">
                     <div>
-                        <h2>Cuestionario de Orientación</h2>
-                        <p class="texto-secundario">Responde según tus preferencias personales y profesionales.</p>
+                        <h2>Mis pruebas externas</h2>
+                        <p class="texto-secundario">Consulta las instrucciones del proveedor y registra los resultados que obtengas fuera de Rumbo.</p>
                     </div>
                     <a href="/inicio.html" class="btn btn-secundario">Volver al inicio</a>
                 </div>
 
-                <section class="card" id="test-form">
-                    <h3>Evaluación vocacional</h3>
-                    <p class="texto-secundario" style="margin-top: var(--space-2);">
-                        Esta sección te permitirá completar pruebas estandarizadas de intereses y aptitudes con recomendaciones personalizadas.
-                    </p>
-                    <div class="alerta alerta-info" style="margin-top: var(--space-4);">
-                        Próximamente: cuestionario interactivo con recomendaciones vocacionales personalizadas.
+                <section class="card" aria-labelledby="aviso-pruebas">
+                    <h3 id="aviso-pruebas">Como funciona</h3>
+                    <p>Rumbo no aplica, califica ni sustituye pruebas estandarizadas. Abre los recursos oficiales, realiza la prueba fuera de la plataforma y registra tus resultados manualmente.</p>
+                    <p>Los resultados son privados. Guardarlos no completa automaticamente la actividad ni genera una recomendacion de carrera.</p>
+                </section>
+                <p id="estado-pruebas" role="status" aria-live="polite">Comprobando sesion...</p>
+                <section id="contenido-pruebas" hidden>
+                    <div class="acciones-pruebas">
+                        <label>Filtrar por tipo
+                            <select id="filtro-tipo-prueba">
+                                <option value="">Todos los tipos</option>
+                                <option value="INTERESES">Intereses</option>
+                                <option value="HABILIDADES">Habilidades academicas</option>
+                            </select>
+                        </label>
+                        <a id="todas-las-pruebas" class="btn btn-secundario" href="/test-vocacional.html" hidden>Ver todas las pruebas</a>
+                        <button id="recargar-pruebas" type="button" class="btn btn-secundario">Actualizar</button>
                     </div>
+                    <div id="lista-pruebas"></div>
+                    <section class="card" aria-labelledby="titulo-mis-resultados">
+                        <h2 id="titulo-mis-resultados">Mis resultados guardados</h2>
+                        <p>Tu registro mas reciente de cada prueba. Los resultados de actividades retiradas se conservan como historial.</p>
+                        <div id="historial-resultados"></div>
+                    </section>
                 </section>
             </main>
 
@@ -167,5 +184,6 @@
 
     <script src="/js/sesion.js"></script>
     <script src="/js/barraLateral.js"></script>
+    <script src="/js/vistaPruebasVocacionales.js?v=t11-2"></script>
 </body>
 </html>

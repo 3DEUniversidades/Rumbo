@@ -5,6 +5,8 @@ document.addEventListener('DOMContentLoaded', async function () {
     const barra = document.getElementById('barra-progreso');
     const reintentar = document.getElementById('reintentar-carga');
 
+    let actividadesConPrueba = new Set();
+
     const nombresEstado = {
         PENDIENTE: 'Pendiente',
         COMPLETADA: 'Completada',
@@ -63,11 +65,13 @@ document.addEventListener('DOMContentLoaded', async function () {
         resumen.textContent = 'Cargando progreso...';
 
         try {
-            const [actividades, progreso] = await Promise.all([
+            const [actividades, progreso, pruebas] = await Promise.all([
                 consultarJson('/api/mi-progreso/actividades'),
-                consultarJson('/api/mi-progreso/resumen')
+                consultarJson('/api/mi-progreso/resumen'),
+                consultarJson('/api/pruebas-vocacionales').catch(() => [])
             ]);
 
+            actividadesConPrueba = new Set(pruebas.map(prueba => prueba.idActividad));
             lista.replaceChildren();
 
             actividades.forEach(function (actividad) {
@@ -483,6 +487,15 @@ formularioResultados.addEventListener('submit', async function (evento) {
 
 detalles.append(abrir, datos, formulario, formularioResultados);
 tarjeta.append(titulo, fecha, estado, detalles);
+if (actividadesConPrueba.has(actividad.idActividad)) {
+    const enlacePrueba = document.createElement('a');
+    enlacePrueba.className = 'btn btn-secundario';
+    enlacePrueba.href = '/test-vocacional.html?actividad=' + encodeURIComponent(actividad.idActividad);
+    enlacePrueba.textContent = 'Ver prueba externa y registrar resultado';
+    enlacePrueba.style.marginTop = '1rem';
+    tarjeta.appendChild(enlacePrueba);
+}
+
 
 return tarjeta;
     }
