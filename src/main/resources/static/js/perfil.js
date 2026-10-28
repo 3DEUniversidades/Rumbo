@@ -9,7 +9,6 @@ document.addEventListener("DOMContentLoaded", async function () {
     const etiquetaArea = document.getElementById("etiqueta-area-laboral");
     const etiquetaCarrera = document.getElementById("etiqueta-carrera");
     const seccionEdicion = document.getElementById("seccion-edicion-perfil");
-    const seccionSolicitud = document.getElementById("seccion-solicitud-perfil");
     const formularioSolicitud = document.getElementById("formulario-solicitud-perfil");
     const estadoSolicitud = document.getElementById("estado-solicitud-perfil");
     const botonSolicitud = document.getElementById("solicitar-cambio-perfil");
@@ -20,10 +19,17 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     const cargarSolicitudPendiente = async function () {
         const respuesta = await fetch("/api/perfil/solicitudes/pendiente");
+        if (respuesta.status === 204) {
+            return;
+        }
         if (!respuesta.ok) {
             throw new Error("No se pudo consultar la solicitud pendiente.");
         }
-        const solicitud = await respuesta.json();
+        const texto = await respuesta.text();
+        if (!texto.trim()) {
+            return;
+        }
+        const solicitud = JSON.parse(texto);
         if (!solicitud) {
             return;
         }
@@ -34,7 +40,11 @@ document.addEventListener("DOMContentLoaded", async function () {
             solicitud.nombreCompletoSolicitado;
         estadoSolicitud.textContent =
             "Ya tienes una solicitud pendiente de revisión.";
+        campoNombreUsuario.disabled = true;
+        campoNombreCompleto.disabled = true;
+        botonSolicitud.hidden = true;
         botonSolicitud.disabled = true;
+        botonEditarCuenta.hidden = false;
         botonEditarCuenta.disabled = true;
         botonEditarCuenta.textContent = "Solicitud pendiente";
     };
@@ -53,10 +63,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         if (!puedeEditar) {
             seccionEdicion.hidden = true;
         } else {
-            seccionSolicitud.hidden = false;
             botonEditarCuenta.hidden = false;
-            campoNombreUsuario.value = perfil.nombreUsuario || "";
-            campoNombreCompleto.value = perfil.nombreCompleto || "";
             try {
                 await cargarSolicitudPendiente();
             } catch (exception) {
@@ -129,12 +136,14 @@ document.addEventListener("DOMContentLoaded", async function () {
         }
         campoNombreUsuario.disabled = false;
         campoNombreCompleto.disabled = false;
+        botonSolicitud.hidden = false;
         botonSolicitud.disabled = false;
-        botonEditarCuenta.disabled = true;
+        botonEditarCuenta.hidden = true;
         botonEditarCuenta.textContent = "Editando";
         estadoSolicitud.textContent =
-            "Modifica tus datos y después solicita el cambio.";
+            "Modifica tus datos y después guarda los cambios.";
         estadoSolicitud.className = "mensaje-formulario";
+        campoNombreUsuario.focus();
     });
 
     async function consultarPerfil() {
@@ -182,6 +191,9 @@ document.addEventListener("DOMContentLoaded", async function () {
             solicitudPendiente = true;
             campoNombreUsuario.disabled = true;
             campoNombreCompleto.disabled = true;
+            botonSolicitud.hidden = true;
+            botonSolicitud.disabled = true;
+            botonEditarCuenta.hidden = false;
             botonEditarCuenta.disabled = true;
             botonEditarCuenta.textContent = "Solicitud pendiente";
         } catch (exception) {
@@ -192,8 +204,8 @@ document.addEventListener("DOMContentLoaded", async function () {
     });
 
     function mostrarCuenta(perfil) {
-        document.getElementById("perfil-nombre-usuario").textContent = perfil.nombreUsuario;
-        document.getElementById("perfil-nombre-completo").textContent = perfil.nombreCompleto;
+        campoNombreUsuario.value = perfil.nombreUsuario || "";
+        campoNombreCompleto.value = perfil.nombreCompleto || "";
         document.getElementById("perfil-correo").textContent = perfil.correo;
         document.getElementById("perfil-rol").textContent = perfil.rol;
         document.getElementById("titulo-perfil").textContent = "Perfil de " + perfil.nombreCompleto;

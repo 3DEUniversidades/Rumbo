@@ -108,19 +108,18 @@ document.addEventListener("DOMContentLoaded", async () => {
         // 3. Marcar página actual
         resaltarPaginaActual();
 
-        // 4. Notificaciones y verificación para estudiantes y colaboradores
-        if (rol === "ESTUDIANTE" || rol === "COLABORADOR") {
-            if (notificacionesContenedor) {
-                notificacionesContenedor.hidden = false;
-            }
-            await verificarNotificacionesNoLeidas(badgeNotificaciones);
+        // 4. Notificaciones para cualquier usuario autenticado
+        if (notificacionesContenedor) {
+            notificacionesContenedor.hidden = false;
         }
+        await verificarNotificacionesNoLeidas(badgeNotificaciones);
 
+        // 5. Estado de verificación solo para estudiantes
         if (rol === "ESTUDIANTE") {
             await verificarEstadoForoEstudiante();
         }
 
-        // 5. Contenido del inicio según rol (Sección 5 del documento)
+        // 6. Contenido del inicio según rol (Sección 5 del documento)
         await activarContenidoInicioPorRol(rol);
 
     } catch (error) {
@@ -360,10 +359,10 @@ document.addEventListener("DOMContentLoaded", async () => {
                 <h2>Acceso al Foro</h2>
                 <p style="margin: 1rem 0; line-height: 1.5;">
                     Para participar e interactuar en el foro necesitas estar verificado.
-                    Puedes solicitar tu verificación desde tu perfil o desde tu página de inicio.
+                    Puedes solicitar tu verificación desde tu perfil.
                 </p>
                 <div class="acciones-form">
-                    <a href="/perfil.html" class="btn btn-destaque">Ir a mi perfil</a>
+                    <a href="/perfil.html#verificacion-estudiante" class="btn btn-destaque">Ir a mi perfil</a>
                     <button type="button" class="btn btn-secundario" id="btn-cerrar-aviso-verificacion">Cerrar</button>
                 </div>
             `;

@@ -153,18 +153,8 @@
                         <h2>Datos de tu cuenta</h2>
                         <button id="editar-datos-cuenta" class="btn btn-secundario" type="button" hidden>Editar</button>
                     </div>
-                    <dl class="datos-cuenta">
-                        <div><dt>Nombre de usuario</dt><dd id="perfil-nombre-usuario"></dd></div>
-                        <div><dt>Nombre completo</dt><dd id="perfil-nombre-completo"></dd></div>
-                        <div><dt>Correo electrónico</dt><dd id="perfil-correo"></dd></div>
-                        <div><dt>Rol</dt><dd id="perfil-rol"></dd></div>
-                    </dl>
-                </section>
-
-                <section id="seccion-solicitud-perfil" class="perfil-card" hidden>
-                    <h2>Solicitar cambio de datos</h2>
                     <p class="texto-secundario">
-                        Los cambios de nombre de usuario y nombre completo requieren revisión antes de aplicarse.
+                        Los cambios de nombre de usuario y nombre completo se envían a revisión antes de aplicarse.
                     </p>
                     <p id="estado-solicitud-perfil" class="mensaje-formulario" role="status"></p>
                     <form id="formulario-solicitud-perfil">
@@ -174,10 +164,22 @@
                         <label for="solicitud-nombre-completo">Nombre completo</label>
                         <input id="solicitud-nombre-completo" type="text" required disabled>
 
-                        <button id="solicitar-cambio-perfil" class="btn" type="submit" disabled>
-                            Solicitar cambio
+                        <button id="solicitar-cambio-perfil" class="btn" type="submit" hidden>
+                            Guardar cambios
                         </button>
                     </form>
+                    <dl class="datos-cuenta">
+                        <div><dt>Correo electrónico</dt><dd id="perfil-correo"></dd></div>
+                        <div><dt>Rol</dt><dd id="perfil-rol"></dd></div>
+                    </dl>
+                </section>
+
+                <section id="verificacion-estudiante" class="perfil-card" hidden>
+                    <h2>Verificación de mi cuenta</h2>
+                    <p id="mensaje-verificacion" class="mensaje-formulario" role="status"></p>
+                    <button id="solicitar-verificacion" class="btn" type="button" disabled>
+                        Solicitar verificación
+                    </button>
                 </section>
 
                 <section id="seccion-edicion-perfil" class="perfil-card">
@@ -202,6 +204,7 @@
                         <button id="guardar-perfil" class="btn" type="submit">Guardar perfil</button>
                     </form>
                 </section>
+
             </main>
 
             <p id="error-perfil" class="mensaje-error" hidden></p>
@@ -214,6 +217,7 @@
 
     <script src="/js/sesion.js"></script>
     <script src="/js/barraLateral.js"></script>
-    <script src="/js/perfil.js?v=5"></script>
+    <script src="/js/perfil.js?v=7"></script>
+    <script src="/js/vistaVerificacion.js?v=1"></script>
 </body>
 </html>
