@@ -142,21 +142,65 @@
             <main id="contenido-principal">
                 <div class="vista-encabezado">
                     <div>
-                        <h2>Bitácora Personal</h2>
+                        <h2>Bitácora personal</h2>
                         <p class="texto-secundario">Lleva un seguimiento de tus reflexiones, dudas y avances vocacionales.</p>
                     </div>
                     <a href="/inicio.html" class="btn btn-secundario">Volver al inicio</a>
                 </div>
 
-                <section class="card" id="bitacora">
-                    <h3>Registro de actividades</h3>
-                    <p class="texto-secundario" style="margin-top: var(--space-2);">
-                        En esta bitácora podrás registrar tus aprendizajes de cada carrera explorada y tus decisiones durante el proceso de orientación.
+                <p id="mensaje-bitacora" class="estado-vista" role="status"></p>
+
+                <section class="card" aria-labelledby="titulo-nueva-entrada">
+                    <h2 id="titulo-nueva-entrada">Nueva entrada</h2>
+                    <p class="texto-secundario">
+                        Escribe lo que aprendiste, lo que te generó dudas o la decisión que tomaste.
                     </p>
-                    <div class="alerta alerta-info" style="margin-top: var(--space-4);">
-                        Próximamente: espacio de notas personales y diario vocacional sincronizado.
-                    </div>
+                    <form id="formulario-entrada">
+                        <label for="contenido-entrada">Contenido</label>
+                        <textarea id="contenido-entrada" rows="5" required></textarea>
+
+                        <label for="actividad-entrada">Actividad relacionada (opcional)</label>
+                        <select id="actividad-entrada">
+                            <option value="">Sin actividad relacionada</option>
+                        </select>
+
+                        <p id="mensaje-nueva-entrada" class="mensaje-formulario" role="status"></p>
+
+                        <button id="guardar-entrada" class="btn" type="submit">
+                            Guardar entrada
+                        </button>
+                    </form>
                 </section>
+
+                <section aria-labelledby="titulo-entradas">
+                    <h2 id="titulo-entradas">Mis entradas</h2>
+                    <div id="lista-entradas"></div>
+                </section>
+
+                <dialog id="dialogo-editar-entrada" class="modal-edicion">
+                    <form id="formulario-editar-entrada">
+                        <h2>Editar entrada</h2>
+
+                        <label for="contenido-editar">Contenido</label>
+                        <textarea id="contenido-editar" rows="5" required></textarea>
+
+                        <label for="actividad-editar">Actividad relacionada (opcional)</label>
+                        <select id="actividad-editar">
+                            <option value="">Sin actividad relacionada</option>
+                        </select>
+
+                        <p id="mensaje-editar-entrada" class="mensaje-formulario" role="status"></p>
+
+                        <div class="acciones-form">
+                            <button id="guardar-edicion" class="btn" type="submit">
+                                Guardar cambios
+                            </button>
+                            <button id="cancelar-edicion" class="btn btn-secundario" type="button">
+                                Cancelar
+                            </button>
+                        </div>
+                    </form>
+                </dialog>
             </main>
 
             <footer>
@@ -167,5 +211,6 @@
 
     <script src="/js/sesion.js"></script>
     <script src="/js/barraLateral.js"></script>
+    <script src="/js/vistaBitacora.js?v=1"></script>
 </body>
 </html>

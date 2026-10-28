@@ -1,5 +1,6 @@
 package com.rumbo.controlador;
 
+import com.rumbo.servicio.ExcepcionBitacora;
 import com.rumbo.servicio.ExcepcionConflicto;
 import com.rumbo.servicio.ExcepcionAutenticacion;
 import com.rumbo.servicio.ExcepcionValidacion;
@@ -34,6 +35,12 @@ public class ManejadorExcepciones {
     @ExceptionHandler(ExcepcionConflicto.class)
     public ResponseEntity<?> manejarConflicto(ExcepcionConflicto e) {
         return ResponseEntity.status(409)
+                .body(Map.of("error", e.getMessage()));
+    }
+
+    @ExceptionHandler(ExcepcionBitacora.class)
+    public ResponseEntity<?> manejarBitacora(ExcepcionBitacora e) {
+        return ResponseEntity.status(404)
                 .body(Map.of("error", e.getMessage()));
     }
 }

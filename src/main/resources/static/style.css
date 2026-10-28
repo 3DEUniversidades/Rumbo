@@ -1466,3 +1466,20 @@ progress::-moz-progress-bar,
         padding: var(--space-4);
     }
 }
+
+/* Bitácora personal */
+#lista-entradas {
+    display: grid;
+    gap: var(--space-3);
+}
+
+#lista-entradas .perfil-card-encabezado .acciones-form {
+    margin-top: 0;
+}
+
+.entrada-bitacora-contenido {
+    margin-top: var(--space-3);
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+    white-space: pre-wrap;
+}
