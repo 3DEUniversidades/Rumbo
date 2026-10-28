@@ -60,8 +60,12 @@ public class ControladorPerfil {
             HttpSession sesion) {
         SesionUsuario usuario = gestorPermisos.exigirRol(
                 sesion, Rol.ESTUDIANTE, Rol.COLABORADOR);
-        return ResponseEntity.ok(
-                perfilService.consultarSolicitudPendiente(usuario.getIdUsuario()));
+        SolicitudActualizacionPerfilResponse pendiente =
+                perfilService.consultarSolicitudPendiente(usuario.getIdUsuario());
+        if (pendiente == null) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(pendiente);
     }
 
     @GetMapping("/publico/{idUsuario}")

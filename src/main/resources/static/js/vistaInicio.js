@@ -101,10 +101,21 @@ document.addEventListener("DOMContentLoaded", async () => {
                     });
                     boton.disabled = true;
                     elemento.classList.remove("notificacion-no-leida");
+                    actualizarBadgeNotificaciones();
                 });
                 elemento.appendChild(boton);
             }
             lista.appendChild(elemento);
         });
+    }
+
+    function actualizarBadgeNotificaciones() {
+        const badge = document.getElementById("badge-notificaciones-no-leidas");
+        if (!badge) {
+            return;
+        }
+        const noLeidas = document.querySelectorAll("#lista-notificaciones-inicio .notificacion-no-leida").length;
+        badge.textContent = noLeidas > 99 ? "99+" : String(noLeidas);
+        badge.hidden = noLeidas === 0;
     }
 });

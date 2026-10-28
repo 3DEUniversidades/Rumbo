@@ -339,7 +339,14 @@ formularioResultados.innerHTML = `
         <button type="submit" class="btn">
             Guardar resultados
         </button>
+
+        <button type="button" class="btn btn-secundario"
+                data-accion="bitacora" hidden>
+            Agregar resultados a mi bitácora
+        </button>
     </fieldset>
+
+    <p class="mensaje-bitacora" role="status"></p>
 
     <p role="status" class="mensaje-guardado"></p>
 `;
@@ -349,8 +356,64 @@ const entradaResultados =
     formularioResultados.elements.namedItem('resultados');
 const avisoResultados =
     formularioResultados.querySelector('.mensaje-guardado');
+const botonBitacora =
+    formularioResultados.querySelector('[data-accion="bitacora"]');
+const avisoBitacora =
+    formularioResultados.querySelector('.mensaje-bitacora');
 
 entradaResultados.value = actividad.resultadosRegistrados ?? '';
+
+function actualizarBotonBitacora(resultados) {
+    botonBitacora.hidden =
+        resultados == null || resultados.trim() === '';
+}
+
+actualizarBotonBitacora(actividad.resultadosRegistrados);
+
+botonBitacora.addEventListener('click', async function () {
+    botonBitacora.disabled = true;
+    avisoBitacora.textContent = 'Agregando a tu bitácora...';
+    avisoBitacora.className = 'mensaje-bitacora';
+
+    try {
+        const respuesta = await fetch(
+            '/api/bitacora/actividades/' +
+            encodeURIComponent(actividad.idActividad) +
+            '/resultados',
+            {
+                method: 'POST',
+                credentials: 'same-origin'
+            }
+        );
+
+        if (respuesta.status === 401) {
+            window.location.replace('/login.html');
+            return;
+        }
+
+        if (!respuesta.ok) {
+            const error = await respuesta.json().catch(() => ({}));
+            const detalle = error.campos
+                ? Object.values(error.campos).join(' ')
+                : error.error;
+
+            throw new Error(
+                detalle || 'No se pudieron agregar los resultados.'
+            );
+        }
+
+        avisoBitacora.textContent =
+            'Resultados agregados a tu bitácora.';
+        avisoBitacora.className =
+            'mensaje-bitacora mensaje-formulario mensaje-exito';
+    } catch (error) {
+        avisoBitacora.textContent = error.message;
+        avisoBitacora.className =
+            'mensaje-bitacora mensaje-formulario mensaje-error';
+    } finally {
+        botonBitacora.disabled = false;
+    }
+});
 
 formularioResultados.addEventListener('submit', async function (evento) {
     evento.preventDefault();
@@ -400,6 +463,10 @@ formularioResultados.addEventListener('submit', async function (evento) {
             actualizada.resultadosRegistrados?.trim()
                 ? actualizada.resultadosRegistrados
                 : 'Sin información registrada.';
+
+        actualizarBotonBitacora(actualizada.resultadosRegistrados);
+        avisoBitacora.textContent = '';
+        avisoBitacora.className = 'mensaje-bitacora';
 
         avisoResultados.textContent =
             'Resultados guardados correctamente.';
