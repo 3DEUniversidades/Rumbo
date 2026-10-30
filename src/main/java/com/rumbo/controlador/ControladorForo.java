@@ -1,6 +1,7 @@
 package com.rumbo.controlador;
 
 import com.rumbo.dto.*;
+import com.rumbo.modelo.Rol;
 import com.rumbo.servicio.ExcepcionForo;
 import com.rumbo.servicio.ForoService;
 import com.rumbo.servicio.GestorPermisos;
@@ -77,6 +78,29 @@ public class ControladorForo {
 
         return foroService.crearRespuesta(
                 id, solicitud, idUsuario(sesion));
+    }
+
+    @PutMapping("/publicaciones/{id}/me-gusta")
+    public PublicacionForoRespuesta marcarMeGusta(
+            @PathVariable Long id, HttpSession sesion) {
+        return reaccionar(id, sesion, true);
+    }
+
+    @DeleteMapping("/publicaciones/{id}/me-gusta")
+    public PublicacionForoRespuesta quitarMeGusta(
+            @PathVariable Long id, HttpSession sesion) {
+        return reaccionar(id, sesion, false);
+    }
+
+    private PublicacionForoRespuesta reaccionar(
+            Long id, HttpSession sesion, boolean meGusta) {
+        String usuario = gestorPermisos.exigirRol(
+                sesion, Rol.ESTUDIANTE, Rol.COLABORADOR, Rol.ADMIN).getIdUsuario();
+        if (id == null || id < 1) {
+            throw new ExcepcionForo(400,
+                    "El identificador de publicación no es válido.");
+        }
+        return foroService.reaccionar(id, usuario, meGusta);
     }
 
     private String idUsuario(HttpSession sesion) {

@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface RespuestaPublicacionRepository
         extends JpaRepository<RespuestaPublicacion, Long> {
 
+    long countByPublicacionId(Long publicacionId);
+
     @EntityGraph(attributePaths = "autor")
     List<RespuestaPublicacion> findByPublicacionIdOrderByFechaAscIdAsc(
             Long publicacionId);

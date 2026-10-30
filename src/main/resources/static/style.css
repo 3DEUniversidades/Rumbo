@@ -958,6 +958,37 @@ progress::-moz-progress-bar,
     margin: var(--space-3) 0;
 }
 
+.reaccion-corazon-foro {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    padding: 8px;
+    border: 0;
+    background: transparent;
+    color: var(--color-primary);
+    cursor: pointer;
+}
+
+.reaccion-corazon-foro svg {
+    width: 24px;
+    height: 24px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linejoin: round;
+}
+
+.reaccion-corazon-foro[aria-pressed="true"] svg {
+    fill: currentColor;
+}
+
+.reaccion-corazon-foro:disabled {
+    opacity: 0.6;
+    cursor: wait;
+}
+
 .respuesta-foro {
     padding: var(--space-3) 0;
     border-bottom: 1px solid var(--color-border);

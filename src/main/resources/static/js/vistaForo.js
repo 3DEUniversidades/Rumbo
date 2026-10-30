@@ -38,6 +38,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     let publicacionAbierta = null;
     let revisionDetalle = 0;
     let revisionListado = 0;
+    let revisionPerfil = 0;
     let publicando = false;
     let respondiendo = false;
 
@@ -70,6 +71,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     obtener("cerrar-perfil-publico-foro").addEventListener(
         "click", () => modalPerfil.close()
     );
+    modalPerfil.addEventListener("close", () => revisionPerfil++);
 
     filtros.addEventListener("submit", evento => {
         evento.preventDefault();
@@ -238,7 +240,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                     "click", () => abrirPublicacion(p.id)
                 );
 
-                tarjeta.appendChild(abrir);
+                tarjeta.append(crearReacciones(p), abrir);
                 listado.appendChild(tarjeta);
             });
 
@@ -330,6 +332,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             obtener("texto-detalle-foro").textContent =
                 publicacion.contenido;
+            obtener("reacciones-detalle-foro").replaceChildren(
+                crearReacciones(publicacion)
+            );
 
             respuestas.replaceChildren();
 
@@ -389,6 +394,11 @@ document.addEventListener("DOMContentLoaded", async () => {
             agregarRespuesta(respuesta);
             formularioRespuesta.reset();
             estadoDetalle.textContent = "Respuesta publicada.";
+            publicacionAbierta.cantidadRespuestas++;
+            obtener("reacciones-detalle-foro").replaceChildren(
+                crearReacciones(publicacionAbierta)
+            );
+            await cargarListado();
 
         } catch (error) {
             if (revision === revisionDetalle && modal.open) {
@@ -399,6 +409,59 @@ document.addEventListener("DOMContentLoaded", async () => {
             botonResponder.disabled = false;
             botonResponder.textContent = "Responder";
         }
+    }
+
+    function crearReacciones(publicacion) {
+        const contenedor = crear("div", "", "acciones-formulario");
+        const contador = crear("span");
+        const boton = crear("button", "", "reaccion-corazon-foro");
+        boton.type = "button";
+        const corazon = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+        corazon.setAttribute("viewBox", "0 0 24 24");
+        corazon.setAttribute("aria-hidden", "true");
+        const forma = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        forma.setAttribute("d", "M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z");
+        corazon.appendChild(forma);
+        boton.appendChild(corazon);
+
+        function actualizar() {
+            contador.textContent = `${publicacion.cantidadRespuestas} respuestas · `
+                + `${publicacion.cantidadReacciones} me gusta`;
+            const etiqueta = publicacion.meGusta ? "Quitar me gusta" : "Me gusta";
+            boton.setAttribute("aria-label", etiqueta);
+            boton.title = etiqueta;
+            boton.setAttribute("aria-pressed", String(publicacion.meGusta));
+        }
+
+        actualizar();
+        boton.addEventListener("click", async () => {
+            boton.disabled = true;
+            try {
+                const actualizada = await solicitar(
+                    `/api/foro/publicaciones/${publicacion.id}/me-gusta`,
+                    { method: publicacion.meGusta ? "DELETE" : "PUT" }
+                );
+                Object.assign(publicacion, actualizada);
+                actualizar();
+                if (publicacionAbierta?.id === publicacion.id) {
+                    publicacionAbierta = actualizada;
+                    obtener("reacciones-detalle-foro").replaceChildren(
+                        crearReacciones(actualizada)
+                    );
+                }
+                await cargarListado();
+            } catch (error) {
+                mensaje.textContent = error.message;
+                if (modal.open) estadoDetalle.textContent = error.message;
+                if (modalPerfil.open) {
+                    obtener("estado-perfil-publico-foro").textContent = error.message;
+                }
+            } finally {
+                boton.disabled = false;
+            }
+        });
+        contenedor.append(contador, boton);
+        return contenedor;
     }
 
     function agregarRespuesta(respuesta) {
@@ -433,6 +496,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     async function abrirPerfilPublico(idUsuario) {
+        const revision = ++revisionPerfil;
         const estado = obtener("estado-perfil-publico-foro");
         const contenido = obtener("contenido-perfil-publico-foro");
         const enlacePublicaciones = obtener("publicaciones-perfil-publico-foro");
@@ -444,9 +508,11 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
 
         try {
-            const perfil = await solicitar(
-                `/api/perfil/publico/${encodeURIComponent(idUsuario)}`
-            );
+            const [perfil, publicaciones] = await Promise.all([
+                solicitar(`/api/perfil/publico/${encodeURIComponent(idUsuario)}`),
+                solicitar("/api/foro/publicaciones?autor=" + encodeURIComponent(idUsuario))
+            ]);
+            if (revision !== revisionPerfil || !modalPerfil.open) return;
             obtener("nombre-perfil-publico-foro").textContent =
                 perfil.nombreCompleto;
             obtener("usuario-perfil-publico-foro").textContent =
@@ -455,10 +521,33 @@ document.addEventListener("DOMContentLoaded", async () => {
                 perfil.descripcionPersonal || "Este usuario aún no ha agregado una descripción.";
             enlacePublicaciones.href = "/foro.html?autor="
                 + encodeURIComponent(perfil.idUsuario);
+            const lista = obtener("lista-perfil-publico-foro");
+            lista.replaceChildren();
+            if (publicaciones.length === 0) {
+                lista.appendChild(crear("p", "Este usuario aún no tiene publicaciones."));
+            }
+            publicaciones.forEach(publicacion => {
+                const tarjeta = crear("article", "", "respuesta-foro");
+                const abrir = crear("button", "Abrir publicación", "btn btn-pequeno");
+                abrir.type = "button";
+                abrir.addEventListener("click", () => {
+                    modalPerfil.close();
+                    abrirPublicacion(publicacion.id);
+                });
+                tarjeta.append(
+                    crear("h3", publicacion.titulo),
+                    crear("p", publicacion.contenido, "texto-publicacion-foro"),
+                    crearReacciones(publicacion),
+                    abrir
+                );
+                lista.appendChild(tarjeta);
+            });
             estado.textContent = "";
             contenido.hidden = false;
         } catch (error) {
-            estado.textContent = error.message;
+            if (revision === revisionPerfil && modalPerfil.open) {
+                estado.textContent = error.message;
+            }
         }
     }
 

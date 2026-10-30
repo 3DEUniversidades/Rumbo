@@ -11,7 +11,10 @@ public record PublicacionForoRespuesta(
         Instant fecha,
         String estado,
         AutorForoRespuesta autor,
-        List<CarreraResumen> carreras
+        List<CarreraResumen> carreras,
+        long cantidadRespuestas,
+        int cantidadReacciones,
+        boolean meGusta
 ) {
     public record CarreraResumen(Long id, String nombre) {
     }
