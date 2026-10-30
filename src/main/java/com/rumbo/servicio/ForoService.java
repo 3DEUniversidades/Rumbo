@@ -81,7 +81,7 @@ public class ForoService {
                 .filter(p -> busqueda.isEmpty()
                         || normalizar(p.getTitulo() + " " + p.getContenido())
                                 .contains(busqueda))
-                .map(this::mapearPublicacion)
+                .map(p -> mapearPublicacion(p, idUsuario))
                 .toList();
     }
 
@@ -89,7 +89,7 @@ public class ForoService {
             Long id, String idUsuario) {
 
         exigirAcceso(idUsuario);
-        return mapearPublicacion(buscarVisible(id));
+        return mapearPublicacion(buscarVisible(id), idUsuario);
     }
 
     @Transactional
@@ -142,7 +142,25 @@ public class ForoService {
         Publicacion publicacion = new Publicacion(
                 autor, titulo, contenido, tipo, carreras);
 
-        return mapearPublicacion(publicacionRepository.save(publicacion));
+        return mapearPublicacion(publicacionRepository.save(publicacion), idUsuario);
+    }
+
+    @Transactional
+    public PublicacionForoRespuesta reaccionar(
+            Long id, String idUsuario, boolean meGusta) {
+        Usuario usuario = exigirAcceso(idUsuario);
+        Publicacion publicacion = publicacionRepository.buscarParaRevision(id)
+                .filter(p -> ESTADOS_VISIBLES.contains(p.getEstado()))
+                .orElseThrow(() -> new ExcepcionForo(
+                        404, "La publicación no está disponible."));
+
+        if (meGusta) {
+            publicacion.agregarReaccion(usuario);
+        } else {
+            publicacion.quitarReaccion(usuario.getIdUsuario());
+        }
+
+        return mapearPublicacion(publicacion, idUsuario);
     }
 
     public List<RespuestaForoRespuesta> listarRespuestas(
@@ -272,7 +290,7 @@ public class ForoService {
         );
     }
 
-    private PublicacionForoRespuesta mapearPublicacion(Publicacion p) {
+    private PublicacionForoRespuesta mapearPublicacion(Publicacion p, String idUsuario) {
         List<PublicacionForoRespuesta.CarreraResumen> carreras =
                 p.getCarreras().stream()
                         .sorted(Comparator.comparing(Carrera::getNombre))
@@ -288,7 +306,11 @@ public class ForoService {
                 p.getFecha(),
                 p.getEstado().name(),
                 mapearAutor(p.getAutor()),
-                carreras
+                carreras,
+                respuestaRepository.countByPublicacionId(p.getId()),
+                p.getReacciones().size(),
+                p.getReacciones().stream()
+                        .anyMatch(u -> u.getIdUsuario().equals(idUsuario))
         );
     }
 

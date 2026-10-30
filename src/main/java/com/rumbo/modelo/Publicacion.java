@@ -57,6 +57,16 @@ public class Publicacion {
     )
     private Set<Carrera> carreras = new LinkedHashSet<>();
 
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "reaccion_publicacion",
+            joinColumns = @JoinColumn(name = "publicacion_id"),
+            inverseJoinColumns = @JoinColumn(name = "usuario_id"),
+            uniqueConstraints = @UniqueConstraint(
+                    columnNames = {"publicacion_id", "usuario_id"})
+    )
+    private Set<Usuario> reacciones = new LinkedHashSet<>();
+
     protected Publicacion() {
     }
 
@@ -110,6 +120,21 @@ public class Publicacion {
 
     public void setEstado(Estado estado) {
         this.estado = estado;
+    }
+
+    public Set<Usuario> getReacciones() {
+        return new LinkedHashSet<>(reacciones);
+    }
+
+    public void agregarReaccion(Usuario usuario) {
+        if (reacciones.stream().noneMatch(
+                u -> u.getIdUsuario().equals(usuario.getIdUsuario()))) {
+            reacciones.add(usuario);
+        }
+    }
+
+    public void quitarReaccion(String idUsuario) {
+        reacciones.removeIf(u -> u.getIdUsuario().equals(idUsuario));
     }
 
 }

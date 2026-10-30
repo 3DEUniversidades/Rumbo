@@ -10,6 +10,7 @@ import com.rumbo.modelo.RevisionMensaje.Decision;
 import com.rumbo.modelo.Rol;
 import com.rumbo.modelo.Usuario;
 import com.rumbo.persistencia.PublicacionRepository;
+import com.rumbo.persistencia.RespuestaPublicacionRepository;
 import com.rumbo.persistencia.RevisionMensajeRepository;
 import com.rumbo.persistencia.UsuarioRepository;
 import java.util.Comparator;
@@ -24,15 +25,18 @@ public class ModeracionForoService {
     private final PublicacionRepository publicacionRepository;
     private final RevisionMensajeRepository revisionRepository;
     private final UsuarioRepository usuarioRepository;
+    private final RespuestaPublicacionRepository respuestaRepository;
 
     public ModeracionForoService(
             PublicacionRepository publicacionRepository,
             RevisionMensajeRepository revisionRepository,
-            UsuarioRepository usuarioRepository) {
+            UsuarioRepository usuarioRepository,
+            RespuestaPublicacionRepository respuestaRepository) {
 
         this.publicacionRepository = publicacionRepository;
         this.revisionRepository = revisionRepository;
         this.usuarioRepository = usuarioRepository;
+        this.respuestaRepository = respuestaRepository;
     }
 
     public List<PublicacionForoRespuesta> listarPendientes(
@@ -44,7 +48,7 @@ public class ModeracionForoService {
                 .findByEstadoInOrderByFechaDescIdDesc(
                         List.of(Publicacion.Estado.ACTIVA))
                 .stream()
-                .map(this::mapearPublicacion)
+                .map(p -> mapearPublicacion(p, idSupervisor))
                 .toList();
     }
 
@@ -131,7 +135,7 @@ public class ModeracionForoService {
         );
     }
 
-    private PublicacionForoRespuesta mapearPublicacion(Publicacion p) {
+    private PublicacionForoRespuesta mapearPublicacion(Publicacion p, String idUsuario) {
         List<PublicacionForoRespuesta.CarreraResumen> carreras =
                 p.getCarreras().stream()
                         .sorted(Comparator.comparing(Carrera::getNombre))
@@ -147,7 +151,11 @@ public class ModeracionForoService {
                 p.getFecha(),
                 p.getEstado().name(),
                 mapearAutor(p.getAutor()),
-                carreras
+                carreras,
+                respuestaRepository.countByPublicacionId(p.getId()),
+                p.getReacciones().size(),
+                p.getReacciones().stream()
+                        .anyMatch(u -> u.getIdUsuario().equals(idUsuario))
         );
     }
 
