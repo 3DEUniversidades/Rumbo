@@ -186,8 +186,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     try {
         const sesion = await obtenerSesion();
         if (!sesion) return;
-        if (sesion.rol !== 'ENCARGADO_DE_CARRERAS') {
-            acceso.textContent = 'Esta página está disponible únicamente para el encargado de carreras.';
+        if (!['ENCARGADO_DE_CARRERAS', 'ADMIN'].includes(sesion.rol)) {
+            acceso.textContent = 'Esta página está disponible únicamente para el encargado de carreras o el administrador.';
             return;
         }
         acceso.hidden = true;

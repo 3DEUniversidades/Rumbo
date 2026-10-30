@@ -40,8 +40,16 @@ class GestionActividadesPantallaTest {
                 .andExpect(status().isOk());
     }
 
+    @Test
+    void adminPuedeAbrirLaPantalla() throws Exception {
+        mvc.perform(get("/gestion-actividades.html").session(sesion(Rol.ADMIN)))
+                .andExpect(status().isOk());
+    }
+
     @ParameterizedTest
-    @EnumSource(value = Rol.class, names = "ENCARGADO_DE_CARRERAS", mode = EnumSource.Mode.EXCLUDE)
+    @EnumSource(value = Rol.class,
+            names = {"ENCARGADO_DE_CARRERAS", "ADMIN"},
+            mode = EnumSource.Mode.EXCLUDE)
     void otrosRolesNoPuedenAbrirLaPantalla(Rol rol) throws Exception {
         mvc.perform(get("/gestion-actividades.html").session(sesion(rol)))
                 .andExpect(status().isForbidden());

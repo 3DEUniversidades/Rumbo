@@ -157,7 +157,8 @@ public class ConfiguracionWeb implements WebMvcConfigurer {
             }
 
             if ("/gestion-actividades.html".equals(rutaSolicitada)) {
-                if (sesionUsuario.getRol() != Rol.ENCARGADO_DE_CARRERAS) {
+                Rol rol = sesionUsuario.getRol();
+                if (rol != Rol.ENCARGADO_DE_CARRERAS && rol != Rol.ADMIN) {
                     respuesta.sendError(
                             HttpServletResponse.SC_FORBIDDEN,
                             "Pantalla no existente"

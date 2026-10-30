@@ -100,8 +100,36 @@ class GestionActividadesIntegracionTest {
                 .andExpect(status().isNotFound());
     }
 
+    @Test
+    void adminPuedeCrearEditarYEliminarActividades() throws Exception {
+        String alta = mvc.perform(post("/api/actividades").session(sesion(Rol.ADMIN))
+                        .contentType(APPLICATION_JSON)
+                        .content(json.writeValueAsString(datos("2026-10-20", "Creada por admin"))))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.descripcion").value("Creada por admin"))
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        String id = json.readTree(alta).get("idActividad").asText();
+
+        mvc.perform(put("/api/actividades/{id}", id).session(sesion(Rol.ADMIN))
+                        .contentType(APPLICATION_JSON)
+                        .content(json.writeValueAsString(datos("2026-11-01", "Editada por admin"))))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.descripcion").value("Editada por admin"));
+
+        mvc.perform(delete("/api/actividades/{id}", id).session(sesion(Rol.ADMIN)))
+                .andExpect(status().isNoContent());
+
+        mvc.perform(get("/api/actividades/{id}", id).session(sesion(Rol.ADMIN)))
+                .andExpect(status().isNotFound());
+    }
+
     @ParameterizedTest
-    @EnumSource(value = Rol.class, names = "ENCARGADO_DE_CARRERAS", mode = EnumSource.Mode.EXCLUDE)
+    @EnumSource(value = Rol.class,
+            names = {"ENCARGADO_DE_CARRERAS", "ADMIN"},
+            mode = EnumSource.Mode.EXCLUDE)
     void otrosRolesNoPuedenCrearEditarNiEliminar(Rol rol) throws Exception {
         String cuerpo = json.writeValueAsString(datos("2026-10-20", "No autorizada"));
         mvc.perform(post("/api/actividades").session(sesion(rol)).contentType(APPLICATION_JSON).content(cuerpo))

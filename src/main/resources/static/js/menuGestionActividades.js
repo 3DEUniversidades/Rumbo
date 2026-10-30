@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (!enlace) return;
     try {
         const sesion = await obtenerSesion();
-        enlace.hidden = !sesion || sesion.rol !== 'ENCARGADO_DE_CARRERAS';
+        enlace.hidden = !sesion || !['ENCARGADO_DE_CARRERAS', 'ADMIN'].includes(sesion.rol);
     } catch {
         enlace.hidden = true;
     }

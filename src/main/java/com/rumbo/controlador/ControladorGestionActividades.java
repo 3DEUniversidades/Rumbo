@@ -30,19 +30,19 @@ public class ControladorGestionActividades {
 
     @GetMapping
     public List<Actividad> obtenerLineaDeTiempo(HttpSession sesion) {
-        gestorPermisos.exigirRol(sesion, Rol.ESTUDIANTE, Rol.ENCARGADO_DE_CARRERAS);
+        gestorPermisos.exigirRol(sesion, Rol.ESTUDIANTE, Rol.ENCARGADO_DE_CARRERAS, Rol.ADMIN);
         return actividadService.obtenerLineaDeTiempo();
     }
 
     @GetMapping("/{id}")
     public Actividad consultar(@PathVariable String id, HttpSession sesion) {
-        gestorPermisos.exigirRol(sesion, Rol.ESTUDIANTE, Rol.ENCARGADO_DE_CARRERAS);
+        gestorPermisos.exigirRol(sesion, Rol.ESTUDIANTE, Rol.ENCARGADO_DE_CARRERAS, Rol.ADMIN);
         return actividadService.consultarActividad(id);
     }
 
     @PostMapping
     public ResponseEntity<Actividad> crear(@RequestBody ActividadSolicitud solicitud, HttpSession sesion) {
-        gestorPermisos.exigirRol(sesion, Rol.ENCARGADO_DE_CARRERAS);
+        gestorPermisos.exigirRol(sesion, Rol.ENCARGADO_DE_CARRERAS, Rol.ADMIN);
         validadorDatos.exigirActividadValida(solicitud);
         Actividad actividad = actividadService.crearActividad(solicitud);
         return ResponseEntity.created(URI.create("/api/actividades/" + actividad.getIdActividad()))
@@ -52,14 +52,14 @@ public class ControladorGestionActividades {
     @PutMapping("/{id}")
     public Actividad actualizar(@PathVariable String id,
             @RequestBody ActividadSolicitud solicitud, HttpSession sesion) {
-        gestorPermisos.exigirRol(sesion, Rol.ENCARGADO_DE_CARRERAS);
+        gestorPermisos.exigirRol(sesion, Rol.ENCARGADO_DE_CARRERAS, Rol.ADMIN);
         validadorDatos.exigirActividadValida(solicitud);
         return actividadService.actualizarActividad(id, solicitud);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminar(@PathVariable String id, HttpSession sesion) {
-        gestorPermisos.exigirRol(sesion, Rol.ENCARGADO_DE_CARRERAS);
+        gestorPermisos.exigirRol(sesion, Rol.ENCARGADO_DE_CARRERAS, Rol.ADMIN);
         actividadService.eliminarActividad(id);
         return ResponseEntity.noContent().build();
     }
