@@ -61,7 +61,7 @@ public class ControladorCarreras {
             HttpSession sesion) {
 
         SesionUsuario encargado = gestorPermisos.exigirRol(
-                sesion, Rol.ENCARGADO_DE_CARRERAS);
+                sesion, Rol.ENCARGADO_DE_CARRERAS, Rol.ADMIN);
 
         try {
             Carrera actualizada = carreraService.actualizarCarrera(
@@ -85,7 +85,7 @@ public class ControladorCarreras {
     @GetMapping("/historial")
     public ResponseEntity<?> consultarHistorial(HttpSession sesion) {
         gestorPermisos.exigirRol(
-                sesion, Rol.ENCARGADO_DE_CARRERAS);
+                sesion, Rol.ENCARGADO_DE_CARRERAS, Rol.ADMIN);
 
         return ResponseEntity.ok(
                 carreraService.consultarHistorial(null));
@@ -97,7 +97,7 @@ public class ControladorCarreras {
             HttpSession sesion) {
 
         gestorPermisos.exigirRol(
-                sesion, Rol.ENCARGADO_DE_CARRERAS);
+                sesion, Rol.ENCARGADO_DE_CARRERAS, Rol.ADMIN);
 
         if (carreraService.buscarPorId(id).isEmpty()) {
             return ResponseEntity.status(404)

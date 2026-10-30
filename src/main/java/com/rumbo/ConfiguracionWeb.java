@@ -142,8 +142,21 @@ public class ConfiguracionWeb implements WebMvcConfigurer {
                 return true;
             }
 
-            if ("/gestion-carreras.html".equals(rutaSolicitada)
-                    || "/gestion-actividades.html".equals(rutaSolicitada)) {
+            if ("/gestion-carreras.html".equals(rutaSolicitada)) {
+                Rol rol = sesionUsuario.getRol();
+                if (rol != Rol.ENCARGADO_DE_CARRERAS && rol != Rol.ADMIN) {
+                    respuesta.sendError(
+                            HttpServletResponse.SC_FORBIDDEN,
+                            "Pantalla no existente"
+                    );
+                    return false;
+                }
+
+                respuesta.setHeader("Cache-Control", "no-store");
+                return true;
+            }
+
+            if ("/gestion-actividades.html".equals(rutaSolicitada)) {
                 if (sesionUsuario.getRol() != Rol.ENCARGADO_DE_CARRERAS) {
                     respuesta.sendError(
                             HttpServletResponse.SC_FORBIDDEN,

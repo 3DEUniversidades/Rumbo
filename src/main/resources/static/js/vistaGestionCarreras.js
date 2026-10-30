@@ -69,7 +69,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             if (!sesion) return;
 
-            if (sesion.rol !== "ENCARGADO_DE_CARRERAS") {
+            if (!["ENCARGADO_DE_CARRERAS", "ADMIN"].includes(sesion.rol)) {
                 window.location.replace("/inicio.html");
                 return;
             }

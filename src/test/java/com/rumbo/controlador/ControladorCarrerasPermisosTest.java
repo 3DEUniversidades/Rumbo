@@ -87,6 +87,31 @@ class ControladorCarrerasPermisosTest {
     }
 
     @Test
+    void adminPuedeEditarYConsultarHistorial() throws Exception {
+        MockHttpSession sesion = sesionServidor(Rol.ADMIN);
+
+        mvc.perform(put("/api/carreras/{id}", carreraId)
+                        .session(sesion)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"nombre\":\"Civil actualizada por admin\"}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.nombre")
+                        .value("Civil actualizada por admin"));
+
+        var cambios = registros.findByCarreraIdOrderByFechaDesc(carreraId);
+
+        assertEquals(1, cambios.size());
+        assertEquals("usuario-test", cambios.get(0).getResponsable());
+
+        mvc.perform(get("/api/carreras/{id}/historial", carreraId)
+                        .session(sesion))
+                .andExpect(status().isOk());
+
+        mvc.perform(get("/api/carreras/historial").session(sesion))
+                .andExpect(status().isOk());
+    }
+
+    @Test
     void headerSinSesionNoPermiteGestionar() throws Exception {
         mvc.perform(put("/api/carreras/{id}", carreraId)
                         .header("X-Usuario-Id", "encargado-test")
@@ -106,7 +131,7 @@ class ControladorCarrerasPermisosTest {
     @Test
     void ningunOtroRolPuedeEditarNiConsultarHistorial() throws Exception {
         for (Rol rol : Rol.values()) {
-            if (rol == Rol.ENCARGADO_DE_CARRERAS) continue;
+            if (rol == Rol.ENCARGADO_DE_CARRERAS || rol == Rol.ADMIN) continue;
 
             MockHttpSession sesion = sesionServidor(rol);
 
@@ -137,7 +162,7 @@ class ControladorCarrerasPermisosTest {
     }
 
     @Test
-    void pantallaGestionSoloSeSirveAlEncargado() throws Exception {
+    void pantallaGestionSeSirveAEncargadoYAdmin() throws Exception {
         mvc.perform(get("/gestion-carreras.html"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/login.html"));
@@ -148,6 +173,10 @@ class ControladorCarrerasPermisosTest {
 
         mvc.perform(get("/gestion-carreras.html")
                         .session(iniciarSesionEncargado()))
+                .andExpect(status().isOk());
+
+        mvc.perform(get("/gestion-carreras.html")
+                        .session(sesionServidor(Rol.ADMIN)))
                 .andExpect(status().isOk());
     }
 
