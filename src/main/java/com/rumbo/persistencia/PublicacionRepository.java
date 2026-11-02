@@ -13,6 +13,10 @@ import org.springframework.data.repository.query.Param;
 
 public interface PublicacionRepository extends JpaRepository<Publicacion, Long> {
 
+    @EntityGraph(attributePaths = "autor")
+    org.springframework.data.domain.Page<Publicacion> findByEstadoIn(
+            Collection<Publicacion.Estado> estados, org.springframework.data.domain.Pageable pagina);
+
     @EntityGraph(attributePaths = {"autor", "carreras"})
     List<Publicacion> findByEstadoInOrderByFechaDescIdDesc(
             Collection<Publicacion.Estado> estados);

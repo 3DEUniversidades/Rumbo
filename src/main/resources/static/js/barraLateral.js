@@ -212,13 +212,15 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             case "ADMIN":
                 if (navSupervision) {
+                    navSupervision.href = "/administracion-usuarios.html";
                     navSupervision.hidden = false;
                     navSupervision.querySelector("span").textContent = "Usuarios";
                 }
-                if (navForo) navForo.hidden = false;
+                if (navForo) { navForo.hidden = false; navForo.href = "/administracion-publicaciones.html"; }
                 if (navGestionCarreras) navGestionCarreras.hidden = false;
                 if (navGestionActividades) {
                     navGestionActividades.hidden = false;
+                    navGestionActividades.href = "/registros-administrativos.html";
                     navGestionActividades.querySelector("span").textContent = "Registros";
                 }
                 break;

@@ -31,6 +31,18 @@ public class Usuario {
     @Enumerated(EnumType.STRING)
     private EstadoVerificacion estadoVerificacion;
 
+    @Column(nullable = false, columnDefinition = "boolean default false")
+    private boolean eliminado = false;
+
+    private java.time.Instant fechaEliminacion;
+
+    public boolean isEliminado() { return eliminado; }
+    public java.time.Instant getFechaEliminacion() { return fechaEliminacion; }
+    public void eliminarCuenta() {
+        this.eliminado = true;
+        this.fechaEliminacion = java.time.Instant.now();
+    }
+
     protected Usuario() {
     }
 

@@ -17,8 +17,11 @@ public class ConfiguracionWeb implements WebMvcConfigurer {
 
     private final GestorPermisos gestorPermisos;
 
-    public ConfiguracionWeb(GestorPermisos gestorPermisos) {
+    private final com.rumbo.persistencia.UsuarioRepository usuarios;
+
+    public ConfiguracionWeb(GestorPermisos gestorPermisos, com.rumbo.persistencia.UsuarioRepository usuarios) {
         this.gestorPermisos = gestorPermisos;
+        this.usuarios = usuarios;
     }
 
     @Override
@@ -40,8 +43,12 @@ public class ConfiguracionWeb implements WebMvcConfigurer {
 
                 if (sesion != null) {
                     try {
-                        gestorPermisos.exigirSesion(sesion);
-                        autenticado = true;
+                        SesionUsuario cuenta = gestorPermisos.exigirSesion(sesion);
+                        if (usuarios.existsByIdUsuarioAndEliminadoTrue(cuenta.getIdUsuario())) {
+                            sesion.invalidate();
+                        } else {
+                            autenticado = true;
+                        }
 
                     } catch (ExcepcionAutenticacion e) {
                         autenticado = false;
@@ -96,6 +103,9 @@ public class ConfiguracionWeb implements WebMvcConfigurer {
                 new InterceptorPantallasRol(gestorPermisos)
         )
         .addPathPatterns(
+                "/administracion-usuarios.html",
+                "/administracion-publicaciones.html",
+                "/registros-administrativos.html",
                 "/test-vocacional.html",
                 "/gestion-carreras.html",
                 "/gestion-actividades.html"
@@ -134,6 +144,16 @@ public class ConfiguracionWeb implements WebMvcConfigurer {
 
             String rutaSolicitada = solicitud.getRequestURI()
                     .substring(solicitud.getContextPath().length());
+            if ("/administracion-usuarios.html".equals(rutaSolicitada)
+                    || "/administracion-publicaciones.html".equals(rutaSolicitada)
+                    || "/registros-administrativos.html".equals(rutaSolicitada)) {
+                if (sesionUsuario.getRol() != Rol.ADMIN) {
+                    respuesta.sendError(HttpServletResponse.SC_FORBIDDEN, "Se requiere rol de administrador");
+                    return false;
+                }
+                return true;
+            }
+
             if ("/test-vocacional.html".equals(rutaSolicitada)) {
                 if (sesionUsuario.getRol() != Rol.ESTUDIANTE) {
                     respuesta.sendError(HttpServletResponse.SC_FORBIDDEN, "Se requiere rol de estudiante");
