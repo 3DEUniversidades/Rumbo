@@ -4,8 +4,11 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.rumbo.dto.RegistroActualizacionRespuesta;
 import com.rumbo.modelo.Carrera;
 import com.rumbo.modelo.RegistroActualizacionCarrera;
+import com.rumbo.modelo.Rol;
+import com.rumbo.modelo.Usuario;
 import com.rumbo.persistencia.CarreraRepository;
 import com.rumbo.persistencia.RegistroActualizacionCarreraRepository;
+import com.rumbo.persistencia.UsuarioRepository;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.net.URI;
@@ -38,11 +41,14 @@ public class CarreraService {
 
     private final CarreraRepository carreraRepository;
     private final RegistroActualizacionCarreraRepository registroRepository;
+    private final UsuarioRepository usuarioRepository;
 
     public CarreraService(CarreraRepository carreraRepository,
-                          RegistroActualizacionCarreraRepository registroRepository) {
+                          RegistroActualizacionCarreraRepository registroRepository,
+                          UsuarioRepository usuarioRepository) {
         this.carreraRepository = carreraRepository;
         this.registroRepository = registroRepository;
+        this.usuarioRepository = usuarioRepository;
     }
 
     public List<Carrera> consultarCarreras() {
@@ -191,16 +197,35 @@ public class CarreraService {
                 : registroRepository.findByCarreraIdOrderByFechaDesc(carreraId);
 
         return registros.stream()
-                .map(r -> new RegistroActualizacionRespuesta(
-                        r.getId(),
-                        r.getCarrera().getId(),
-                        r.getCarrera().getNombre(),
-                        r.getCampo(),
-                        r.getValorAnterior(),
-                        r.getValorNuevo(),
-                        r.getFecha(),
-                        r.getResponsable()))
+                .map(this::mapearRegistro)
                 .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<RegistroActualizacionRespuesta> consultarMisActualizaciones(String idUsuario) {
+        Usuario encargado = usuarioRepository.findById(idUsuario)
+                .filter(u -> !u.isEliminado())
+                .orElseThrow(() -> new ExcepcionAutenticacion("La cuenta ya no esta disponible"));
+        if (encargado.getRol() != Rol.ENCARGADO_DE_CARRERAS) {
+            throw new ExcepcionPermiso("Se requiere rol de encargado de carreras");
+        }
+
+        return registroRepository.findByResponsableOrderByFechaDescIdDesc(idUsuario)
+                .stream()
+                .map(this::mapearRegistro)
+                .toList();
+    }
+
+    private RegistroActualizacionRespuesta mapearRegistro(RegistroActualizacionCarrera r) {
+        return new RegistroActualizacionRespuesta(
+                r.getId(),
+                r.getCarrera().getId(),
+                r.getCarrera().getNombre(),
+                r.getCampo(),
+                r.getValorAnterior(),
+                r.getValorNuevo(),
+                r.getFecha(),
+                r.getResponsable());
     }
 
     // ---------- Registro de cambios ----------

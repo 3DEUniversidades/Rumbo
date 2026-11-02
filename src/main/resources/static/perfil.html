@@ -226,6 +226,30 @@
                     </form>
                 </section>
 
+                <section id="seccion-historial-encargado" class="perfil-card" aria-labelledby="titulo-historial-encargado" hidden>
+                    <div class="perfil-card-encabezado">
+                        <h2 id="titulo-historial-encargado">Mis actualizaciones de carreras</h2>
+                        <button id="actualizar-historial-encargado" class="btn btn-secundario btn-pequeno" type="button">Actualizar historial</button>
+                    </div>
+                    <p>Consulta los cambios que realizaste, del más reciente al más antiguo.</p>
+                    <p id="estado-historial-encargado" role="status" aria-live="polite"></p>
+                    <div id="tabla-historial-encargado" class="tabla-contenedor" hidden>
+                        <table class="tabla-gestion">
+                            <caption class="texto-secundario">Historial de tus cambios en las carreras</caption>
+                            <thead>
+                                <tr>
+                                    <th scope="col">Fecha</th>
+                                    <th scope="col">Carrera</th>
+                                    <th scope="col">Campo modificado</th>
+                                    <th scope="col">Valor anterior</th>
+                                    <th scope="col">Valor nuevo</th>
+                                </tr>
+                            </thead>
+                            <tbody id="cuerpo-historial-encargado"></tbody>
+                        </table>
+                    </div>
+                </section>
+
                 <section id="seccion-historial-supervisor" class="perfil-card" aria-labelledby="titulo-historial-supervisor" hidden>
                     <h2 id="titulo-historial-supervisor">Mis decisiones de supervisión</h2>
                     <p>Verificaciones y cambios de perfil que aprobaste o rechazaste.</p>
@@ -253,5 +277,6 @@
     <script src="/js/perfil.js?v=9"></script>
     <script src="/js/vistaVerificacion.js?v=2"></script>
     <script src="/js/vistaHistorialSupervisor.js?v=f5-t10-1"></script>
+    <script src="/js/vistaHistorialEncargado.js?v=f5-t9-1"></script>
 </body>
 </html>
