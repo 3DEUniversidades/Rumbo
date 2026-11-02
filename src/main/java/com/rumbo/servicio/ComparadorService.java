@@ -70,7 +70,7 @@ public class ComparadorService {
         filas.add(texto("modalidad", "Modalidad", carreras,
                 CarreraRespuesta::modalidad));
 
-        filas.add(numerica("cargaCreditos", "Carga de créditos", carreras,
+        filas.add(numerica("cargaCreditos", "Carga académica (créditos del plan)", carreras,
                 CarreraRespuesta::cargaCreditos, "créditos", true, ""));
 
         filas.add(lista("areasFormacion", "Áreas de formación", carreras,

@@ -89,18 +89,20 @@ public class CarreraService {
                     carrera::setDescripcion);
         }
         if (cambios.has("duracion")) {
-            Integer duracion = enteroRequerido(cambios.get("duracion"), "duración");
-            if (duracion < 1 || duracion > 15) {
+            BigDecimal duracion = decimalOpcional(cambios.get("duracion"), "duración");
+            if (duracion != null && (duracion.compareTo(BigDecimal.ONE) < 0
+                    || duracion.compareTo(new BigDecimal("15")) > 0)) {
                 throw new ExcepcionCarrera("La duración debe estar entre 1 y 15 años");
+            }
+            if (duracion != null
+                    && cambios.get("duracion").decimalValue().stripTrailingZeros().scale() > 1) {
+                throw new ExcepcionCarrera("La duración admite como máximo un decimal");
             }
             r.aplicar("duracion", carrera.getDuracion(), duracion, carrera::setDuracion);
         }
         if (cambios.has("costo")) {
             BigDecimal costo = decimalOpcional(cambios.get("costo"), "costo");
-            if (costo == null) {
-                throw new ExcepcionCarrera("El campo costo es obligatorio");
-            }
-            if (costo.signum() < 0) {
+            if (costo != null && costo.signum() < 0) {
                 throw new ExcepcionCarrera("El costo no puede ser negativo");
             }
             r.aplicar("costo", carrera.getCosto(), costo, carrera::setCosto);
@@ -285,14 +287,6 @@ public class CarreraService {
             throw new ExcepcionCarrera("El campo " + campo + " debe ser un número entero");
         }
         return nodo.intValue();
-    }
-
-    private static Integer enteroRequerido(JsonNode nodo, String campo) {
-        Integer valor = enteroOpcional(nodo, campo);
-        if (valor == null) {
-            throw new ExcepcionCarrera("El campo " + campo + " es obligatorio");
-        }
-        return valor;
     }
 
     private static BigDecimal decimalOpcional(JsonNode nodo, String campo) {

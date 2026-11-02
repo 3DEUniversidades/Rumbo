@@ -8,7 +8,7 @@ public record CarreraRespuesta(
         String nombre,
         String facultad,
         String descripcion,
-        Integer duracion,
+        BigDecimal duracion,
         BigDecimal costo,
         String costoPeriodo,
         Integer costoAnio,

@@ -155,7 +155,9 @@
                 crear("p", c.facultad ?? "Facultad no disponible", "carrera-area"),
                 crear(
                     "p",
-                    `${c.duracion} años · ${moneda(c.costo)} el primer semestre`,
+                    (c.duracion == null ? "Duración no disponible" : `${c.duracion} años`)
+                        + " · " + (c.costo == null
+                            ? "Costo no disponible" : `${moneda(c.costo)} el primer semestre`),
                     "carrera-uni"
                 )
             );
@@ -283,6 +285,23 @@
     }
 
     function mostrarResultado(datos) {
+        const sonDos = datos.carreras.length === 2;
+        const general = document.getElementById("vista-general-comparador");
+        general.hidden = sonDos;
+        document.getElementById("detalle-comparador").open = sonDos;
+        document.getElementById("abrir-detalle-comparador").hidden = sonDos;
+
+        if (!sonDos) {
+            const campos = ["facultad", "duracion", "costo", "costoPeriodo",
+                "costoAnio", "modalidad", "cargaCreditos"];
+            llenarTabla(datos, document.getElementById("tabla-general-comparador"),
+                datos.filas.filter(fila => campos.includes(fila.campo)));
+        }
+        llenarTabla(datos, tabla, datos.filas);
+        resultado.hidden = false;
+    }
+
+    function llenarTabla(datos, tabla, filas) {
         tabla.replaceChildren();
 
         const sonDos = datos.carreras.length === 2;
@@ -313,7 +332,7 @@
 
         const cuerpo = crear("tbody");
 
-        datos.filas.forEach(fila => {
+        filas.forEach(fila => {
             const tr = crear("tr");
             const titulo = crear("th", fila.criterio);
             titulo.scope = "row";
@@ -356,7 +375,6 @@
         });
 
         tabla.append(cabecera, cuerpo);
-        resultado.hidden = false;
     }
 
     function crearEnlace(valor) {

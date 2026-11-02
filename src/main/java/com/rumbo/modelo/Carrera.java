@@ -31,12 +31,12 @@ public class Carrera {
     private String descripcion;
 
     // Anios del plan base.
-    @Column(nullable = false)
-    private Integer duracion;
+    @Column(precision = 4, scale = 1)
+    private BigDecimal duracion;
 
     // Total calculado del primer semestre de primer ingreso, incluida la inscripcion.
     // No es costo anual ni de toda la carrera: ver costoPeriodo y costoAnio.
-    @Column(nullable = false, precision = 12, scale = 2)
+    @Column(precision = 12, scale = 2)
     private BigDecimal costo;
 
     @Column(length = 200)
@@ -84,7 +84,7 @@ public class Carrera {
 
     public Carrera(String nombre, Integer duracion, BigDecimal costo) {
         this.nombre = nombre;
-        this.duracion = duracion;
+        this.duracion = duracion == null ? null : BigDecimal.valueOf(duracion);
         this.costo = costo;
     }
 
@@ -116,11 +116,11 @@ public class Carrera {
         this.descripcion = descripcion;
     }
 
-    public Integer getDuracion() {
+    public BigDecimal getDuracion() {
         return duracion;
     }
 
-    public void setDuracion(Integer duracion) {
+    public void setDuracion(BigDecimal duracion) {
         this.duracion = duracion;
     }
 
