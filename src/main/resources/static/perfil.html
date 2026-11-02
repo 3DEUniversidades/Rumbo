@@ -174,6 +174,33 @@
                     </dl>
                 </section>
 
+                <section id="seccion-foto-perfil" class="perfil-card" hidden>
+                    <h2>Foto de perfil</h2>
+                    <p class="texto-secundario">
+                        Esta foto se mostrará en tu perfil público cuando otros usuarios consulten tus publicaciones.
+                    </p>
+                    <div class="foto-perfil-editor">
+                        <div class="foto-perfil-contenedor">
+                            <img id="foto-perfil" alt="Foto de perfil" hidden>
+                            <span id="foto-perfil-iniciales" class="foto-perfil-iniciales">--</span>
+                        </div>
+                        <div class="foto-perfil-acciones">
+                            <input id="archivo-foto-perfil" type="file"
+                                   accept="image/jpeg,image/png,image/webp" hidden>
+                            <div class="acciones-form">
+                                <button id="seleccionar-foto-perfil" class="btn btn-secundario"
+                                        type="button">Seleccionar foto</button>
+                                <button id="subir-foto-perfil" class="btn"
+                                        type="button" disabled>Subir foto</button>
+                                <button id="eliminar-foto-perfil" class="btn btn-secundario"
+                                        type="button" hidden>Eliminar foto</button>
+                            </div>
+                            <p id="mensaje-foto-perfil" class="mensaje-formulario" role="status"></p>
+                            <p class="texto-secundario">JPG, PNG o WebP. Máximo 5 MB.</p>
+                        </div>
+                    </div>
+                </section>
+
                 <section id="verificacion-estudiante" class="perfil-card" hidden>
                     <h2>Verificación de mi cuenta</h2>
                     <p id="mensaje-verificacion" class="mensaje-formulario" role="status"></p>
@@ -217,7 +244,7 @@
 
     <script src="/js/sesion.js"></script>
     <script src="/js/barraLateral.js"></script>
-    <script src="/js/perfil.js?v=7"></script>
+    <script src="/js/perfil.js?v=8"></script>
     <script src="/js/vistaVerificacion.js?v=1"></script>
 </body>
 </html>

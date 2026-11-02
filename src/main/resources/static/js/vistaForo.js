@@ -500,8 +500,11 @@ document.addEventListener("DOMContentLoaded", async () => {
         const estado = obtener("estado-perfil-publico-foro");
         const contenido = obtener("contenido-perfil-publico-foro");
         const enlacePublicaciones = obtener("publicaciones-perfil-publico-foro");
+        const foto = obtener("foto-perfil-publico-foro");
 
         contenido.hidden = true;
+        foto.hidden = true;
+        foto.removeAttribute("src");
         estado.textContent = "Cargando perfil...";
         if (!modalPerfil.open) {
             modalPerfil.showModal();
@@ -519,6 +522,10 @@ document.addEventListener("DOMContentLoaded", async () => {
                 "@" + perfil.nombreUsuario;
             obtener("descripcion-perfil-publico-foro").textContent =
                 perfil.descripcionPersonal || "Este usuario aún no ha agregado una descripción.";
+            if (perfil.fotoUrl) {
+                foto.src = perfil.fotoUrl;
+                foto.hidden = false;
+            }
             enlacePublicaciones.href = "/foro.html?autor="
                 + encodeURIComponent(perfil.idUsuario);
             const lista = obtener("lista-perfil-publico-foro");

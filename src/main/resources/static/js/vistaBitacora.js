@@ -4,6 +4,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     const formulario = document.getElementById("formulario-entrada");
     const contenido = document.getElementById("contenido-entrada");
     const actividad = document.getElementById("actividad-entrada");
+    const archivosEntrada = document.getElementById("archivos-entrada");
     const botonGuardar = document.getElementById("guardar-entrada");
     const mensajeNueva = document.getElementById("mensaje-nueva-entrada");
     const dialogo = document.getElementById("dialogo-editar-entrada");
@@ -98,9 +99,113 @@ document.addEventListener("DOMContentLoaded", async function () {
         });
     }
 
+    async function subirAdjuntos(idEntrada, archivos) {
+        for (const archivo of Array.from(archivos)) {
+            const formularioArchivo = new FormData();
+            formularioArchivo.append("archivo", archivo);
+
+            await consultarJson(
+                `/api/bitacora/${encodeURIComponent(idEntrada)}/adjuntos`,
+                {
+                    method: "POST",
+                    body: formularioArchivo
+                }
+            );
+        }
+    }
+
+    function crearListaAdjuntos(entrada) {
+        const adjuntos = Array.isArray(entrada.adjuntos)
+            ? entrada.adjuntos
+            : [];
+
+        if (adjuntos.length === 0) {
+            return null;
+        }
+
+        const bloque = document.createElement("div");
+        bloque.className = "adjuntos-bitacora";
+
+        const titulo = document.createElement("p");
+        titulo.className = "texto-secundario";
+        titulo.textContent = "Adjuntos";
+        bloque.appendChild(titulo);
+
+        adjuntos.forEach(function (adjunto) {
+            const fila = document.createElement("div");
+            fila.className = "adjunto-bitacora";
+
+            const enlace = document.createElement("a");
+            enlace.href = adjunto.urlContenido;
+            enlace.target = "_blank";
+            enlace.rel = "noopener";
+            enlace.className = "adjunto-bitacora-enlace";
+
+            if (adjunto.esImagen) {
+                const miniatura = document.createElement("img");
+                miniatura.src = adjunto.urlContenido;
+                miniatura.alt = adjunto.nombreOriginal;
+                miniatura.className = "adjunto-bitacora-miniatura";
+                enlace.appendChild(miniatura);
+            } else {
+                enlace.textContent = "Abrir PDF";
+            }
+
+            const nombre = document.createElement("span");
+            nombre.textContent = adjunto.nombreOriginal
+                + " (" + formatearTamano(adjunto.tamanoBytes) + ")";
+
+            const botonEliminar = document.createElement("button");
+            botonEliminar.type = "button";
+            botonEliminar.className = "btn btn-secundario btn-pequeno";
+            botonEliminar.textContent = "Eliminar";
+            botonEliminar.addEventListener("click", async function () {
+                if (!window.confirm("¿Eliminar este adjunto?")) {
+                    return;
+                }
+
+                try {
+                    await consultarJson(
+                        `/api/bitacora/${encodeURIComponent(entrada.idEntrada)}`
+                            + `/adjuntos/${encodeURIComponent(adjunto.idAdjunto)}`,
+                        { method: "DELETE" }
+                    );
+                    await cargarEntradas();
+                    mostrarMensaje(
+                        "Adjunto eliminado correctamente.",
+                        "mensaje-formulario mensaje-exito"
+                    );
+                } catch (error) {
+                    mostrarMensaje(
+                        error.message,
+                        "mensaje-formulario mensaje-error"
+                    );
+                }
+            });
+
+            fila.append(enlace, nombre, botonEliminar);
+            bloque.appendChild(fila);
+        });
+
+        return bloque;
+    }
+
+    function formatearTamano(bytes) {
+        if (!Number.isFinite(bytes) || bytes < 0) {
+            return "tamaño desconocido";
+        }
+        if (bytes < 1024 * 1024) {
+            return Math.max(1, Math.round(bytes / 1024)) + " KB";
+        }
+        return (bytes / (1024 * 1024)).toFixed(1) + " MB";
+    }
+
     function crearTarjeta(entrada) {
         const tarjeta = document.createElement("article");
         tarjeta.className = "perfil-card";
+        const adjuntos = Array.isArray(entrada.adjuntos)
+            ? entrada.adjuntos
+            : [];
 
         const encabezado = document.createElement("div");
         encabezado.className = "perfil-card-encabezado";
@@ -127,7 +232,50 @@ document.addEventListener("DOMContentLoaded", async function () {
             eliminarEntrada(entrada);
         });
 
-        acciones.append(botonEditar, botonEliminar);
+        const inputAdjuntar = document.createElement("input");
+        inputAdjuntar.type = "file";
+        inputAdjuntar.multiple = true;
+        inputAdjuntar.accept = "image/jpeg,image/png,image/webp,application/pdf";
+        inputAdjuntar.hidden = true;
+
+        const botonAdjuntar = document.createElement("button");
+        botonAdjuntar.type = "button";
+        botonAdjuntar.className = "btn btn-secundario btn-pequeno";
+        botonAdjuntar.textContent = "Adjuntar archivo";
+        botonAdjuntar.disabled = adjuntos.length >= 5;
+        botonAdjuntar.addEventListener("click", function () {
+            inputAdjuntar.click();
+        });
+
+        inputAdjuntar.addEventListener("change", async function () {
+            if (inputAdjuntar.files.length === 0) {
+                return;
+            }
+
+            botonAdjuntar.disabled = true;
+            inputAdjuntar.disabled = true;
+            mostrarMensaje("Subiendo adjunto...", "estado-vista");
+
+            try {
+                await subirAdjuntos(entrada.idEntrada, inputAdjuntar.files);
+                await cargarEntradas();
+                mostrarMensaje(
+                    "Adjunto guardado correctamente.",
+                    "mensaje-formulario mensaje-exito"
+                );
+            } catch (error) {
+                mostrarMensaje(
+                    error.message,
+                    "mensaje-formulario mensaje-error"
+                );
+                inputAdjuntar.disabled = false;
+                botonAdjuntar.disabled = adjuntos.length >= 5;
+            } finally {
+                inputAdjuntar.value = "";
+            }
+        });
+
+        acciones.append(botonEditar, botonEliminar, botonAdjuntar);
         encabezado.append(titulo, acciones);
 
         const fechas = document.createElement("p");
@@ -150,6 +298,12 @@ document.addEventListener("DOMContentLoaded", async function () {
             tarjeta.appendChild(actividadRelacionada);
         }
 
+        const listaAdjuntos = crearListaAdjuntos(entrada);
+        if (listaAdjuntos) {
+            tarjeta.appendChild(listaAdjuntos);
+        }
+
+        tarjeta.appendChild(inputAdjuntar);
         return tarjeta;
     }
 
@@ -209,8 +363,10 @@ document.addEventListener("DOMContentLoaded", async function () {
         mensajeNueva.textContent = "Guardando...";
         mensajeNueva.className = "mensaje-formulario";
 
+        const archivosNuevos = Array.from(archivosEntrada.files);
+
         try {
-            await consultarJson("/api/bitacora", {
+            const entradaCreada = await consultarJson("/api/bitacora", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -221,9 +377,23 @@ document.addEventListener("DOMContentLoaded", async function () {
 
             formulario.reset();
             actividad.value = "";
-            mensajeNueva.textContent = "Entrada guardada correctamente.";
-            mensajeNueva.className =
-                "mensaje-formulario mensaje-exito";
+
+            let mensajeGuardado = "Entrada guardada correctamente.";
+            let claseGuardado = "mensaje-formulario mensaje-exito";
+
+            if (archivosNuevos.length > 0) {
+                try {
+                    await subirAdjuntos(entradaCreada.idEntrada, archivosNuevos);
+                    mensajeGuardado += " Adjuntos guardados.";
+                } catch (errorAdjunto) {
+                    mensajeGuardado = "La entrada se guardó, pero no se pudieron subir todos los adjuntos: "
+                        + errorAdjunto.message;
+                    claseGuardado = "mensaje-formulario mensaje-error";
+                }
+            }
+
+            mensajeNueva.textContent = mensajeGuardado;
+            mensajeNueva.className = claseGuardado;
             await cargarEntradas();
         } catch (error) {
             mensajeNueva.textContent = error.message;

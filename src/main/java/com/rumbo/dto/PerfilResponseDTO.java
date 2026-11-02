@@ -12,11 +12,12 @@ public class PerfilResponseDTO {
     private final String carreraNombre;
     private final String areaLaboral;
     private final String descripcionPersonal;
+    private final String fotoUrl;
 
     public PerfilResponseDTO(String idUsuario, String nombreUsuario, String nombreCompleto,
                              String correo, String rol,
                              String nivelEstudios, Long carreraId, String carreraNombre,
-                             String areaLaboral, String descripcionPersonal) {
+                             String areaLaboral, String descripcionPersonal, String fotoUrl) {
         this.idUsuario = idUsuario;
         this.nombreUsuario = nombreUsuario;
         this.nombreCompleto = nombreCompleto;
@@ -27,6 +28,7 @@ public class PerfilResponseDTO {
         this.carreraNombre = carreraNombre;
         this.areaLaboral = areaLaboral;
         this.descripcionPersonal = descripcionPersonal;
+        this.fotoUrl = fotoUrl;
     }
 
     public String getIdUsuario() {
@@ -67,5 +69,9 @@ public class PerfilResponseDTO {
 
     public String getDescripcionPersonal() {
         return descripcionPersonal;
+    }
+
+    public String getFotoUrl() {
+        return fotoUrl;
     }
 }

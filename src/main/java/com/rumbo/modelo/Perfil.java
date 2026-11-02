@@ -1,5 +1,6 @@
 package com.rumbo.modelo;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -24,6 +25,12 @@ public class Perfil {
     private String nivelEstudios;
     private String descripcionPersonal;
     private String areaLaboral;
+
+    @Column(name = "foto_public_id", length = 255)
+    private String fotoPublicId;
+
+    @Column(name = "foto_url", columnDefinition = "text")
+    private String fotoUrl;
 
     @ManyToOne
     @JoinColumn(name = "id_carrera")
@@ -66,6 +73,22 @@ public class Perfil {
 
     public void setAreaLaboral(String areaLaboral) {
         this.areaLaboral = areaLaboral;
+    }
+
+    public String getFotoPublicId() {
+        return fotoPublicId;
+    }
+
+    public void setFotoPublicId(String fotoPublicId) {
+        this.fotoPublicId = fotoPublicId;
+    }
+
+    public String getFotoUrl() {
+        return fotoUrl;
+    }
+
+    public void setFotoUrl(String fotoUrl) {
+        this.fotoUrl = fotoUrl;
     }
 
     public Carrera getCarrera() {

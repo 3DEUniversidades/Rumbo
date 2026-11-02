@@ -249,9 +249,56 @@ exista un flujo de revisión implementado, la solicitud no modifica la cuenta.
 
 Los usuarios autenticados pueden consultar el perfil público de estudiantes y
 colaboradores con `GET /api/perfil/publico/{idUsuario}`. La respuesta pública
-solo contiene nombre de usuario, nombre completo y descripción personal. Desde
-el foro, el autor de una publicación o respuesta abre esta información y puede
-navegar a sus publicaciones filtradas.
+solo contiene nombre de usuario, nombre completo, descripción personal y foto
+de perfil. Desde el foro, el autor de una publicación o respuesta abre esta
+información y puede navegar a sus publicaciones filtradas.
+
+Estudiantes y colaboradores pueden subir una foto con
+`POST /api/perfil/foto` usando el campo multipart `archivo`, y quitarla con
+`DELETE /api/perfil/foto`. Se aceptan JPG, PNG y WebP de hasta 5 MB; la imagen
+se guarda en Cloudinary y se devuelve una URL pública recortada a 320x320.
+
+## Bitácora y adjuntos
+
+Los estudiantes pueden adjuntar imágenes JPG/PNG/WebP o PDF a sus entradas de
+bitácora. Cada entrada admite hasta 5 archivos de 10 MB como máximo.
+
+- `POST /api/bitacora/{idEntrada}/adjuntos` con el campo multipart `archivo`.
+- `GET /api/bitacora/{idEntrada}/adjuntos` lista los adjuntos.
+- `GET /api/bitacora/{idEntrada}/adjuntos/{idAdjunto}/contenido` descarga el archivo.
+- `DELETE /api/bitacora/{idEntrada}/adjuntos/{idAdjunto}` elimina el adjunto.
+
+Los adjuntos son privados: solo el dueño de la entrada puede listarlos,
+descargarlos o eliminarlos. El contenido no se sirve con una URL pública de
+Cloudinary; el backend valida la sesión y hace de proxy con una URL firmada.
+Para los PDF (`raw`) utiliza la API de descarga privada de Cloudinary con una
+autorización que caduca en 5 minutos, usada únicamente por el servidor. Así se
+evita depender de la entrega de PDF por CDN, que puede estar bloqueada aunque
+la subida esté permitida. Los PDF ya adjuntados usan la misma ruta de descarga.
+`GET /api/bitacora` incluye los adjuntos de cada entrada.
+
+## Archivos y Cloudinary
+
+Las fotos y los adjuntos se guardan en Cloudinary. Configura estas variables de
+entorno antes de arrancar la aplicación:
+
+```powershell
+$env:CLOUDINARY_CLOUD_NAME="tu-cloud"
+$env:CLOUDINARY_API_KEY="tu-api-key"
+$env:CLOUDINARY_API_SECRET="tu-api-secret"
+```
+
+En Linux/macOS:
+
+```bash
+export CLOUDINARY_CLOUD_NAME="tu-cloud"
+export CLOUDINARY_API_KEY="tu-api-key"
+export CLOUDINARY_API_SECRET="tu-api-secret"
+```
+
+No guardes estas credenciales en el repositorio. Si faltan, la aplicación
+arranca, pero las operaciones de subida, descarga y eliminación de archivos
+responden `503 Service Unavailable`.
 
 ## Supervisión de usuarios
 
@@ -311,4 +358,5 @@ src/main/resources/
 - Java + Spring Boot 3.4
 - Spring Data JPA + H2 (dev rapido/tests) / PostgreSQL (desarrollo compartido y produccion futura)
 - spring-security-crypto (hash BCrypt)
+- Cloudinary (fotos de perfil y adjuntos privados)
 - Frontend vanilla (HTML/CSS/JS) como PWA

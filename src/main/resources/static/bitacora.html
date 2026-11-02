@@ -164,6 +164,13 @@
                             <option value="">Sin actividad relacionada</option>
                         </select>
 
+                        <label for="archivos-entrada">Adjuntos (opcional)</label>
+                        <input id="archivos-entrada" type="file" multiple
+                               accept="image/jpeg,image/png,image/webp,application/pdf">
+                        <p class="texto-secundario">
+                            Puedes adjuntar hasta 5 archivos de máximo 10 MB cada uno: imágenes JPG, PNG, WebP o PDF.
+                        </p>
+
                         <p id="mensaje-nueva-entrada" class="mensaje-formulario" role="status"></p>
 
                         <button id="guardar-entrada" class="btn" type="submit">
@@ -211,6 +218,6 @@
 
     <script src="/js/sesion.js"></script>
     <script src="/js/barraLateral.js"></script>
-    <script src="/js/vistaBitacora.js?v=1"></script>
+    <script src="/js/vistaBitacora.js?v=2"></script>
 </body>
 </html>

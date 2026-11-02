@@ -15,7 +15,19 @@ document.addEventListener("DOMContentLoaded", async function () {
     const botonEditarCuenta = document.getElementById("editar-datos-cuenta");
     const campoNombreUsuario = document.getElementById("solicitud-nombre-usuario");
     const campoNombreCompleto = document.getElementById("solicitud-nombre-completo");
+    const seccionFotoPerfil = document.getElementById("seccion-foto-perfil");
+    const fotoPerfil = document.getElementById("foto-perfil");
+    const fotoIniciales = document.getElementById("foto-perfil-iniciales");
+    const archivoFotoPerfil = document.getElementById("archivo-foto-perfil");
+    const seleccionarFotoPerfil = document.getElementById("seleccionar-foto-perfil");
+    const subirFotoPerfil = document.getElementById("subir-foto-perfil");
+    const eliminarFotoPerfil = document.getElementById("eliminar-foto-perfil");
+    const mensajeFotoPerfil = document.getElementById("mensaje-foto-perfil");
+    const MAX_FOTO_BYTES = 5 * 1024 * 1024;
     let solicitudPendiente = false;
+    let perfilActual = null;
+    let archivoFotoSeleccionado = null;
+    let urlVistaPrevia = null;
 
     const cargarSolicitudPendiente = async function () {
         const respuesta = await fetch("/api/perfil/solicitudes/pendiente");
@@ -49,16 +61,142 @@ document.addEventListener("DOMContentLoaded", async function () {
         botonEditarCuenta.textContent = "Solicitud pendiente";
     };
 
+    seleccionarFotoPerfil.addEventListener("click", function () {
+        archivoFotoPerfil.click();
+    });
+
+    archivoFotoPerfil.addEventListener("change", function () {
+        const archivo = archivoFotoPerfil.files[0];
+        mensajeFotoPerfil.textContent = "";
+        mensajeFotoPerfil.className = "mensaje-formulario";
+        archivoFotoSeleccionado = null;
+        subirFotoPerfil.disabled = true;
+
+        if (!archivo) {
+            return;
+        }
+
+        const tiposPermitidos = ["image/jpeg", "image/png", "image/webp"];
+        if (archivo.type && !tiposPermitidos.includes(archivo.type)) {
+            mensajeFotoPerfil.textContent = "Usa una imagen JPG, PNG o WebP.";
+            mensajeFotoPerfil.className = "mensaje-formulario mensaje-error";
+            archivoFotoPerfil.value = "";
+            return;
+        }
+
+        if (archivo.size > MAX_FOTO_BYTES) {
+            mensajeFotoPerfil.textContent = "La foto no puede superar los 5 MB.";
+            mensajeFotoPerfil.className = "mensaje-formulario mensaje-error";
+            archivoFotoPerfil.value = "";
+            return;
+        }
+
+        if (urlVistaPrevia) {
+            URL.revokeObjectURL(urlVistaPrevia);
+        }
+
+        urlVistaPrevia = URL.createObjectURL(archivo);
+        fotoPerfil.src = urlVistaPrevia;
+        fotoPerfil.hidden = false;
+        fotoIniciales.hidden = true;
+        archivoFotoSeleccionado = archivo;
+        subirFotoPerfil.disabled = false;
+        mensajeFotoPerfil.textContent = "Vista previa lista. Pulsa “Subir foto”.";
+    });
+
+    subirFotoPerfil.addEventListener("click", async function () {
+        if (!archivoFotoSeleccionado) {
+            return;
+        }
+
+        subirFotoPerfil.disabled = true;
+        mensajeFotoPerfil.textContent = "Subiendo foto...";
+        mensajeFotoPerfil.className = "mensaje-formulario";
+
+        const formularioFoto = new FormData();
+        formularioFoto.append("archivo", archivoFotoSeleccionado);
+
+        try {
+            const respuesta = await fetch("/api/perfil/foto", {
+                method: "POST",
+                body: formularioFoto
+            });
+
+            if (respuesta.status === 401) {
+                window.location.replace("/login.html");
+                return;
+            }
+
+            const cuerpo = await respuesta.json().catch(() => ({}));
+            if (!respuesta.ok) {
+                throw new Error(cuerpo.error || "No se pudo subir la foto.");
+            }
+
+            perfilActual = { ...perfilActual, ...cuerpo };
+            archivoFotoSeleccionado = null;
+            archivoFotoPerfil.value = "";
+            mostrarFotoPerfil(perfilActual);
+            mensajeFotoPerfil.textContent = "Foto actualizada correctamente.";
+            mensajeFotoPerfil.className = "mensaje-formulario mensaje-exito";
+        } catch (exception) {
+            mensajeFotoPerfil.textContent = exception.message;
+            mensajeFotoPerfil.className = "mensaje-formulario mensaje-error";
+            subirFotoPerfil.disabled = false;
+        }
+    });
+
+    eliminarFotoPerfil.addEventListener("click", async function () {
+        if (!window.confirm("¿Eliminar tu foto de perfil?")) {
+            return;
+        }
+
+        eliminarFotoPerfil.disabled = true;
+        mensajeFotoPerfil.textContent = "Eliminando foto...";
+        mensajeFotoPerfil.className = "mensaje-formulario";
+
+        try {
+            const respuesta = await fetch("/api/perfil/foto", {
+                method: "DELETE"
+            });
+
+            if (respuesta.status === 401) {
+                window.location.replace("/login.html");
+                return;
+            }
+
+            const cuerpo = await respuesta.json().catch(() => ({}));
+            if (!respuesta.ok) {
+                throw new Error(cuerpo.error || "No se pudo eliminar la foto.");
+            }
+
+            perfilActual = { ...perfilActual, ...cuerpo };
+            archivoFotoSeleccionado = null;
+            archivoFotoPerfil.value = "";
+            subirFotoPerfil.disabled = true;
+            mostrarFotoPerfil(perfilActual);
+            mensajeFotoPerfil.textContent = "Foto eliminada correctamente.";
+            mensajeFotoPerfil.className = "mensaje-formulario mensaje-exito";
+        } catch (exception) {
+            mensajeFotoPerfil.textContent = exception.message;
+            mensajeFotoPerfil.className = "mensaje-formulario mensaje-error";
+            eliminarFotoPerfil.disabled = false;
+        }
+    });
+
     try {
         const sesion = await obtenerSesion();
         if (!sesion) {
             return;
         }
         const perfil = await consultarPerfil();
+        perfilActual = perfil;
         mostrarCuenta(perfil);
+        mostrarFotoPerfil(perfil);
         const rol = String(sesion.rol || "").toUpperCase();
         const puedeEditar = rol === "ESTUDIANTE"
             || rol === "COLABORADOR";
+
+        seccionFotoPerfil.hidden = !puedeEditar;
 
         if (!puedeEditar) {
             seccionEdicion.hidden = true;
@@ -209,6 +347,39 @@ document.addEventListener("DOMContentLoaded", async function () {
         document.getElementById("perfil-correo").textContent = perfil.correo;
         document.getElementById("perfil-rol").textContent = perfil.rol;
         document.getElementById("titulo-perfil").textContent = "Perfil de " + perfil.nombreCompleto;
+    }
+
+    function mostrarFotoPerfil(perfil) {
+        if (urlVistaPrevia) {
+            URL.revokeObjectURL(urlVistaPrevia);
+            urlVistaPrevia = null;
+        }
+
+        const fotoUrl = perfil && perfil.fotoUrl;
+        if (fotoUrl) {
+            fotoPerfil.src = fotoUrl;
+            fotoPerfil.hidden = false;
+            fotoIniciales.hidden = true;
+            eliminarFotoPerfil.hidden = false;
+            eliminarFotoPerfil.disabled = false;
+        } else {
+            fotoPerfil.removeAttribute("src");
+            fotoPerfil.hidden = true;
+            fotoIniciales.hidden = false;
+            fotoIniciales.textContent = calcularIniciales(perfil && perfil.nombreCompleto);
+            eliminarFotoPerfil.hidden = true;
+        }
+    }
+
+    function calcularIniciales(nombreCompleto) {
+        if (!nombreCompleto) {
+            return "RU";
+        }
+        const partes = nombreCompleto.trim().split(/\s+/);
+        if (partes.length === 1) {
+            return partes[0].substring(0, 2).toUpperCase();
+        }
+        return (partes[0][0] + partes[partes.length - 1][0]).toUpperCase();
     }
 
     function mostrarFormulario(perfil, carreras, rol) {

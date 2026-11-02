@@ -3,6 +3,7 @@ package com.rumbo.dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public record EntradaBitacoraRespuesta(
         String idEntrada,
@@ -12,6 +13,7 @@ public record EntradaBitacoraRespuesta(
         @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
         LocalDateTime fechaEdicion,
         String idActividad,
-        String descripcionActividad
+        String descripcionActividad,
+        List<AdjuntoBitacoraRespuesta> adjuntos
 ) {
 }

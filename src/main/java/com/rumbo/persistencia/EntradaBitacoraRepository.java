@@ -10,12 +10,12 @@ import java.util.Optional;
 public interface EntradaBitacoraRepository
         extends JpaRepository<EntradaBitacora, String> {
 
-    @EntityGraph(attributePaths = "actividad")
+    @EntityGraph(attributePaths = {"actividad", "adjuntos"})
     List<EntradaBitacora> findByUsuario_IdUsuarioOrderByFechaCreacionDesc(
             String idUsuario
     );
 
-    @EntityGraph(attributePaths = "actividad")
+    @EntityGraph(attributePaths = {"actividad", "adjuntos"})
     Optional<EntradaBitacora> findByIdEntradaAndUsuario_IdUsuario(
             String idEntrada,
             String idUsuario

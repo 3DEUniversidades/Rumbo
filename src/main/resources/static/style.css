@@ -1498,7 +1498,7 @@ progress::-moz-progress-bar,
     }
 }
 
-/* Bitácora personal */
+/* Bitï¿½cora personal */
 #lista-entradas {
     display: grid;
     gap: var(--space-3);
@@ -1513,4 +1513,90 @@ progress::-moz-progress-bar,
     line-height: 1.6;
     overflow-wrap: anywhere;
     white-space: pre-wrap;
+}
+
+/* Foto de perfil */
+.foto-perfil-editor {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-5);
+    margin-top: var(--space-4);
+}
+
+.foto-perfil-contenedor {
+    align-items: center;
+    background: var(--color-accent);
+    border: 3px solid var(--color-border);
+    border-radius: var(--radius-full);
+    color: var(--color-text-inverse);
+    display: flex;
+    flex: 0 0 auto;
+    font-size: var(--font-size-lg);
+    font-weight: 700;
+    height: 6rem;
+    justify-content: center;
+    overflow: hidden;
+    width: 6rem;
+}
+
+.foto-perfil-contenedor img {
+    height: 100%;
+    object-fit: cover;
+    width: 100%;
+}
+
+.foto-perfil-acciones {
+    flex: 1 1 16rem;
+}
+
+.foto-perfil-acciones .acciones-form {
+    margin-top: 0;
+}
+
+.foto-perfil-publico {
+    border: 3px solid var(--color-border);
+    border-radius: var(--radius-full);
+    display: block;
+    height: 6rem;
+    margin-bottom: var(--space-3);
+    object-fit: cover;
+    width: 6rem;
+}
+
+/* Adjuntos de bitacora */
+.adjuntos-bitacora {
+    border-top: 1px solid var(--color-border);
+    display: grid;
+    gap: var(--space-2);
+    margin-top: var(--space-3);
+    padding-top: var(--space-3);
+}
+
+.adjunto-bitacora {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+}
+
+.adjunto-bitacora-enlace {
+    align-items: center;
+    display: inline-flex;
+    font-weight: 600;
+    gap: var(--space-2);
+}
+
+.adjunto-bitacora-miniatura {
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    height: 3.5rem;
+    object-fit: cover;
+    width: 3.5rem;
+}
+
+.adjunto-bitacora span {
+    color: var(--color-text-muted);
+    flex: 1 1 12rem;
+    overflow-wrap: anywhere;
 }
