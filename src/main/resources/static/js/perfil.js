@@ -13,6 +13,8 @@ document.addEventListener("DOMContentLoaded", async function () {
     const estadoSolicitud = document.getElementById("estado-solicitud-perfil");
     const botonSolicitud = document.getElementById("solicitar-cambio-perfil");
     const botonEditarCuenta = document.getElementById("editar-datos-cuenta");
+    const cancelarEdicionCuenta = document.getElementById("cancelar-edicion-cuenta");
+    const resumenCuenta = document.getElementById("resumen-datos-cuenta");
     const campoNombreUsuario = document.getElementById("solicitud-nombre-usuario");
     const campoNombreCompleto = document.getElementById("solicitud-nombre-completo");
     const seccionFotoPerfil = document.getElementById("seccion-foto-perfil");
@@ -23,6 +25,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     const subirFotoPerfil = document.getElementById("subir-foto-perfil");
     const eliminarFotoPerfil = document.getElementById("eliminar-foto-perfil");
     const mensajeFotoPerfil = document.getElementById("mensaje-foto-perfil");
+    const cancelarFotoPerfil = document.getElementById("cancelar-foto-perfil");
     const MAX_FOTO_BYTES = 5 * 1024 * 1024;
     let solicitudPendiente = false;
     let perfilActual = null;
@@ -59,6 +62,8 @@ document.addEventListener("DOMContentLoaded", async function () {
         botonEditarCuenta.hidden = false;
         botonEditarCuenta.disabled = true;
         botonEditarCuenta.textContent = "Solicitud pendiente";
+        formularioSolicitud.hidden = true;
+        resumenCuenta.hidden = false;
     };
 
     seleccionarFotoPerfil.addEventListener("click", function () {
@@ -67,14 +72,12 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     archivoFotoPerfil.addEventListener("change", function () {
         const archivo = archivoFotoPerfil.files[0];
+        if (!archivo) return;
         mensajeFotoPerfil.textContent = "";
         mensajeFotoPerfil.className = "mensaje-formulario";
         archivoFotoSeleccionado = null;
         subirFotoPerfil.disabled = true;
-
-        if (!archivo) {
-            return;
-        }
+        mostrarFotoPerfil(perfilActual);
 
         const tiposPermitidos = ["image/jpeg", "image/png", "image/webp"];
         if (archivo.type && !tiposPermitidos.includes(archivo.type)) {
@@ -101,15 +104,34 @@ document.addEventListener("DOMContentLoaded", async function () {
         fotoIniciales.hidden = true;
         archivoFotoSeleccionado = archivo;
         subirFotoPerfil.disabled = false;
-        mensajeFotoPerfil.textContent = "Vista previa lista. Pulsa “Subir foto”.";
+        subirFotoPerfil.hidden = false;
+        cancelarFotoPerfil.hidden = false;
+        eliminarFotoPerfil.hidden = true;
+        mensajeFotoPerfil.textContent = "Vista previa. Guarda la foto para aplicar el cambio.";
     });
+
+    cancelarFotoPerfil.addEventListener("click", function () {
+        archivoFotoSeleccionado = null;
+        archivoFotoPerfil.value = "";
+        mostrarFotoPerfil(perfilActual);
+        mensajeFotoPerfil.textContent = "";
+        seleccionarFotoPerfil.focus();
+    });
+
+    function bloquearFoto(ocupado) {
+        seleccionarFotoPerfil.disabled = ocupado;
+        archivoFotoPerfil.disabled = ocupado;
+        cancelarFotoPerfil.disabled = ocupado;
+        eliminarFotoPerfil.disabled = ocupado;
+        subirFotoPerfil.disabled = ocupado || !archivoFotoSeleccionado;
+    }
 
     subirFotoPerfil.addEventListener("click", async function () {
         if (!archivoFotoSeleccionado) {
             return;
         }
 
-        subirFotoPerfil.disabled = true;
+        bloquearFoto(true);
         mensajeFotoPerfil.textContent = "Subiendo foto...";
         mensajeFotoPerfil.className = "mensaje-formulario";
 
@@ -141,7 +163,9 @@ document.addEventListener("DOMContentLoaded", async function () {
         } catch (exception) {
             mensajeFotoPerfil.textContent = exception.message;
             mensajeFotoPerfil.className = "mensaje-formulario mensaje-error";
-            subirFotoPerfil.disabled = false;
+        } finally {
+            bloquearFoto(false);
+            if (!archivoFotoSeleccionado) seleccionarFotoPerfil.focus();
         }
     });
 
@@ -150,7 +174,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             return;
         }
 
-        eliminarFotoPerfil.disabled = true;
+        bloquearFoto(true);
         mensajeFotoPerfil.textContent = "Eliminando foto...";
         mensajeFotoPerfil.className = "mensaje-formulario";
 
@@ -179,7 +203,9 @@ document.addEventListener("DOMContentLoaded", async function () {
         } catch (exception) {
             mensajeFotoPerfil.textContent = exception.message;
             mensajeFotoPerfil.className = "mensaje-formulario mensaje-error";
-            eliminarFotoPerfil.disabled = false;
+        } finally {
+            bloquearFoto(false);
+            seleccionarFotoPerfil.focus();
         }
     });
 
@@ -189,6 +215,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             return;
         }
         const perfil = await consultarPerfil();
+        if (!perfil) return;
         perfilActual = perfil;
         mostrarCuenta(perfil);
         mostrarFotoPerfil(perfil);
@@ -212,6 +239,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         }
 
         contenido.hidden = false;
+        document.getElementById("cargando-perfil").hidden = true;
 
         if (puedeEditar) {
             try {
@@ -225,6 +253,8 @@ document.addEventListener("DOMContentLoaded", async function () {
         }
     } catch (exception) {
         mostrarMensaje(exception.message || "No se pudo cargar el perfil.");
+    } finally {
+        document.getElementById("cargando-perfil").hidden = true;
     }
 
     formulario.addEventListener("submit", async function (evento) {
@@ -255,6 +285,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             if (!respuesta.ok) {
                 throw new Error(cuerpo.error || "No se pudo guardar el perfil.");
             }
+            perfilActual = { ...perfilActual, ...cuerpo };
             mensaje.textContent = "Perfil guardado correctamente.";
             mensaje.className = "mensaje-formulario mensaje-exito";
         } catch (exception) {
@@ -274,6 +305,9 @@ document.addEventListener("DOMContentLoaded", async function () {
         }
         campoNombreUsuario.disabled = false;
         campoNombreCompleto.disabled = false;
+        formularioSolicitud.hidden = false;
+        resumenCuenta.hidden = true;
+        botonEditarCuenta.setAttribute("aria-expanded", "true");
         botonSolicitud.hidden = false;
         botonSolicitud.disabled = false;
         botonEditarCuenta.hidden = true;
@@ -283,6 +317,25 @@ document.addEventListener("DOMContentLoaded", async function () {
         estadoSolicitud.className = "mensaje-formulario";
         campoNombreUsuario.focus();
     });
+
+    cancelarEdicionCuenta.addEventListener("click", function () {
+        campoNombreUsuario.value = perfilActual.nombreUsuario || "";
+        campoNombreCompleto.value = perfilActual.nombreCompleto || "";
+        cerrarEdicionCuenta();
+        estadoSolicitud.textContent = "";
+        botonEditarCuenta.focus();
+    });
+
+    function cerrarEdicionCuenta() {
+        formularioSolicitud.hidden = true;
+        resumenCuenta.hidden = false;
+        campoNombreUsuario.disabled = true;
+        campoNombreCompleto.disabled = true;
+        botonEditarCuenta.hidden = false;
+        botonEditarCuenta.setAttribute("aria-expanded", "false");
+        botonEditarCuenta.textContent = solicitudPendiente ? "Solicitud pendiente" : "Editar datos";
+        botonEditarCuenta.disabled = solicitudPendiente;
+    }
 
     async function consultarPerfil() {
         const respuesta = await fetch("/api/perfil");
@@ -307,6 +360,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     formularioSolicitud.addEventListener("submit", async function (evento) {
         evento.preventDefault();
         botonSolicitud.disabled = true;
+        cancelarEdicionCuenta.disabled = true;
         estadoSolicitud.textContent = "Enviando solicitud...";
         estadoSolicitud.className = "mensaje-formulario";
 
@@ -320,6 +374,10 @@ document.addEventListener("DOMContentLoaded", async function () {
                 })
             });
             const cuerpo = await respuesta.json().catch(() => ({}));
+            if (respuesta.status === 401) {
+                window.location.replace("/login.html");
+                return;
+            }
             if (!respuesta.ok) {
                 throw new Error(cuerpo.error || "No se pudo crear la solicitud.");
             }
@@ -334,10 +392,15 @@ document.addEventListener("DOMContentLoaded", async function () {
             botonEditarCuenta.hidden = false;
             botonEditarCuenta.disabled = true;
             botonEditarCuenta.textContent = "Solicitud pendiente";
+            cerrarEdicionCuenta();
+            estadoSolicitud.setAttribute("tabindex", "-1");
+            estadoSolicitud.focus();
         } catch (exception) {
             estadoSolicitud.textContent = exception.message;
             estadoSolicitud.className = "mensaje-formulario mensaje-error";
             botonSolicitud.disabled = false;
+        } finally {
+            cancelarEdicionCuenta.disabled = false;
         }
     });
 
@@ -345,17 +408,30 @@ document.addEventListener("DOMContentLoaded", async function () {
         campoNombreUsuario.value = perfil.nombreUsuario || "";
         campoNombreCompleto.value = perfil.nombreCompleto || "";
         document.getElementById("perfil-correo").textContent = perfil.correo;
-        document.getElementById("perfil-rol").textContent = perfil.rol;
-        document.getElementById("titulo-perfil").textContent = "Perfil de " + perfil.nombreCompleto;
+        const roles = {
+            ESTUDIANTE: "Estudiante", COLABORADOR: "Colaborador", ADMIN: "Administrador",
+            ENCARGADO_DE_CARRERAS: "Encargado de carreras",
+            SUPERVISOR_DE_MENSAJES: "Supervisor de mensajes",
+            SUPERVISOR_DE_USUARIOS: "Supervisor de usuarios"
+        };
+        document.getElementById("perfil-rol").textContent = roles[perfil.rol] || perfil.rol;
+        document.getElementById("titulo-perfil").textContent = perfil.nombreCompleto;
+        document.getElementById("perfil-usuario-cabecera").textContent = "@" + perfil.nombreUsuario;
+        document.getElementById("perfil-nombre-completo").textContent = perfil.nombreCompleto;
+        document.getElementById("perfil-nombre-usuario").textContent = perfil.nombreUsuario;
     }
 
     function mostrarFotoPerfil(perfil) {
+        subirFotoPerfil.hidden = true;
+        subirFotoPerfil.disabled = true;
+        cancelarFotoPerfil.hidden = true;
         if (urlVistaPrevia) {
             URL.revokeObjectURL(urlVistaPrevia);
             urlVistaPrevia = null;
         }
 
         const fotoUrl = perfil && perfil.fotoUrl;
+        seleccionarFotoPerfil.textContent = fotoUrl ? "Cambiar foto" : "Añadir foto";
         if (fotoUrl) {
             fotoPerfil.src = fotoUrl;
             fotoPerfil.hidden = false;

@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const panel = document.getElementById("verificacion-estudiante");
     const mensaje = document.getElementById("mensaje-verificacion");
     const boton = document.getElementById("solicitar-verificacion");
+    const detalle = document.getElementById("detalle-verificacion");
 
     if (!panel || !mensaje || !boton) return;
 
@@ -54,6 +55,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         } catch (error) {
             mensaje.textContent = error.message;
+            mensaje.className = "etiqueta-estado";
 
         } finally {
             ocupado = false;
@@ -68,16 +70,26 @@ document.addEventListener("DOMContentLoaded", async () => {
             const estado = await solicitar("/api/verificacion/estado");
 
             estadoCargado = true;
-            mensaje.textContent = estado.mensaje;
+            const verificado = String(estado.estadoVerificacion).toLowerCase() === "verificado";
+            mensaje.textContent = verificado ? "✓ Cuenta verificada"
+                : estado.solicitudPendiente ? "Verificación en revisión" : "Cuenta sin verificar";
+            mensaje.className = "etiqueta-estado" + (verificado ? " verificado"
+                : estado.solicitudPendiente ? " pendiente" : "");
+            if (detalle) {
+                detalle.textContent = !verificado && !estado.solicitudPendiente ? (estado.mensaje || "") : "";
+                detalle.hidden = !detalle.textContent;
+            }
             boton.textContent = "Solicitar verificación";
 
             boton.hidden =
-                estado.estadoVerificacion === "verificado"
+                verificado
                 || estado.solicitudPendiente;
 
         } catch (error) {
             estadoCargado = false;
             mensaje.textContent = error.message;
+            mensaje.className = "etiqueta-estado";
+            if (detalle) detalle.hidden = true;
             boton.hidden = false;
             boton.textContent = "Reintentar consulta";
 
