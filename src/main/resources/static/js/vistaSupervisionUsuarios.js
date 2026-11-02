@@ -4,6 +4,20 @@ document.addEventListener("DOMContentLoaded", async () => {
     const listaPerfiles = document.getElementById("lista-perfiles");
     const listaNotificaciones = document.getElementById("lista-notificaciones");
 
+    function seleccionarApartado() {
+        const cambios = window.location.hash === "#perfiles";
+        document.getElementById("verificaciones").hidden = cambios;
+        document.getElementById("perfiles").hidden = !cambios;
+        for (const [id, seleccionado] of [["tab-verificaciones", !cambios], ["tab-perfiles", cambios]]) {
+            const enlace = document.getElementById(id);
+            enlace.classList.toggle("btn-secundario", !seleccionado);
+            if (seleccionado) enlace.setAttribute("aria-current", "location");
+            else enlace.removeAttribute("aria-current");
+        }
+    }
+    window.addEventListener("hashchange", seleccionarApartado);
+    seleccionarApartado();
+
     try {
         const sesion = await obtenerSesion();
         const rol = String(sesion.rol || "").toUpperCase();
@@ -19,6 +33,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         renderizarSolicitudes(listaVerificaciones, verificaciones, "verificaciones");
         renderizarSolicitudes(listaPerfiles, perfiles, "perfiles");
         renderizarNotificaciones(listaNotificaciones, notificaciones);
+        seleccionarApartado();
     } catch (error) {
         mensaje.textContent = error.message || "No se pudo cargar el tablero.";
     }

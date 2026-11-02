@@ -8,6 +8,7 @@
     <title>Rumbo - Mi perfil</title>
     <link rel="stylesheet" href="/style.css">
     <link rel="stylesheet" href="/css/perfil.css?v=1">
+    <link rel="stylesheet" href="/css/historialSupervisor.css?v=f5-t10-1">
 </head>
 <body>
     <a href="#contenido-perfil" class="saltar-contenido">Saltar al contenido</a>
@@ -225,6 +226,18 @@
                     </form>
                 </section>
 
+                <section id="seccion-historial-supervisor" class="perfil-card" aria-labelledby="titulo-historial-supervisor" hidden>
+                    <h2 id="titulo-historial-supervisor">Mis decisiones de supervisión</h2>
+                    <p>Verificaciones y cambios de perfil que aprobaste o rechazaste.</p>
+                    <div class="filtros-historial-supervisor">
+                        <label>Tipo de solicitud<select id="tipo-historial-supervisor"><option value="TODAS">Todos los tipos</option><option value="VERIFICACION">Verificaciones</option><option value="PERFIL">Cambios de perfil</option></select></label>
+                        <label>Decisión<select id="decision-historial-supervisor"><option value="TODAS">Todas las decisiones</option><option value="APROBAR">Aprobadas</option><option value="RECHAZAR">Rechazadas</option></select></label>
+                        <button id="actualizar-historial-supervisor" class="btn btn-secundario" type="button">Actualizar historial</button>
+                    </div>
+                    <p id="estado-historial-supervisor" role="status" aria-live="polite"></p>
+                    <div id="lista-historial-supervisor"></div>
+                    <div class="paginacion-historial-supervisor"><button id="anterior-historial-supervisor" class="btn btn-secundario" type="button">Anterior</button><p id="pagina-historial-supervisor"></p><button id="siguiente-historial-supervisor" class="btn btn-secundario" type="button">Siguiente</button></div>
+                </section>
             </main>
 
             <p id="error-perfil" class="mensaje-error" hidden></p>
@@ -239,5 +252,6 @@
     <script src="/js/barraLateral.js"></script>
     <script src="/js/perfil.js?v=9"></script>
     <script src="/js/vistaVerificacion.js?v=2"></script>
+    <script src="/js/vistaHistorialSupervisor.js?v=f5-t10-1"></script>
 </body>
 </html>
