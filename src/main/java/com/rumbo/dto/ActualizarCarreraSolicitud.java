@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 
 public record ActualizarCarreraSolicitud(
         String nombre,
-        Integer duracion,
+        BigDecimal duracion,
         BigDecimal costo,
         String modalidad,
         Integer cargaCreditos,

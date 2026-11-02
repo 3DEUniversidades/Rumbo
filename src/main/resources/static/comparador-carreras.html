@@ -208,12 +208,29 @@
                     <p class="texto-secundario" style="margin-bottom: var(--space-3);">
                         Mayor o menor describe una cifra, no indica cuál carrera es mejor.
                         El costo es una referencia del periodo mostrado, no de toda la carrera.
+                        La duración corresponde al programa o etapa descrita en su información oficial.
                     </p>
 
-                    <div class="tabla-contenedor">
-                        <table id="tabla-comparador"
-                               class="tabla-gestion tabla-comparador"></table>
+                    <p class="texto-secundario" style="margin-bottom: var(--space-3);">
+                        La carga académica muestra los créditos registrados del plan, no horas semanales.
+                        Si el dato no está confirmado, se indica «No disponible».
+                    </p>
+
+                    <div id="vista-general-comparador" hidden>
+                        <h3>Vista general</h3>
+                        <div class="tabla-contenedor">
+                            <table id="tabla-general-comparador"
+                                   class="tabla-gestion tabla-comparador"></table>
+                        </div>
                     </div>
+
+                    <details id="detalle-comparador" open>
+                        <summary id="abrir-detalle-comparador">Ver comparación completa</summary>
+                        <div class="tabla-contenedor">
+                            <table id="tabla-comparador"
+                                   class="tabla-gestion tabla-comparador"></table>
+                        </div>
+                    </details>
                 </section>
             </main>
 

@@ -4,8 +4,11 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.rumbo.dto.RegistroActualizacionRespuesta;
 import com.rumbo.modelo.Carrera;
 import com.rumbo.modelo.RegistroActualizacionCarrera;
+import com.rumbo.modelo.Rol;
+import com.rumbo.modelo.Usuario;
 import com.rumbo.persistencia.CarreraRepository;
 import com.rumbo.persistencia.RegistroActualizacionCarreraRepository;
+import com.rumbo.persistencia.UsuarioRepository;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.net.URI;
@@ -38,11 +41,14 @@ public class CarreraService {
 
     private final CarreraRepository carreraRepository;
     private final RegistroActualizacionCarreraRepository registroRepository;
+    private final UsuarioRepository usuarioRepository;
 
     public CarreraService(CarreraRepository carreraRepository,
-                          RegistroActualizacionCarreraRepository registroRepository) {
+                          RegistroActualizacionCarreraRepository registroRepository,
+                          UsuarioRepository usuarioRepository) {
         this.carreraRepository = carreraRepository;
         this.registroRepository = registroRepository;
+        this.usuarioRepository = usuarioRepository;
     }
 
     public List<Carrera> consultarCarreras() {
@@ -89,18 +95,20 @@ public class CarreraService {
                     carrera::setDescripcion);
         }
         if (cambios.has("duracion")) {
-            Integer duracion = enteroRequerido(cambios.get("duracion"), "duración");
-            if (duracion < 1 || duracion > 15) {
+            BigDecimal duracion = decimalOpcional(cambios.get("duracion"), "duración");
+            if (duracion != null && (duracion.compareTo(BigDecimal.ONE) < 0
+                    || duracion.compareTo(new BigDecimal("15")) > 0)) {
                 throw new ExcepcionCarrera("La duración debe estar entre 1 y 15 años");
+            }
+            if (duracion != null
+                    && cambios.get("duracion").decimalValue().stripTrailingZeros().scale() > 1) {
+                throw new ExcepcionCarrera("La duración admite como máximo un decimal");
             }
             r.aplicar("duracion", carrera.getDuracion(), duracion, carrera::setDuracion);
         }
         if (cambios.has("costo")) {
             BigDecimal costo = decimalOpcional(cambios.get("costo"), "costo");
-            if (costo == null) {
-                throw new ExcepcionCarrera("El campo costo es obligatorio");
-            }
-            if (costo.signum() < 0) {
+            if (costo != null && costo.signum() < 0) {
                 throw new ExcepcionCarrera("El costo no puede ser negativo");
             }
             r.aplicar("costo", carrera.getCosto(), costo, carrera::setCosto);
@@ -189,16 +197,35 @@ public class CarreraService {
                 : registroRepository.findByCarreraIdOrderByFechaDesc(carreraId);
 
         return registros.stream()
-                .map(r -> new RegistroActualizacionRespuesta(
-                        r.getId(),
-                        r.getCarrera().getId(),
-                        r.getCarrera().getNombre(),
-                        r.getCampo(),
-                        r.getValorAnterior(),
-                        r.getValorNuevo(),
-                        r.getFecha(),
-                        r.getResponsable()))
+                .map(this::mapearRegistro)
                 .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<RegistroActualizacionRespuesta> consultarMisActualizaciones(String idUsuario) {
+        Usuario encargado = usuarioRepository.findById(idUsuario)
+                .filter(u -> !u.isEliminado())
+                .orElseThrow(() -> new ExcepcionAutenticacion("La cuenta ya no esta disponible"));
+        if (encargado.getRol() != Rol.ENCARGADO_DE_CARRERAS) {
+            throw new ExcepcionPermiso("Se requiere rol de encargado de carreras");
+        }
+
+        return registroRepository.findByResponsableOrderByFechaDescIdDesc(idUsuario)
+                .stream()
+                .map(this::mapearRegistro)
+                .toList();
+    }
+
+    private RegistroActualizacionRespuesta mapearRegistro(RegistroActualizacionCarrera r) {
+        return new RegistroActualizacionRespuesta(
+                r.getId(),
+                r.getCarrera().getId(),
+                r.getCarrera().getNombre(),
+                r.getCampo(),
+                r.getValorAnterior(),
+                r.getValorNuevo(),
+                r.getFecha(),
+                r.getResponsable());
     }
 
     // ---------- Registro de cambios ----------
@@ -285,14 +312,6 @@ public class CarreraService {
             throw new ExcepcionCarrera("El campo " + campo + " debe ser un número entero");
         }
         return nodo.intValue();
-    }
-
-    private static Integer enteroRequerido(JsonNode nodo, String campo) {
-        Integer valor = enteroOpcional(nodo, campo);
-        if (valor == null) {
-            throw new ExcepcionCarrera("El campo " + campo + " es obligatorio");
-        }
-        return valor;
     }
 
     private static BigDecimal decimalOpcional(JsonNode nodo, String campo) {

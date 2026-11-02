@@ -2,6 +2,7 @@ package com.rumbo.controlador;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.rumbo.dto.CarreraRespuesta;
+import com.rumbo.dto.RegistroActualizacionRespuesta;
 import com.rumbo.modelo.Carrera;
 import com.rumbo.modelo.Rol;
 import com.rumbo.modelo.SesionUsuario;
@@ -80,6 +81,12 @@ public class ControladorCarreras {
             return ResponseEntity.badRequest()
                     .body(Map.of("error", e.getMessage()));
         }
+    }
+
+    @GetMapping("/mis-actualizaciones")
+    public List<RegistroActualizacionRespuesta> consultarMisActualizaciones(HttpSession sesion) {
+        SesionUsuario encargado = gestorPermisos.exigirRol(sesion, Rol.ENCARGADO_DE_CARRERAS);
+        return carreraService.consultarMisActualizaciones(encargado.getIdUsuario());
     }
 
     @GetMapping("/historial")
