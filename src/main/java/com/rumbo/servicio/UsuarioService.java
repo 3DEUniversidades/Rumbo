@@ -54,7 +54,7 @@ public class UsuarioService {
         Usuario usuario = usuarioRepository.findByCorreoIgnoreCase(correoNormalizado)
                 .orElseThrow(() -> new ExcepcionAutenticacion("Credenciales incorrectas"));
 
-        if (!codificadorContrasenia.matches(contraseniaIngresada, usuario.getContrasenia())) {
+        if (usuario.isEliminado() || !codificadorContrasenia.matches(contraseniaIngresada, usuario.getContrasenia())) {
             throw new ExcepcionAutenticacion("Credenciales incorrectas");
         }
 

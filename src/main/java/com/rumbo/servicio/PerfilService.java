@@ -190,6 +190,10 @@ public class PerfilService {
     @Transactional
     public PerfilPublicoResponse consultarPublico(String idUsuario) {
         Usuario usuario = buscarUsuario(idUsuario);
+        if (usuario.isEliminado()) {
+            throw new org.springframework.web.server.ResponseStatusException(
+                    org.springframework.http.HttpStatus.NOT_FOUND, "Perfil no disponible");
+        }
         if (!usuario.getRol().esPublico()) {
             throw new ExcepcionPermiso("El perfil publico solo esta disponible para estudiantes y colaboradores");
         }
