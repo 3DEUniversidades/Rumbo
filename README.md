@@ -7,7 +7,7 @@ Plataforma web (PWA) que ayuda a estudiantes de bachillerato a explorar carreras
 - **Java 21** instalado ([descargar](https://adoptium.net/))
 - Variable de entorno `JAVA_HOME` apuntando a la carpeta del JDK
 - No se requiere instalar Maven (se usa Maven Wrapper)
-- PostgreSQL 18+ instalado localmente o Docker Desktop para levantar PostgreSQL con `docker compose`
+- PostgreSQL 18+ instalado localmente o Docker Desktop para levantar PostgreSQL con `docker compose`. Para trabajar sin PostgreSQL, usar el perfil local `h2`.
 
 ### Configurar JAVA_HOME
 
@@ -21,25 +21,14 @@ Plataforma web (PWA) que ayuda a estudiantes de bachillerato a explorar carreras
 export JAVA_HOME="/ruta/al/jdk-21"
 ```
 
-## Ejecutar en local con H2
+## Configuracion local
 
-Por defecto el proyecto usa H2 en memoria. Esto permite abrir la aplicacion sin configurar PostgreSQL, util para revisar la PWA o correr pruebas rapidas.
+PostgreSQL es la base predeterminada del equipo. La configuracion compartida esta
+en `application.properties`; cada integrante coloca sus credenciales en `.env`,
+en la raiz del proyecto. Spring Boot carga ese archivo automaticamente y Git lo
+ignora.
 
-```bash
-./mvnw spring-boot:run
-```
-
-Abrir http://localhost:8080
-
-> **Windows sin Git Bash:** usa `mvnw.cmd spring-boot:run` en su lugar.
-
-## Base de datos local con PostgreSQL
-
-La base objetivo del proyecto es PostgreSQL. El repositorio no guarda credenciales reales ni archivos de datos de PostgreSQL. Solo guarda la configuracion reproducible para que cada integrante o el auxiliar pueda levantar la base.
-
-### Opcion A: PostgreSQL con Docker
-
-1. Copiar el archivo de ejemplo:
+Si aun no tienes `.env`, copia la plantilla:
 
 ```bash
 cp .env.example .env
@@ -51,97 +40,135 @@ En Windows PowerShell:
 Copy-Item .env.example .env
 ```
 
+Si ya existe, conserva sus valores y agrega las variables que falten. Completa
+`DB_PASSWORD` con tu contrasena local. `DB_URL`, `DB_USERNAME` y `DB_PASSWORD`
+configuran Spring Boot; Docker utiliza el mismo usuario y contrasena. Su variable
+`POSTGRES_DB` debe coincidir con el nombre de la base incluido en `DB_URL`.
+
+| Archivo | Funcion |
+|---|---|
+| `src/main/resources/application.properties` | Configuracion comun y PostgreSQL predeterminado |
+| `src/main/resources/application-h2.properties` | Alternativa local con H2 en memoria |
+| `src/test/resources/application-test.properties` | H2 aislado para pruebas automatizadas |
+| `.env.example` | Plantilla de variables locales sin credenciales reales |
+| `.env` | Valores personales, ignorados por Git |
+
+Los antiguos perfiles `postgres` y `local` ya no son necesarios. Traslada a
+`.env` los valores personales que tuvieras en `application-local.properties` y
+deja de activar esos perfiles. Las propiedades de un perfil activo reemplazan
+las equivalentes de `application.properties`.
+
+## Ejecutar con PostgreSQL (predeterminado)
+
+### Opcion A: PostgreSQL con Docker
+
+1. Completar `.env` como se indica arriba.
 2. Levantar PostgreSQL:
 
 ```bash
 docker compose up -d postgres
 ```
 
-3. Ejecutar Spring Boot usando el perfil PostgreSQL:
+Si ya existe un volumen de PostgreSQL, usa las credenciales con las que se creo:
+cambiar `.env` no modifica los usuarios ni contrasenas de una base existente.
+
+3. Ejecutar Spring Boot, sin seleccionar perfiles:
 
 ```bash
-./mvnw spring-boot:run -Dspring-boot.run.profiles=postgres
+./mvnw spring-boot:run
 ```
 
 En Windows:
 
 ```powershell
-.\mvnw.cmd spring-boot:run -Dspring-boot.run.profiles=postgres
+.\mvnw.cmd spring-boot:run
 ```
 
-Si PowerShell interpreta mal el argumento del perfil, usa comillas:
+Abrir http://localhost:8081. Puedes cambiar el puerto con `PORT` en `.env`.
 
-```powershell
-.\mvnw.cmd spring-boot:run "-Dspring-boot.run.profiles=postgres"
-```
-
-Con la configuracion de ejemplo, la conexion queda asi:
+Con la plantilla, la conexion queda asi:
 
 | Dato | Valor |
 |---|---|
 | Base de datos | `vocacional_db` |
 | Usuario | `rumbo_app` |
-| Password | `rumbo_app_dev` |
+| Password | El valor que completes en `DB_PASSWORD` |
 | Host | `localhost` |
 | Puerto | `5432` |
 
 ### Opcion B: PostgreSQL instalado localmente
 
-1. Crear la base y usuario en PostgreSQL:
+1. Crear el usuario y la base desde una sesion administradora de PostgreSQL,
+   eligiendo una contrasena propia:
 
 ```sql
-CREATE DATABASE vocacional_db;
-CREATE USER rumbo_app WITH PASSWORD 'rumbo_app_dev';
-GRANT ALL PRIVILEGES ON DATABASE vocacional_db TO rumbo_app;
+CREATE USER rumbo_app WITH PASSWORD 'elige_tu_contrasena';
+CREATE DATABASE vocacional_db OWNER rumbo_app;
 ```
 
-2. Copiar el ejemplo local:
+2. Configurar `.env` con la URL, el usuario y la contrasena correspondientes.
+3. Arrancar con `./mvnw spring-boot:run` o `.\mvnw.cmd spring-boot:run`.
+
+### Como revisar datos cargados
+
+Puedes revisar los datos de tres formas:
+
+1. Desde la aplicacion web, usando las vistas y endpoints REST.
+2. Desde endpoints JSON, por ejemplo `GET http://localhost:8081/api/carreras`.
+3. Desde PostgreSQL, conectandose a `vocacional_db` con un cliente como pgAdmin, DBeaver o `psql`.
+
+En PostgreSQL, `data.sql` carga los datos iniciales despues de que JPA prepare el
+esquema. Para desactivar esa carga, configura `DB_SQL_INIT_MODE=never` en `.env`.
+`DB_DDL_AUTO=update` permite ajustar el esquema durante el desarrollo.
+
+## Ejecutar en local con H2 (alternativa)
+
+Si no puedes instalar o arrancar PostgreSQL, activa `h2`:
 
 ```bash
-cp src/main/resources/application-local.example.properties src/main/resources/application-local.properties
+./mvnw spring-boot:run -Dspring-boot.run.profiles=h2
 ```
 
 En Windows PowerShell:
 
 ```powershell
-Copy-Item src/main/resources/application-local.example.properties src/main/resources/application-local.properties
+.\mvnw.cmd spring-boot:run "-Dspring-boot.run.profiles=h2"
 ```
 
-3. Ajustar usuario/password si son diferentes.
+Abrir http://localhost:8081, o el puerto configurado en `PORT`. Este perfil
+reemplaza la conexion aunque `.env` contenga variables de PostgreSQL. No requiere
+una base externa, empieza sin datos iniciales y pierde sus datos al detenerse.
+Puedes registrar cuentas y probar los flujos desde la pagina. `data.sql` se
+desactiva porque contiene instrucciones especificas de PostgreSQL.
 
-4. Ejecutar con perfiles `postgres,local`:
+La consola esta en `/h2-console`, con URL JDBC
+`jdbc:h2:mem:rumbo;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE`, usuario `sa` y
+contrasena vacia. Cloudinary se configura igual que con PostgreSQL.
 
-```bash
-./mvnw spring-boot:run -Dspring-boot.run.profiles=postgres,local
-```
-
-En Windows:
+## Pruebas automatizadas
 
 ```powershell
-.\mvnw.cmd spring-boot:run -Dspring-boot.run.profiles=postgres,local
+.\mvnw.cmd test
 ```
 
-Si PowerShell interpreta mal el argumento del perfil, usa comillas:
+En Linux/macOS: `./mvnw test`. Las pruebas que cargan Spring activan el perfil
+`test`: usan H2, sin consola ni `data.sql`, y no requieren PostgreSQL o Docker.
+Las pruebas de archivos usan almacenamiento de prueba, sin llamar a Cloudinary.
+
+El JDK recomendado es 21. Si ejecutas con JDK 25, la version actual de Mockito
+requiere `-Dnet.bytebuddy.experimental=true`, por ejemplo:
 
 ```powershell
-.\mvnw.cmd spring-boot:run "-Dspring-boot.run.profiles=postgres,local"
+.\mvnw.cmd test "-Dnet.bytebuddy.experimental=true"
 ```
 
-`application-local.properties` esta ignorado por Git y no debe subirse al repositorio.
-
-### Como revisar datos cargados
-
-Cuando existan entidades JPA y datos iniciales, el auxiliar podra revisar los datos de tres formas:
-
-1. Desde la aplicacion web, usando las vistas y endpoints REST.
-2. Desde endpoints JSON, por ejemplo `GET http://localhost:8080/api/carreras` cuando exista el controlador.
-3. Desde PostgreSQL, conectandose a `vocacional_db` con un cliente como pgAdmin, DBeaver o `psql`.
-
-Si agregamos carreras iniciales con `data.sql`, tambien se documentara el modo de activarlas. Por ahora `spring.sql.init.mode` queda en `never` para evitar insertar datos antes de que existan entidades y tablas revisadas.
+Los cambios que dependan de SQL o del comportamiento propio de PostgreSQL tambien
+deben verificarse en esa base.
 
 ## Usuario por defecto
 
-Al iniciar, `data.sql` siembra un usuario administrador para probar el login:
+Al iniciar con PostgreSQL y la carga de datos activa, `data.sql` siembra un
+usuario administrador para probar el login. Este usuario no se crea en H2:
 
 | Dato | Valor |
 |---|---|
@@ -200,7 +227,7 @@ La respuesta nunca incluye la contrasena ni su hash.
 Ejemplo con curl:
 
 ```bash
-curl -X POST http://localhost:8080/api/auth/registro \
+curl -X POST http://localhost:8081/api/auth/registro \
   -H "Content-Type: application/json" \
   -d "{\"nombreUsuario\":\"juanperez\",\"nombreCompleto\":\"Juan Perez\",\"correo\":\"juan@uvg.edu.gt\",\"contrasenia\":\"contrasenia123\",\"rol\":\"ESTUDIANTE\"}"
 ```
@@ -279,8 +306,8 @@ la subida esté permitida. Los PDF ya adjuntados usan la misma ruta de descarga.
 
 ## Archivos y Cloudinary
 
-Las fotos y los adjuntos se guardan en Cloudinary. Configura estas variables de
-entorno antes de arrancar la aplicación:
+Las fotos y los adjuntos se guardan en Cloudinary. Completa las variables
+`CLOUDINARY_*` en tu `.env` o exportalas antes de arrancar la aplicación:
 
 ```powershell
 $env:CLOUDINARY_CLOUD_NAME="tu-cloud"
@@ -326,10 +353,10 @@ Las notificaciones del usuario se consultan con
 
 | Comando | Descripcion |
 |---|---|
-| `./mvnw spring-boot:run` | Arranca el servidor en local |
-| `./mvnw spring-boot:run -Dspring-boot.run.profiles=postgres` | Arranca usando PostgreSQL |
+| `./mvnw spring-boot:run` | Arranca con PostgreSQL (predeterminado) |
+| `./mvnw spring-boot:run -Dspring-boot.run.profiles=h2` | Arranca sin PostgreSQL, con H2 en memoria |
 | `docker compose up -d postgres` | Levanta PostgreSQL local con Docker |
-| `./mvnw test` | Ejecuta los tests |
+| `./mvnw test` | Ejecuta los tests con H2 |
 | `./mvnw clean package` | Compila el `.jar` para produccion |
 
 > **Windows:** reemplaza `./mvnw` por `mvnw.cmd` en los comandos anteriores.
@@ -346,17 +373,20 @@ src/main/java/com/rumbo/
 
 src/main/resources/
   static/                    # Frontend PWA (HTML, CSS, JS)
-  application.properties     # Configuracion
-  application-postgres.properties
-                              # Perfil PostgreSQL reproducible
-  application-local.example.properties
-                              # Plantilla local privada
+  application.properties     # Configuracion comun y PostgreSQL predeterminado
+  application-h2.properties  # Alternativa local con H2 en memoria
+
+src/test/resources/
+  application-test.properties # H2 aislado para pruebas
+
+.env.example                 # Plantilla de variables locales
+.env                         # Credenciales locales (ignorado por Git)
 ```
 
 ## Stack
 
 - Java + Spring Boot 3.4
-- Spring Data JPA + H2 (dev rapido/tests) / PostgreSQL (desarrollo compartido y produccion futura)
+- Spring Data JPA + PostgreSQL (predeterminado) / H2 (alternativa local y tests)
 - spring-security-crypto (hash BCrypt)
 - Cloudinary (fotos de perfil y adjuntos privados)
 - Frontend vanilla (HTML/CSS/JS) como PWA

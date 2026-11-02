@@ -5,14 +5,14 @@ services:
     restart: unless-stopped
     environment:
       POSTGRES_DB: ${POSTGRES_DB:-vocacional_db}
-      POSTGRES_USER: ${POSTGRES_USER:-rumbo_app}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-rumbo_app_dev}
+      POSTGRES_USER: ${DB_USERNAME:-rumbo_app}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?Configura DB_PASSWORD en .env}
     ports:
       - "5432:5432"
     volumes:
       - rumbo_postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-rumbo_app} -d ${POSTGRES_DB:-vocacional_db}"]
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME:-rumbo_app} -d ${POSTGRES_DB:-vocacional_db}"]
       interval: 10s
       timeout: 5s
       retries: 5
