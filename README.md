@@ -304,6 +304,47 @@ evita depender de la entrega de PDF por CDN, que puede estar bloqueada aunque
 la subida esté permitida. Los PDF ya adjuntados usan la misma ruta de descarga.
 `GET /api/bitacora` incluye los adjuntos de cada entrada.
 
+### Exportar la bitácora: PDF (T-13) y carpeta ZIP
+
+Desde **Mi Bitácora**, el estudiante puede descargar una copia de todas sus
+entradas guardadas:
+
+- **Descargar PDF**: `GET /api/bitacora/exportar/pdf`. Incluye el nombre del
+  estudiante, fechas de creación y edición, actividad relacionada y contenido
+  escrito, en orden cronológico. El documento tiene paginación y fuente
+  incrustada para conservar acentos. Los símbolos sin glifo en esa fuente se
+  representan con su código Unicode, por ejemplo `[U+1F60A]`.
+- **Descargar bitácora completa (.zip)**: `GET /api/bitacora/exportar/zip`.
+  Incluye el mismo informe PDF y los archivos y fotografías originales de cada
+  entrada, recuperados del almacenamiento privado. La numeración de carpetas
+  corresponde al orden de las entradas en el PDF:
+
+```text
+bitacora.zip
+  bitacora.pdf
+  adjuntos/
+    entrada-001/
+      001-documento.pdf
+      002-foto.png
+    entrada-002/
+      001-documento.pdf
+```
+
+Los nombres se sanean y numeran para evitar rutas inseguras o archivos
+sobrescritos por nombres repetidos. Si no hay adjuntos, el ZIP contiene solo
+`bitacora.pdf`. Si no hay entradas, ambas rutas responden `400` y los botones
+permanecen deshabilitados.
+
+Ambas descargas requieren sesión y rol `ESTUDIANTE`. El dueño se obtiene de la
+sesión, sin aceptar identificadores de otro usuario. Se sirven como archivos
+adjuntos con `Cache-Control: private, no-store`; no exponen enlaces de Cloudinary.
+Si falla un adjunto, el ZIP responde con un error `503` en lugar de entregar una
+copia incompleta. La descarga de solo texto en PDF sigue disponible.
+
+El backend genera los archivos en temporales, copia los adjuntos al ZIP uno a
+uno y elimina los temporales al terminar la descarga o ante un error. Para el
+PDF se utiliza Apache PDFBox 3.0.8; ZIP utiliza la biblioteca estándar de Java.
+
 ## Archivos y Cloudinary
 
 Las fotos y los adjuntos se guardan en Cloudinary. Completa las variables
@@ -389,4 +430,5 @@ src/test/resources/
 - Spring Data JPA + PostgreSQL (predeterminado) / H2 (alternativa local y tests)
 - spring-security-crypto (hash BCrypt)
 - Cloudinary (fotos de perfil y adjuntos privados)
+- Apache PDFBox (exportación de bitácora a PDF)
 - Frontend vanilla (HTML/CSS/JS) como PWA

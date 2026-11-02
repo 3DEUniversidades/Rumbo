@@ -7,6 +7,7 @@
     <link rel="manifest" href="/manifest.json">
     <title>Rumbo - Mi Bitácora</title>
     <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/css/bitacora.css?v=1">
 </head>
 <body>
     <a href="#contenido-principal" class="saltar-contenido">Saltar al contenido</a>
@@ -150,6 +151,18 @@
 
                 <p id="mensaje-bitacora" class="estado-vista" role="status"></p>
 
+                <section id="exportacion-bitacora" class="card bitacora-exportacion" aria-labelledby="titulo-exportacion">
+                    <div>
+                        <h2 id="titulo-exportacion">Lleva tu proceso contigo</h2>
+                        <p class="texto-secundario">Descarga tus entradas guardadas en PDF o incluye también tus archivos y fotografías en un ZIP.</p>
+                    </div>
+                    <div class="bitacora-exportacion-acciones">
+                        <button id="descargar-bitacora-pdf" class="btn btn-secundario" type="button" disabled>Descargar PDF</button>
+                        <button id="descargar-bitacora-zip" class="btn" type="button" disabled>Descargar bitácora completa (.zip)</button>
+                    </div>
+                    <p id="estado-exportacion-bitacora" class="mensaje-formulario" role="status">Cargando las opciones de descarga…</p>
+                </section>
+
                 <section class="card" aria-labelledby="titulo-nueva-entrada">
                     <h2 id="titulo-nueva-entrada">Nueva entrada</h2>
                     <p class="texto-secundario">
@@ -218,6 +231,6 @@
 
     <script src="/js/sesion.js"></script>
     <script src="/js/barraLateral.js"></script>
-    <script src="/js/vistaBitacora.js?v=2"></script>
+    <script src="/js/vistaBitacora.js?v=3"></script>
 </body>
 </html>

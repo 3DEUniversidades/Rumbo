@@ -14,9 +14,74 @@ document.addEventListener("DOMContentLoaded", async function () {
     const mensajeEditar = document.getElementById("mensaje-editar-entrada");
     const botonGuardarEdicion = document.getElementById("guardar-edicion");
     const botonCancelarEdicion = document.getElementById("cancelar-edicion");
+    const botonPdf = document.getElementById("descargar-bitacora-pdf");
+    const botonZip = document.getElementById("descargar-bitacora-zip");
+    const estadoExportacion = document.getElementById("estado-exportacion-bitacora");
+    const seccionExportacion = document.getElementById("exportacion-bitacora");
 
     let actividades = [];
     let entradaEnEdicion = null;
+    let hayEntradas = false;
+    let exportando = false;
+
+    function actualizarBotonesExportacion() {
+        botonPdf.disabled = !hayEntradas || exportando;
+        botonZip.disabled = !hayEntradas || exportando;
+    }
+
+    async function descargarExportacion(formato) {
+        if (!hayEntradas || exportando) return;
+        exportando = true;
+        actualizarBotonesExportacion();
+        seccionExportacion.setAttribute("aria-busy", "true");
+        estadoExportacion.className = "mensaje-formulario";
+        estadoExportacion.textContent = formato === "zip"
+            ? "Preparando el PDF y recuperando tus adjuntos. Puede tardar unos momentos…"
+            : "Preparando el PDF de tu bitácora…";
+
+        try {
+            const respuesta = await fetch(`/api/bitacora/exportar/${formato}`, {
+                credentials: "same-origin",
+                cache: "no-store"
+            });
+            if (respuesta.status === 401) {
+                window.location.replace("/login.html");
+                return;
+            }
+            if (!respuesta.ok) {
+                const cuerpo = await respuesta.json().catch(() => ({}));
+                const detalle = cuerpo.campos ? Object.values(cuerpo.campos).join(" ") : cuerpo.error;
+                throw new Error(detalle || "No se pudo generar la descarga. Intenta nuevamente.");
+            }
+            const tipoEsperado = formato === "pdf" ? "application/pdf" : "application/zip";
+            if (!(respuesta.headers.get("Content-Type") || "").startsWith(tipoEsperado)) {
+                throw new Error("La descarga no tiene el formato esperado. Intenta nuevamente.");
+            }
+            const archivo = await respuesta.blob();
+            const url = URL.createObjectURL(archivo);
+            const enlace = document.createElement("a");
+            enlace.href = url;
+            enlace.download = `bitacora.${formato}`;
+            enlace.hidden = true;
+            document.body.appendChild(enlace);
+            enlace.click();
+            enlace.remove();
+            // Permite al navegador iniciar la descarga antes de liberar el recurso.
+            window.setTimeout(() => URL.revokeObjectURL(url), 60000);
+            estadoExportacion.textContent = "Archivo listo. Se inició la descarga.";
+            estadoExportacion.className = "mensaje-formulario mensaje-exito";
+        } catch (error) {
+            estadoExportacion.textContent = error.message || "No se pudo descargar la bitácora.";
+            estadoExportacion.className = "mensaje-formulario mensaje-error";
+        } finally {
+            exportando = false;
+            seccionExportacion.setAttribute("aria-busy", "false");
+            actualizarBotonesExportacion();
+        }
+    }
+
+    botonPdf.addEventListener("click", () => descargarExportacion("pdf"));
+    botonZip.addEventListener("click", () => descargarExportacion("zip"));
 
     function mostrarMensaje(texto, clase) {
         mensaje.textContent = texto;
@@ -83,6 +148,13 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     async function cargarEntradas() {
         const entradas = await consultarJson("/api/bitacora");
+        hayEntradas = Array.isArray(entradas) && entradas.length > 0;
+        actualizarBotonesExportacion();
+        if (!exportando) {
+            estadoExportacion.textContent = hayEntradas ? ""
+                : "Guarda tu primera entrada para descargar tu bitácora.";
+            estadoExportacion.className = "mensaje-formulario";
+        }
         lista.replaceChildren();
 
         if (!entradas || entradas.length === 0) {
@@ -484,6 +556,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         }
 
         if (String(sesion.rol || "").toUpperCase() !== "ESTUDIANTE") {
+            seccionExportacion.hidden = true;
             mostrarMensaje(
                 "Esta sección está disponible solo para estudiantes.",
                 "mensaje-formulario mensaje-error"
@@ -495,9 +568,11 @@ document.addEventListener("DOMContentLoaded", async function () {
             return;
         }
 
-        await cargarActividades();
-        await cargarEntradas();
+        await Promise.all([cargarActividades(), cargarEntradas()]);
     } catch (error) {
+        if (!hayEntradas) {
+            estadoExportacion.textContent = "Las descargas estarán disponibles cuando se cargue tu bitácora.";
+        }
         mostrarMensaje(
             error.message,
             "mensaje-formulario mensaje-error"

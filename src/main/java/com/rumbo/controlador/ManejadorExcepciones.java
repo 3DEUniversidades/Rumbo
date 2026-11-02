@@ -6,6 +6,7 @@ import com.rumbo.servicio.ExcepcionConflicto;
 import com.rumbo.servicio.ExcepcionAutenticacion;
 import com.rumbo.servicio.ExcepcionValidacion;
 import com.rumbo.servicio.ExcepcionPermiso;
+import com.rumbo.servicio.ExcepcionExportacionBitacora;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -56,5 +57,10 @@ public class ManejadorExcepciones {
     public ResponseEntity<?> manejarArchivoDemasiadoGrande() {
         return ResponseEntity.status(413)
                 .body(Map.of("error", "El archivo excede el tamaño máximo permitido"));
+    }
+
+    @ExceptionHandler(ExcepcionExportacionBitacora.class)
+    public ResponseEntity<?> manejarExportacionBitacora(ExcepcionExportacionBitacora e) {
+        return ResponseEntity.internalServerError().body(Map.of("error", e.getMessage()));
     }
 }

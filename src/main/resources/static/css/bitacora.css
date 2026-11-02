@@ -1,0 +1,15 @@
+.bitacora-exportacion {
+    display: grid;
+    gap: var(--space-3);
+    border-left: 4px solid var(--color-primary);
+}
+
+.bitacora-exportacion h2 { margin-bottom: var(--space-2); }
+.bitacora-exportacion-acciones { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.bitacora-exportacion .mensaje-formulario { margin: 0; }
+.bitacora-exportacion .mensaje-formulario:empty { display: none; }
+
+@media (max-width: 600px) {
+    .bitacora-exportacion-acciones { flex-direction: column; }
+    .bitacora-exportacion-acciones .btn { width: 100%; }
+}
