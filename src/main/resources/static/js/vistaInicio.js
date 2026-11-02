@@ -2,7 +2,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     const acciones = document.getElementById("acciones");
     const mensaje = document.getElementById("mensaje-inicio");
     const botonCerrarSesion = document.getElementById("cerrar-sesion");
-    const enlaceForo = document.getElementById("enlace-foro");
     const enlaceSupervision = document.getElementById("enlace-supervision");
     const enlaceLineaTiempo =
     document.getElementById("enlace-linea-tiempo");
@@ -23,7 +22,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         document.getElementById("encabezado-usuario").textContent =
             "Orientación vocacional para " + sesion.nombreCompleto;
 
-        await mostrarForoSiEstaVerificado();
         await cargarNotificaciones();
 
         acciones.hidden = false;
@@ -53,20 +51,6 @@ document.addEventListener("DOMContentLoaded", async () => {
             mensaje.textContent = error.message;
         }
     });
-
-    async function mostrarForoSiEstaVerificado() {
-        const respuesta = await fetch("/api/verificacion/estado", {
-            credentials: "same-origin",
-            cache: "no-store"
-        });
-
-        if (!respuesta.ok) {
-            throw new Error("No se pudo consultar el estado de verificación.");
-        }
-
-        const estado = await respuesta.json();
-        enlaceForo.hidden = estado.estadoVerificacion !== "verificado";
-    }
 
     async function cargarNotificaciones() {
         const seccion = document.getElementById("notificaciones-inicio");

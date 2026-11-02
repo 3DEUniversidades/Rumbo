@@ -70,6 +70,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
     }
 
+    window.addEventListener("hashchange", resaltarPaginaActual);
+
     try {
         const sesion = await obtenerSesion();
         if (!sesion) return;
@@ -228,25 +230,24 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     function resaltarPaginaActual() {
-        const rutaActual = window.location.pathname.toLowerCase();
-        const enlaces = barraLateral.querySelectorAll(".barra-lateral-nav a");
+        const actual = new URL(window.location.href);
+        const normalizar = ruta => ruta === "/" ? "/inicio.html" : ruta.toLowerCase();
+        const enlaces = [...barraLateral.querySelectorAll(".barra-lateral-nav a")];
+        const destinos = enlaces.map(enlace => {
+            const href = enlace.getAttribute("href");
+            return { enlace, url: href ? new URL(href, actual.href) : null };
+        });
+        const mismaPagina = item => item.url && item.url.origin === actual.origin &&
+            normalizar(item.url.pathname) === normalizar(actual.pathname);
+        const hayApartado = destinos.some(item => !item.enlace.hidden && mismaPagina(item) &&
+            item.url.hash && item.url.hash === actual.hash);
 
-        enlaces.forEach((enlace) => {
-            const rutaEnlace = enlace.getAttribute("href");
-            if (!rutaEnlace) return;
-
-            const esPaginaActual =
-                (rutaActual === "/" || rutaActual.endsWith("/inicio.html")) &&
-                rutaEnlace.includes("inicio.html") ||
-                rutaActual.includes(rutaEnlace.replace(".html", ""));
-
-            if (esPaginaActual) {
-                enlace.classList.add("activo");
-                enlace.setAttribute("aria-current", "page");
-            } else {
-                enlace.classList.remove("activo");
-                enlace.removeAttribute("aria-current");
-            }
+        destinos.forEach(item => {
+            const activo = !item.enlace.hidden && mismaPagina(item) &&
+                (hayApartado ? item.url.hash === actual.hash : !item.url.hash);
+            item.enlace.classList.toggle("activo", Boolean(activo));
+            if (activo) item.enlace.setAttribute("aria-current", "page");
+            else item.enlace.removeAttribute("aria-current");
         });
     }
 

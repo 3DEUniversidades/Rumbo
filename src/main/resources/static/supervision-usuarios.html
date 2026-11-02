@@ -152,6 +152,11 @@
 
                 <p id="mensaje-supervision" class="estado-vista" role="status" aria-live="polite"></p>
 
+                <nav aria-label="Apartados de supervisión" style="display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:1rem;">
+                    <a id="tab-verificaciones" href="#verificaciones" class="btn">Verificaciones</a>
+                    <a id="tab-perfiles" href="#perfiles" class="btn btn-secundario">Cambios de perfil</a>
+                </nav>
+
                 <section id="verificaciones" class="tarjeta" style="margin-bottom: var(--space-4);">
                     <h2>Verificación inicial de estudiantes</h2>
                     <p class="texto-secundario" style="margin-bottom: var(--space-3);">
@@ -160,7 +165,7 @@
                     <div id="lista-verificaciones" class="lista-carreras"></div>
                 </section>
 
-                <section id="perfiles" class="tarjeta" style="margin-bottom: var(--space-4);">
+                <section id="perfiles" class="tarjeta" hidden style="margin-bottom: var(--space-4);">
                     <h2>Actualización de perfiles</h2>
                     <p class="texto-secundario" style="margin-bottom: var(--space-3);">
                         Cambios de nombre o nombre de usuario propuestos por colaboradores o estudiantes para su aprobación.
@@ -184,7 +189,7 @@
     </div>
 
     <script src="/js/sesion.js"></script>
-    <script src="/js/barraLateral.js"></script>
-    <script src="/js/vistaSupervisionUsuarios.js"></script>
+    <script src="/js/barraLateral.js?v=f5-nav-supervision-2"></script>
+    <script src="/js/vistaSupervisionUsuarios.js?v=f5-nav-supervision-2"></script>
 </body>
 </html>

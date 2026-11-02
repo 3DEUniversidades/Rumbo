@@ -108,6 +108,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         } catch (error) {
             mensaje.textContent = error.message;
+            contenido.hidden = true;
+            login.textContent = error.status === 401 ? "Iniciar sesión" : "Volver al inicio";
+            login.href = error.status === 401 ? "/login.html" : "/inicio.html";
             login.hidden = false;
         }
     }
@@ -126,9 +129,11 @@ document.addEventListener("DOMContentLoaded", async () => {
         const datos = await respuesta.json().catch(() => ({}));
 
         if (!respuesta.ok) {
-            throw new Error(
+            const error = new Error(
                 datos.error || "No se pudo completar la operación."
             );
+            error.status = respuesta.status;
+            throw error;
         }
 
         return datos;
