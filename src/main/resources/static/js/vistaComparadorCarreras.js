@@ -43,7 +43,11 @@
 
     botonComparar.addEventListener("click", comparar);
 
-    cargarCatalogo();
+    obtenerSesion().then(sesion => {
+        if (sesion) return cargarCatalogo();
+    }).catch(() => {
+        estado.textContent = "No se pudo cargar la sesión. Recarga la página para intentarlo de nuevo.";
+    });
 
     async function cargarCatalogo() {
         estado.textContent = "Cargando carreras...";
@@ -259,6 +263,11 @@
 
             const datos = await respuesta.json().catch(() => ({}));
 
+            if (respuesta.status === 401) {
+                window.location.replace("/login.html");
+                return;
+            }
+
             if (!respuesta.ok) {
                 throw new Error(
                     datos.error || "No se pudo realizar la comparación."
@@ -299,6 +308,8 @@
         }
         llenarTabla(datos, tabla, datos.filas);
         resultado.hidden = false;
+        document.getElementById("titulo-resultado-comparador").focus({ preventScroll: true });
+        resultado.scrollIntoView({ behavior: "instant", block: "start" });
     }
 
     function llenarTabla(datos, tabla, filas) {
