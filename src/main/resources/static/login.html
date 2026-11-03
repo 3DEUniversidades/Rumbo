@@ -20,6 +20,7 @@
     <main>
         <section id="login">
             <h2 style="text-align: center; margin-bottom: var(--space-4);">Iniciar sesión</h2>
+            <p class="alerta alerta-info" role="note" style="margin: 0 0 var(--space-4);">Ingresa con el correo y la contraseña de tu cuenta. Si es tu primera visita, selecciona Regístrate.</p>
             <form id="login-form" class="login-form">
                 <label for="correo">Correo electrónico</label>
                 <input type="email" id="correo" name="correo" required autocomplete="email" placeholder="usuario@correo.com">
@@ -37,6 +38,7 @@
 
         <section id="registro" hidden>
             <h2 style="text-align: center; margin-bottom: var(--space-4);">Crear cuenta</h2>
+            <p class="alerta alerta-info" role="note" style="margin: 0 0 var(--space-4);">Crea tu cuenta como estudiante o colaborador. Para registrarte como colaborador, utiliza tu correo institucional de la UVG.</p>
             <form id="registro-form" class="login-form" novalidate>
                 <label for="registro-nombreUsuario">Nombre de usuario</label>
                 <input type="text" id="registro-nombreUsuario" name="nombreUsuario" required autocomplete="username" placeholder="juanperez">
