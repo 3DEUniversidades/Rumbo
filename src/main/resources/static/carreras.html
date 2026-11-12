@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+    <meta name="color-scheme" content="dark">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#0B6B3A">
+    <meta name="theme-color" content="#0C1420">
     <meta name="description" content="Rumbo - Catálogo de carreras">
     <link rel="manifest" href="/manifest.json">
-    <title>Rumbo - Carreras</title>
+    <title>Carreras universitarias - Rumbo</title>
     <link rel="stylesheet" href="/style.css">
+    <script src="/js/rumbo.js" defer></script>
 </head>
 <body>
     <a href="#contenido-principal" class="saltar-contenido">Saltar al contenido</a>
@@ -132,19 +134,18 @@
         <!-- Contenido principal -->
         <div class="contenido-principal-app">
             <header>
-                <h1>Catálogo de Carreras</h1>
-                <p>Oferta académica y perfiles profesionales universitarios</p>
+                <h1>Carreras universitarias</h1>
+                <p>Explora los programas y encuentra opciones para tu próxima etapa.</p>
             </header>
 
             <main id="contenido-principal">
-                <p class="alerta alerta-info" role="note" style="margin: 0 0 var(--space-4);">
+                <p class="ayuda-vista" role="note" style="margin: 0 0 var(--space-4);">
                     Abre el detalle de una carrera para conocer su formación, duración y costos. Usa el comparador para revisar tus favoritas juntas.
                 </p>
                 <section id="catalogo-carreras">
                     <div class="vista-encabezado">
                         <div>
-                            <h2>Carreras disponibles</h2>
-                            <p class="texto-secundario">Consulta la información detallada de cada carrera.</p>
+                            <h2>Oferta académica</h2>
                         </div>
                         <div style="display: flex; gap: var(--space-2); flex-wrap: wrap;">
                             <a href="/inicio.html" class="btn btn-secundario">Volver al inicio</a>
@@ -153,7 +154,7 @@
                     </div>
 
                     <div id="estado-carreras" class="estado-vista">Cargando carreras...</div>
-                    <div id="lista-carreras" class="lista-carreras" aria-live="polite"></div>
+                    <div id="lista-carreras" class="lista-carreras catalogo-tarjetas" aria-live="polite"></div>
                 </section>
             </main>
 

@@ -1,7 +1,21 @@
 .bitacora-exportacion {
     display: grid;
     gap: var(--space-3);
-    border-left: 4px solid var(--color-primary);
+}
+
+.bitacora-distribucion { grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); }
+.bitacora-editor form { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-3); margin-top: var(--space-4); }
+.bitacora-editor form > * { min-width: 0; }
+.bitacora-editor form label { margin: var(--space-2) 0 0; }
+.bitacora-editor form > .btn { justify-self: start; }
+.bitacora-exportacion { grid-template-columns: minmax(0, 1fr) auto; align-items: center; }
+.bitacora-exportacion > .mensaje-formulario { grid-column: 1 / -1; }
+.bitacora-exportacion h2 { font-size: var(--font-size-md); }
+.bitacora-exportacion-acciones { justify-content: flex-end; }
+
+@media (max-width: 1000px) {
+    .bitacora-distribucion, .bitacora-exportacion { grid-template-columns: 1fr; }
+    .bitacora-exportacion-acciones { justify-content: flex-start; }
 }
 
 .bitacora-exportacion h2 { margin-bottom: var(--space-2); }

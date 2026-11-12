@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+    <meta name="color-scheme" content="dark">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#0B6B3A">
+    <meta name="theme-color" content="#0C1420">
     <link rel="manifest" href="/manifest.json">
-    <title>Rumbo - Mi perfil</title>
+    <title>Mi perfil - Rumbo</title>
     <link rel="stylesheet" href="/style.css">
+    <script src="/js/rumbo.js" defer></script>
     <link rel="stylesheet" href="/css/perfil.css?v=1">
     <link rel="stylesheet" href="/css/historialSupervisor.css?v=f5-t10-1">
 </head>
@@ -134,14 +136,16 @@
         <div class="contenido-principal-app">
             <header>
                 <h1>Mi perfil</h1>
-                <p>Tu cuenta y la información que compartes en Rumbo</p>
+                <p>Tu cuenta y la información que compartes en Rumbo.</p>
             </header>
 
             <p id="cargando-perfil" class="estado-vista" role="status">Cargando tu perfil…</p>
             <main id="contenido-perfil" hidden>
-                <p class="alerta alerta-info" role="note" style="margin: 0 0 var(--space-4);">
+                <p class="ayuda-vista" role="note" style="margin: 0 0 var(--space-4);">
                     Revisa los datos de tu cuenta y las opciones disponibles para tu rol. Para volver a este perfil, pulsa tu nombre al pie del menú.
                 </p>
+                <div class="bloques-vista perfil-distribucion">
+                <div class="perfil-cuenta">
                 <section class="perfil-card perfil-identidad" aria-labelledby="titulo-perfil">
                     <div class="perfil-identidad-fila">
                         <div class="foto-perfil-contenedor">
@@ -202,6 +206,7 @@
                     </dl>
                 </section>
 
+                </div>
                 <section id="seccion-edicion-perfil" class="perfil-card">
                     <h2>Información personal</h2>
                     <p class="texto-secundario">Cuéntanos sobre tus estudios e intereses. Tu descripción se muestra en el perfil público.</p>
@@ -224,6 +229,7 @@
                         <button id="guardar-perfil" class="btn" type="submit">Guardar perfil</button>
                     </form>
                 </section>
+                </div>
 
                 <section id="seccion-historial-encargado" class="perfil-card" aria-labelledby="titulo-historial-encargado" hidden>
                     <div class="perfil-card-encabezado">
