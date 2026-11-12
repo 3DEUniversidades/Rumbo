@@ -133,8 +133,8 @@ document.addEventListener('DOMContentLoaded', async function () {
         agregarDato(datos, 'Contexto', actividad.contexto);
         agregarDato(datos, 'Instrucciones', actividad.instrucciones);
         agregarDato(datos, 'Acciones a realizar', actividad.accionesARealizar);
-        agregarDato(datos, 'Método recomendado', actividad.metodoRecomendado);
-        agregarDato(datos, 'Herramientas', actividad.herramientasDisponibles);
+        agregarDato(datos, 'Método recomendado', actividad.metodoRecomendado, true);
+        agregarDato(datos, 'Herramientas', actividad.herramientasDisponibles, true);
         agregarDato(
             datos,
             'Información que debes guardar',
@@ -500,7 +500,7 @@ if (actividadesConPrueba.has(actividad.idActividad)) {
 return tarjeta;
     }
 
-    function agregarDato(contenedor, etiqueta, valor) {
+    function agregarDato(contenedor, etiqueta, valor, convertirEnlaces = false) {
         const termino = document.createElement('dt');
         termino.textContent = etiqueta;
 
@@ -510,7 +510,41 @@ return tarjeta;
                 ? 'Sin información registrada.'
                 : String(valor);
 
+        if (convertirEnlaces) {
+            agregarEnlaces(descripcion);
+        }
+
         contenedor.append(termino, descripcion);
         return descripcion;
+    }
+
+    // Herramientas y Método recomendado convierten enlaces; el resto conserva texto plano.
+    function agregarEnlaces(contenedor) {
+        const texto = contenedor.textContent;
+        const direcciones = /https?:\/\/[^\s<>"']+/gi;
+        let posicion = 0;
+        contenedor.replaceChildren();
+
+        for (const coincidencia of texto.matchAll(direcciones)) {
+            const direccion = coincidencia[0].replace(/[.,;:!?)\]}]+$/, '');
+
+            try {
+                new URL(direccion);
+            } catch (error) {
+                continue;
+            }
+
+            contenedor.append(document.createTextNode(texto.slice(posicion, coincidencia.index)));
+
+            const enlace = document.createElement('a');
+            enlace.href = direccion;
+            enlace.textContent = direccion;
+            enlace.target = '_blank';
+            enlace.rel = 'noopener noreferrer';
+            contenedor.appendChild(enlace);
+            posicion = coincidencia.index + direccion.length;
+        }
+
+        contenedor.append(document.createTextNode(texto.slice(posicion)));
     }
 });
