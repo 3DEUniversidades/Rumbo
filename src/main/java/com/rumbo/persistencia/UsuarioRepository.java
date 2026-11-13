@@ -7,6 +7,8 @@ import java.util.Optional;
 
 public interface UsuarioRepository extends JpaRepository<Usuario, String> {
 
+    boolean existsByRolAndEliminadoFalse(com.rumbo.modelo.Rol rol);
+
     org.springframework.data.domain.Page<Usuario> findByEliminadoFalse(org.springframework.data.domain.Pageable pagina);
 
     boolean existsByIdUsuarioAndEliminadoTrue(String idUsuario);

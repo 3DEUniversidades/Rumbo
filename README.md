@@ -167,8 +167,9 @@ deben verificarse en esa base.
 
 ## Usuario por defecto
 
-Al iniciar con PostgreSQL y la carga de datos activa, `data.sql` siembra un
-usuario administrador para probar el login. Este usuario no se crea en H2:
+Al iniciar en local con PostgreSQL y la carga de datos activa, la inicializacion
+siembra un usuario administrador para probar el login mediante `data-desarrollo.sql`.
+Este usuario no se crea en H2 ni con el perfil `railway`:
 
 | Dato | Valor |
 |---|---|
@@ -178,6 +179,13 @@ usuario administrador para probar el login. Este usuario no se crea en H2:
 | Rol | `ADMIN` |
 
 La contrasena se guarda siempre como hash BCrypt, nunca en texto plano.
+La cuenta se inserta si no existe; los reinicios no restablecen su contrasena.
+
+## Demo publica en Railway
+
+El `Dockerfile` usa Java 21 y activa el perfil `railway`.
+Este perfil excluye la cuenta de desarrollo y crea el primer
+administrador con credenciales privadas proporcionadas en Railway.
 
 ## Registro de cuentas
 

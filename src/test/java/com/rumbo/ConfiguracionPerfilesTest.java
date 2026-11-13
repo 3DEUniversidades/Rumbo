@@ -29,6 +29,8 @@ class ConfiguracionPerfilesTest {
             assertEquals("clave_config_ficticia", entorno.getProperty("spring.datasource.password"));
             assertEquals("validate", entorno.getProperty("spring.jpa.hibernate.ddl-auto"));
             assertEquals("always", entorno.getProperty("spring.sql.init.mode"));
+            assertEquals("classpath:data.sql,classpath:data-desarrollo.sql",
+                    entorno.getProperty("spring.sql.init.data-locations"));
             assertEquals("false", entorno.getProperty("spring.h2.console.enabled"));
         });
     }
@@ -59,6 +61,31 @@ class ConfiguracionPerfilesTest {
             assertEquals("create-drop", entorno.getProperty("spring.jpa.hibernate.ddl-auto"));
             assertEquals("never", entorno.getProperty("spring.sql.init.mode"));
             assertEquals("false", entorno.getProperty("spring.h2.console.enabled"));
+        });
+    }
+
+    @Test
+    void railwayUsaSoloElCatalogoPublicoYConfiguraLaSesionParaHttps() {
+        contexto.withPropertyValues("spring.profiles.active=railway").run(contexto -> {
+            var entorno = contexto.getEnvironment();
+            assertEquals("org.postgresql.Driver", entorno.getProperty("spring.datasource.driver-class-name"));
+            assertEquals("jdbc:postgresql://localhost:5432/base_prueba_config",
+                    entorno.getProperty("spring.datasource.url"));
+            assertEquals("classpath:data.sql", entorno.getProperty("spring.sql.init.data-locations"));
+            assertEquals("always", entorno.getProperty("spring.sql.init.mode"));
+            assertEquals("false", entorno.getProperty("spring.jpa.show-sql"));
+            assertEquals("false", entorno.getProperty("spring.h2.console.enabled"));
+            assertEquals("framework", entorno.getProperty("server.forward-headers-strategy"));
+            assertEquals("true", entorno.getProperty("server.servlet.session.cookie.secure"));
+            assertEquals("true", entorno.getProperty("server.servlet.session.cookie.http-only"));
+            assertEquals("lax", entorno.getProperty("server.servlet.session.cookie.same-site"));
+        });
+    }
+
+    @Test
+    void railwayPermiteDesactivarLaCargaTrasElPrimerDespliegue() {
+        contexto.withPropertyValues("spring.profiles.active=railway", "DB_SQL_INIT_MODE=never").run(contexto -> {
+            assertEquals("never", contexto.getEnvironment().getProperty("spring.sql.init.mode"));
         });
     }
 }

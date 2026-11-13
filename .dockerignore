@@ -1,0 +1,17 @@
+# Credenciales y configuracion personal: tampoco deben entrar en el contexto de build.
+.env
+.env.*
+*.env
+DEPLOY_RAILWAY.md
+**/application-local.properties
+.git
+.local
+.idea
+.vscode
+.settings
+**/target
+**/*.log
+**/*.class
+**/*.jar
+# El wrapper es necesario para compilar dentro de la imagen.
+!.mvn/wrapper/maven-wrapper.jar
