@@ -1,7 +1,7 @@
 /* Ajustes propios de Mi perfil; conserva los componentes compartidos de Rumbo. */
 #contenido-perfil {
     width: 100%;
-    max-width: 58rem;
+    max-width: 1140px;
     margin-inline: auto;
 }
 
@@ -35,13 +35,26 @@
 .perfil-foto-controles {
     margin-top: var(--space-4);
     padding-top: var(--space-4);
-    border-top: 1px solid var(--color-border);
 }
 
 .perfil-foto-controles .ayuda-form { margin-top: var(--space-2); }
 #contenido-perfil .perfil-datos { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 #contenido-perfil .perfil-datos div { grid-template-columns: 1fr; gap: var(--space-1); border: 0; }
 #contenido-perfil .perfil-datos dd { margin: 0; }
+
+#contenido-perfil .perfil-cuenta .perfil-datos { grid-template-columns: 1fr; }
+.perfil-distribucion { grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr); }
+.perfil-cuenta { display: grid; gap: var(--space-6); }
+.perfil-cuenta > .perfil-card { margin-bottom: 0; }
+.perfil-cuenta .perfil-identidad-fila { align-items: flex-start; flex-wrap: wrap; }
+.perfil-cuenta .foto-perfil-contenedor { width: 4.5rem; height: 4.5rem; }
+.perfil-distribucion:has(> #seccion-edicion-perfil[hidden]) { grid-template-columns: 1fr; }
+.perfil-distribucion:has(> #seccion-edicion-perfil[hidden]) .perfil-cuenta { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+@media (max-width: 900px) {
+    .perfil-distribucion { grid-template-columns: 1fr; }
+    .perfil-distribucion:has(> #seccion-edicion-perfil[hidden]) .perfil-cuenta { grid-template-columns: 1fr; }
+}
 
 #formulario-solicitud-perfil {
     display: grid;

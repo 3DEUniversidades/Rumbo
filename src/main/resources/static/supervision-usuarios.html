@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+    <meta name="color-scheme" content="dark">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#0B6B3A">
+    <meta name="theme-color" content="#0C1420">
     <meta name="description" content="Rumbo - Supervisión de usuarios y solicitudes">
-    <title>Rumbo - Supervisión de usuarios</title>
+    <title>Supervisión de usuarios - Rumbo</title>
     <link rel="manifest" href="/manifest.json">
     <link rel="stylesheet" href="/style.css">
+    <script src="/js/rumbo.js" defer></script>
 </head>
 <body>
     <a href="#contenido-principal" class="saltar-contenido">Saltar al contenido</a>
@@ -132,22 +134,15 @@
         <!-- Contenido principal -->
         <div class="contenido-principal-app">
             <header>
-                <h1>Supervisión de Usuarios</h1>
-                <p>Revisa solicitudes de verificación inicial y cambios en perfiles de usuario</p>
+                <h1>Supervisión de usuarios</h1>
+                <p>Revisa verificaciones y solicitudes de cambios de perfil.</p>
             </header>
 
             <main id="contenido-principal">
-                <p class="alerta alerta-info" role="note" style="margin: 0 0 var(--space-4);">
+                <p class="ayuda-vista" role="note" style="margin: 0 0 var(--space-4);">
                     Elige Verificaciones o Cambios de perfil para revisar las solicitudes. Si rechazas una, explica el motivo al usuario.
                 </p>
-                <div class="vista-encabezado">
-                    <div>
-                        <h2>Tablero de Supervisión</h2>
-                        <p class="texto-secundario">
-                            Gestiona las solicitudes pendientes para autorizar accesos y cambios en la plataforma.
-                        </p>
-                    </div>
-                </div>
+
 
                 <p id="mensaje-supervision" class="estado-vista" role="status" aria-live="polite"></p>
 
@@ -156,7 +151,7 @@
                     <a id="tab-perfiles" href="#perfiles" class="btn btn-secundario">Cambios de perfil</a>
                 </nav>
 
-                <section id="verificaciones" class="tarjeta" style="margin-bottom: var(--space-4);">
+                <section id="verificaciones" class="panel-vista">
                     <h2>Verificación inicial de estudiantes</h2>
                     <p class="texto-secundario" style="margin-bottom: var(--space-3);">
                         Solicitudes pendientes de estudiantes que requieren confirmación para participar activamente en el foro y otras funcionalidades.
@@ -172,7 +167,7 @@
                     <div id="lista-perfiles" class="lista-carreras"></div>
                 </section>
 
-                <section id="notificaciones" class="tarjeta" style="margin-bottom: var(--space-4);">
+                <section id="notificaciones" class="panel-vista">
                     <h2>Mis notificaciones</h2>
                     <p class="texto-secundario" style="margin-bottom: var(--space-3);">
                         Historial de avisos sobre solicitudes asignadas o completadas.

@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+    <meta name="color-scheme" content="dark">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#0B6B3A">
+    <meta name="theme-color" content="#0C1420">
     <link rel="manifest" href="/manifest.json">
-    <title>Rumbo - Mi Bitácora</title>
+    <title>Mi bitácora - Rumbo</title>
     <link rel="stylesheet" href="/style.css">
+    <script src="/js/rumbo.js" defer></script>
     <link rel="stylesheet" href="/css/bitacora.css?v=1">
 </head>
 <body>
@@ -132,37 +134,23 @@
         <!-- Contenido principal -->
         <div class="contenido-principal-app">
             <header>
-                <h1>Mi Bitácora</h1>
-                <p>Registro y reflexiones de tu proceso vocacional</p>
+                <h1>Mi bitácora</h1>
+                <p>Un espacio privado para tus reflexiones, dudas y descubrimientos.</p>
             </header>
 
             <main id="contenido-principal">
-                <p class="alerta alerta-info" role="note" style="margin: 0 0 var(--space-4);">
+                <p class="ayuda-vista" role="note" style="margin: 0 0 var(--space-4);">
                     Guarda tus resultados, dudas y reflexiones. Tu bitácora es privada: tú eliges qué mostrarle a tu familia para conversar sobre tus opciones.
                 </p>
-                <div class="vista-encabezado">
-                    <div>
-                        <h2>Bitácora personal</h2>
-                        <p class="texto-secundario">Lleva un seguimiento de tus reflexiones, dudas y avances vocacionales.</p>
-                    </div>
-                    <a href="/inicio.html" class="btn btn-secundario">Volver al inicio</a>
+                <div class="vista-acciones">
+                    <p id="mensaje-bitacora" class="estado-vista" role="status"></p>
+                    <a href="/inicio.html" class="btn btn-secundario btn-pequeno">Volver al inicio</a>
                 </div>
 
-                <p id="mensaje-bitacora" class="estado-vista" role="status"></p>
 
-                <section id="exportacion-bitacora" class="card bitacora-exportacion" aria-labelledby="titulo-exportacion">
-                    <div>
-                        <h2 id="titulo-exportacion">Lleva tu proceso contigo</h2>
-                        <p class="texto-secundario">Descarga tus entradas guardadas en PDF o incluye también tus archivos y fotografías en un ZIP.</p>
-                    </div>
-                    <div class="bitacora-exportacion-acciones">
-                        <button id="descargar-bitacora-pdf" class="btn btn-secundario" type="button" disabled>Descargar PDF</button>
-                        <button id="descargar-bitacora-zip" class="btn" type="button" disabled>Descargar bitácora completa (.zip)</button>
-                    </div>
-                    <p id="estado-exportacion-bitacora" class="mensaje-formulario" role="status">Cargando las opciones de descarga…</p>
-                </section>
 
-                <section class="card" aria-labelledby="titulo-nueva-entrada">
+                <div class="bloques-vista bitacora-distribucion">
+                <section class="card bitacora-editor" aria-labelledby="titulo-nueva-entrada">
                     <h2 id="titulo-nueva-entrada">Nueva entrada</h2>
                     <p class="texto-secundario">
                         Escribe lo que aprendiste, lo que te generó dudas o la decisión que tomaste.
@@ -194,6 +182,19 @@
                 <section aria-labelledby="titulo-entradas">
                     <h2 id="titulo-entradas">Mis entradas</h2>
                     <div id="lista-entradas"></div>
+                </section>
+                </div>
+
+                <section id="exportacion-bitacora" class="card bitacora-exportacion" aria-labelledby="titulo-exportacion">
+                    <div>
+                        <h2 id="titulo-exportacion">Exportar mi bitácora</h2>
+                        <p class="texto-secundario">Descarga tus entradas guardadas en PDF o incluye también tus archivos y fotografías en un ZIP.</p>
+                    </div>
+                    <div class="bitacora-exportacion-acciones">
+                        <button id="descargar-bitacora-pdf" class="btn btn-secundario btn-pequeno" type="button" disabled>Descargar PDF</button>
+                        <button id="descargar-bitacora-zip" class="btn btn-secundario btn-pequeno" type="button" disabled>Descargar bitácora completa (.zip)</button>
+                    </div>
+                    <p id="estado-exportacion-bitacora" class="mensaje-formulario" role="status">Cargando las opciones de descarga…</p>
                 </section>
 
                 <dialog id="dialogo-editar-entrada" class="modal-edicion">

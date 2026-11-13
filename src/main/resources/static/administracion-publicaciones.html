@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+    <meta name="color-scheme" content="dark">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#0B6B3A">
+    <meta name="theme-color" content="#0C1420">
     <meta name="description" content="Rumbo - Sistema de Orientación Vocacional">
     <link rel="manifest" href="/manifest.json">
-    <title>Administración - Rumbo - Inicio</title>
+    <title>Publicaciones del foro - Rumbo</title>
     <link rel="stylesheet" href="/style.css">
+    <script src="/js/rumbo.js" defer></script>
 <link rel="stylesheet" href="/css/administracionUsuarios.css?v=f5-t03-4">
 </head>
 <body>
@@ -134,18 +136,21 @@
         <!-- Contenido principal -->
         <div class="contenido-principal-app">
             <header>
-                <h1>Rumbo</h1>
-                <p id="encabezado-usuario">Tu guía de orientación vocacional</p>
+                <h1>Publicaciones del foro</h1>
+                <p id="encabezado-usuario">Consulta y administra el contenido de la comunidad.</p>
             </header>
 
             <main id="contenido-principal">
-                <p class="alerta alerta-info" role="note" style="margin: 0 0 var(--space-4);">
+                <p class="ayuda-vista" role="note" style="margin: 0 0 var(--space-4);">
                     Consulta las publicaciones y revisa su contenido antes de retirarlas. Toda eliminación debe incluir un motivo y queda registrada.
                 </p>
-                <div class="vista-encabezado"><div><h2>Administración de publicaciones</h2><p>Consulta y retira publicaciones del foro.</p></div><a href="/foro.html" class="btn btn-secundario">Abrir foro</a></div>
-                <p id="estado-publicaciones-admin" role="status" aria-live="polite">Comprobando sesión...</p>
+                <div class="vista-acciones">
+                    <p id="estado-publicaciones-admin" role="status" aria-live="polite">Comprobando sesión...</p>
+                    <a href="/foro.html" class="btn btn-secundario btn-pequeno">Abrir foro</a>
+                </div>
+
                 <section id="contenido-publicaciones-admin" class="card" hidden>
-                    <h3>Publicaciones disponibles</h3>
+                    <h2>Publicaciones disponibles</h2>
                     <p>La eliminación retira la publicación del foro y deja un registro con el motivo. Se conservan sus respuestas y revisiones como historial.</p>
                     <div class="acciones-cuenta-admin"><button id="actualizar-publicaciones-admin" type="button" class="btn btn-secundario">Actualizar</button><a href="/registros-administrativos.html" class="btn btn-secundario">Ver registros administrativos</a></div>
                     <div id="lista-publicaciones-admin"></div>

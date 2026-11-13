@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+    <meta name="color-scheme" content="dark">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#0B6B3A">
+    <meta name="theme-color" content="#0C1420">
     <meta name="description" content="Rumbo - Foro de orientación vocacional">
-    <title>Rumbo - Foro</title>
+    <title>Foro vocacional - Rumbo</title>
     <link rel="manifest" href="/manifest.json">
     <link rel="stylesheet" href="/style.css">
+    <script src="/js/rumbo.js" defer></script>
 </head>
 <body>
     <a href="#contenido-principal" class="saltar-contenido">Saltar al contenido</a>
@@ -132,33 +134,29 @@
         <!-- Contenido principal -->
         <div class="contenido-principal-app">
             <header>
-                <h1>Foro Vocacional</h1>
-                <p>Comparte experiencias, resuelve dudas y conversa con la comunidad UVG</p>
+                <h1>Foro vocacional</h1>
+                <p>Comparte experiencias y conversa con la comunidad UVG.</p>
             </header>
 
             <main id="contenido-principal">
-                <p class="alerta alerta-info" role="note" style="margin: 0 0 var(--space-4);">
+                <p class="ayuda-vista" role="note" style="margin: 0 0 var(--space-4);">
                     Comparte dudas y experiencias con respeto. Abre una publicación para responder, dar me gusta o conocer el perfil de su autor.
                 </p>
-                <div class="vista-encabezado">
-                    <div>
-                        <h2>Comunidad de Orientación</h2>
-                        <p class="texto-secundario">
-                            Conversa con estudiantes y colaboradores de distintas áreas académicas.
-                        </p>
-                    </div>
+                <div class="vista-acciones">
+                    <p id="mensaje-foro" class="estado-vista"
+                   role="status" aria-live="polite">Comprobando acceso...</p>
+
                 </div>
 
-                <p id="mensaje-foro" class="estado-vista"
-                   role="status" aria-live="polite">Comprobando acceso...</p>
+
 
                 <div style="margin: var(--space-3) 0;">
                     <a id="login-foro" href="/login.html" class="btn btn-secundario" hidden>Iniciar sesión</a>
                 </div>
 
-                <div id="contenido-foro" hidden>
+                <div id="contenido-foro" class="bloques-vista foro-distribucion" hidden>
                     <!-- Formulario de nueva publicación -->
-                    <section class="tarjeta" style="margin-bottom: var(--space-4);">
+                    <section class="panel-vista foro-editor">
                         <h2>Nueva publicación</h2>
 
                         <form id="form-publicacion" class="form-gestion">
@@ -193,7 +191,7 @@
                     </section>
 
                     <!-- Listado y filtros de publicaciones -->
-                    <section class="tarjeta" style="margin-bottom: var(--space-4);">
+                    <section class="panel-vista foro-listado">
                         <h2>Publicaciones de la comunidad</h2>
 
                         <p id="filtro-autor-foro" class="alerta alerta-info" hidden>

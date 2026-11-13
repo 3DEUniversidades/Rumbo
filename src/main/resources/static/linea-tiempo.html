@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+    <meta name="color-scheme" content="dark">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#0B6B3A">
+    <meta name="theme-color" content="#0C1420">
     <link rel="manifest" href="/manifest.json">
     <link rel="stylesheet" href="/style.css">
-    <title>Rumbo - Mi línea de tiempo</title>
+    <link rel="stylesheet" href="/css/lineaTiempo.css?v=1">
+    <script src="/js/rumbo.js" defer></script>
+    <title>Línea de tiempo - Rumbo</title>
 </head>
 <body>
     <a href="#contenido-principal" class="saltar-contenido">Saltar al contenido</a>
@@ -132,43 +135,52 @@
         <div class="contenido-principal-app">
             <header>
                 <h1>Línea de tiempo</h1>
-                <p>Mi proceso de orientación vocacional</p>
+                <p>Sigue tus actividades y registra tu avance.</p>
             </header>
 
-            <main id="contenido-principal">
-                <p class="alerta alerta-info" role="note" style="margin: 0 0 var(--space-4);">
-                    Abre una actividad, sigue sus instrucciones y registra tu avance. Guarda lo que descubras en tu bitácora.
-                </p>
-                <div class="vista-encabezado">
-                    <div>
-                        <h2>Actividades de orientación</h2>
-                        <p class="texto-secundario">Completa tus actividades para avanzar en tu orientación vocacional.</p>
-                    </div>
-                    <a href="/inicio.html" class="btn btn-secundario">Volver al inicio</a>
+            <main id="contenido-principal" class="linea-tiempo-vista">
+                <div class="vista-acciones">
+                    <p class="ayuda-vista">Cada número es una actividad. Ábrela para consultar tus instrucciones, decisiones y anotaciones.</p>
+                    <a href="/bitacora.html" class="btn btn-secundario btn-pequeno">Mi bitácora</a>
+                    <a href="/inicio.html" class="btn btn-secundario btn-pequeno">Volver al inicio</a>
                 </div>
 
-                <section aria-labelledby="titulo-progreso" class="card">
-                    <h2 id="titulo-progreso">Mi progreso</h2>
-
-                    <label for="barra-progreso" style="margin-bottom: var(--space-2);">Actividades completadas</label>
-                    <progress id="barra-progreso" max="100" value="0"></progress>
-
-                    <p id="resumen-progreso" role="status" class="texto-secundario">
-                        Cargando progreso...
-                    </p>
-                </section>
-
-                <section aria-labelledby="titulo-actividades">
-                    <h2 id="titulo-actividades">Mis actividades</h2>
+                <section class="recorrido" aria-labelledby="titulo-progreso">
+                    <div class="recorrido-cabecera">
+                        <div>
+                            <h2 id="titulo-progreso">Mi recorrido</h2>
+                            <p class="texto-secundario">Avanza a tu ritmo. Puedes volver a cualquier actividad.</p>
+                        </div>
+                        <p id="resumen-progreso" role="status" class="recorrido-resumen">Cargando progreso...</p>
+                    </div>
 
                     <p id="mensaje-linea-tiempo" role="status" class="estado-vista"></p>
-
                     <button id="reintentar-carga" class="btn" type="button" hidden>
                         Reintentar
                     </button>
 
+                    <nav id="recorrido-desplazable" class="recorrido-desplazable" aria-label="Recorrido de actividades" hidden>
+                        <div class="recorrido-trazado">
+                            <div class="recorrido-extremo recorrido-inicio"><span aria-hidden="true"></span>Inicio</div>
+                            <ol id="hitos-actividades" class="recorrido-hitos"></ol>
+                            <div class="recorrido-extremo recorrido-fin"><span aria-hidden="true"></span>Fin</div>
+                        </div>
+                    </nav>
+                    <p id="ayuda-recorrido-largo" class="texto-secundario recorrido-ayuda" hidden>Desliza el recorrido para ver todas las actividades. También puedes avanzar con el teclado.</p>
+                    <div id="leyenda-recorrido" class="recorrido-leyenda" hidden>
+                        <span><span class="recorrido-muestra recorrido-muestra-completada" aria-hidden="true"></span>Completada</span>
+                        <span><span class="recorrido-muestra" aria-hidden="true"></span>Por completar</span>
+                    </div>
+                </section>
+
+                <section id="panel-actividad" class="recorrido-panel" aria-labelledby="titulo-actividades" hidden>
+                    <div class="recorrido-panel-cabecera">
+                        <h2 id="titulo-actividades">Tu actividad</h2>
+                        <button id="volver-al-recorrido" class="btn btn-secundario btn-pequeno" type="button">Volver al recorrido</button>
+                    </div>
                     <div id="lista-actividades"></div>
                 </section>
+                <noscript><p class="mensaje-error">Activa JavaScript para consultar y guardar tu proceso de orientación.</p></noscript>
             </main>
 
             <footer>
@@ -179,6 +191,6 @@
 
     <script src="/js/sesion.js"></script>
     <script src="/js/barraLateral.js"></script>
-    <script src="/js/vistaLineaDeTiempo.js?v=t11-2"></script>
+    <script src="/js/vistaLineaDeTiempo.js?v=recorrido-1"></script>
 </body>
 </html>

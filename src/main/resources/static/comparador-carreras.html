@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+    <meta name="color-scheme" content="dark">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#0B6B3A">
+    <meta name="theme-color" content="#0C1420">
     <meta name="description" content="Rumbo - Comparador de carreras universitarias">
     <link rel="manifest" href="/manifest.json">
-    <title>Rumbo - Comparador de carreras</title>
+    <title>Comparar carreras - Rumbo</title>
     <link rel="stylesheet" href="/style.css">
+    <script src="/js/rumbo.js" defer></script>
 </head>
 <body>
     <a href="#contenido-principal" class="saltar-contenido">Saltar al contenido</a>
@@ -132,25 +134,22 @@
         <!-- Contenido principal -->
         <div class="contenido-principal-app">
             <header>
-                <h1>Comparador de Carreras</h1>
-                <p>Compara planes de estudio, costos, duración y campo laboral</p>
+                <h1>Comparar carreras</h1>
+                <p>Revisa planes de estudio, duración, costos y campo laboral.</p>
             </header>
 
             <main id="contenido-principal">
-                <p class="alerta alerta-info" role="note" style="margin: 0 0 var(--space-4);">
+                <p class="ayuda-vista" role="note" style="margin: 0 0 var(--space-4);">
                     Elige cuántas carreras comparar, agrégalas del listado y pulsa Comparar. Puedes quitar opciones de tu selección para probar otras.
                 </p>
-                <section class="tarjeta" style="margin-bottom: var(--space-4);">
+                <section class="tarjeta comparador-configuracion">
                     <div class="vista-encabezado">
                         <div>
-                            <h2>Explora tus opciones</h2>
-                            <p class="texto-secundario">
-                                Busca, selecciona y compara las carreras que te interesan.
-                            </p>
+                            <h2>Filtra tus opciones</h2>
                         </div>
                     </div>
 
-                    <div class="filtros-comparador">
+                    <div class="filtros-comparador panel-vista">
                         <label>
                             <span>Buscar</span>
                             <input id="buscar-comparador" type="search"
@@ -185,7 +184,7 @@
                         </label>
                     </div>
 
-                    <section aria-labelledby="titulo-seleccion-comparador" style="margin: var(--space-4) 0;">
+                    <section class="panel-vista comparador-seleccion" aria-labelledby="titulo-seleccion-comparador">
                         <h3 id="titulo-seleccion-comparador">Tu selección</h3>
                         <p id="contador-comparador" class="texto-secundario"></p>
                         <div id="seleccion-comparador" class="seleccion-comparador"></div>
@@ -200,7 +199,7 @@
 
                 </section>
 
-                <section id="resultado-comparador" class="tarjeta" aria-labelledby="titulo-resultado-comparador" hidden>
+                <section id="resultado-comparador" class="tarjeta comparador-resultados" aria-labelledby="titulo-resultado-comparador" hidden>
                     <h2 id="titulo-resultado-comparador" tabindex="-1">Tablero de comparación</h2>
 
                     <p class="texto-secundario" style="margin-bottom: var(--space-3);">
@@ -233,7 +232,7 @@
 
                 <section class="tarjeta" aria-labelledby="titulo-catalogo-comparador">
                     <h2 id="titulo-catalogo-comparador">Carreras disponibles</h2>
-                    <div id="catalogo-comparador" class="lista-carreras"></div>
+                    <div id="catalogo-comparador" class="lista-carreras catalogo-tarjetas"></div>
                 </section>
             </main>
 

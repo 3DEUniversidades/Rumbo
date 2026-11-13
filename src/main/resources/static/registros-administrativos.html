@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+    <meta name="color-scheme" content="dark">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#0B6B3A">
+    <meta name="theme-color" content="#0C1420">
     <meta name="description" content="Rumbo - Sistema de Orientación Vocacional">
     <link rel="manifest" href="/manifest.json">
-    <title>Administración - Rumbo - Inicio</title>
+    <title>Registros administrativos - Rumbo</title>
     <link rel="stylesheet" href="/style.css">
+    <script src="/js/rumbo.js" defer></script>
 <link rel="stylesheet" href="/css/administracionUsuarios.css?v=f5-t03-4">
 </head>
 <body>
@@ -134,16 +136,19 @@
         <!-- Contenido principal -->
         <div class="contenido-principal-app">
             <header>
-                <h1>Rumbo</h1>
-                <p id="encabezado-usuario">Tu guía de orientación vocacional</p>
+                <h1>Registros administrativos</h1>
+                <p id="encabezado-usuario">Consulta el historial de acciones y decisiones por área.</p>
             </header>
 
             <main id="contenido-principal">
-                <p class="alerta alerta-info" role="note" style="margin: 0 0 var(--space-4);">
+                <p class="ayuda-vista" role="note" style="margin: 0 0 var(--space-4);">
                     Elige un área para consultar sus acciones registradas y revisar quién las realizó y cuándo.
                 </p>
-                <div class="vista-encabezado"><div><h2>Registros administrativos</h2><p>Consulta el historial existente por área del sistema.</p></div><a href="/inicio.html" class="btn btn-secundario">Volver al inicio</a></div>
-                <p id="estado-historial-admin" role="status" aria-live="polite">Comprobando sesión...</p>
+                <div class="vista-acciones">
+                    <p id="estado-historial-admin" role="status" aria-live="polite">Comprobando sesión...</p>
+                    <a href="/inicio.html" class="btn btn-secundario btn-pequeno">Volver al inicio</a>
+                </div>
+
                 <section id="contenido-historial-admin" class="card" hidden>
                     <div class="acciones-cuenta-admin"><label>Área del registro <select id="origen-historial-admin">
                         <option value="ADMINISTRACION">Administración general</option><option value="SUPERVISION">Supervisión de usuarios</option><option value="CARRERAS">Actualizaciones de carreras</option><option value="MODERACION">Moderación del foro</option>

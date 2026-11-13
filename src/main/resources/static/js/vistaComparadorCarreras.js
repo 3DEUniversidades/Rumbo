@@ -153,25 +153,28 @@
 
         visibles.forEach(c => {
             const tarjeta = crear("article", "", "carrera-card");
-
-            tarjeta.append(
+            const cabecera = crear("div", "", "carrera-cabecera");
+            cabecera.append(
                 crear("h3", c.nombre),
-                crear("p", c.facultad ?? "Facultad no disponible", "carrera-area"),
-                crear(
-                    "p",
-                    (c.duracion == null ? "Duración no disponible" : `${c.duracion} años`)
-                        + " · " + (c.costo == null
-                            ? "Costo no disponible" : `${moneda(c.costo)} el primer semestre`),
-                    "carrera-uni"
-                )
+                crear("p", c.facultad ?? "Facultad no disponible", "carrera-area")
             );
+            const resumen = crear("dl", "", "carrera-resumen");
+            [
+                ["Duración", c.duracion == null ? "No disponible" : `${c.duracion} años`],
+                ["Primer semestre", c.costo == null ? "No disponible" : moneda(c.costo)]
+            ].forEach(([etiqueta, valor]) => {
+                const dato = crear("div");
+                dato.append(crear("dt", etiqueta), crear("dd", valor));
+                resumen.appendChild(dato);
+            });
+            tarjeta.append(cabecera, resumen);
 
             const agregada = seleccionadas.has(c.id);
 
             const boton = crear(
                 "button",
                 agregada ? "Quitar" : "Agregar",
-                "btn btn-pequeno"
+                "btn btn-pequeno btn-seleccion-carrera"
             );
 
             boton.type = "button";

@@ -1,5 +1,14 @@
-const CACHE_NAME = "rumbo-v7-supervision";
-const ASSETS = ["/style.css", "/manifest.json"];
+const CACHE_NAME = "rumbo-v11-recorrido";
+const ASSETS = [
+    "/style.css",
+    "/css/lineaTiempo.css",
+    "/manifest.json",
+    "/js/rumbo.js",
+    "/icons/fonts/PublicSans-Regular.woff2",
+    "/icons/fonts/PublicSans-Medium.woff2",
+    "/icons/fonts/PublicSans-SemiBold.woff2",
+    "/icons/fonts/PublicSans-Bold.woff2"
+];
 
 self.addEventListener("install", event => {
     event.waitUntil((async () => {

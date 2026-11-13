@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+    <meta name="color-scheme" content="dark">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#0B6B3A">
+    <meta name="theme-color" content="#0C1420">
     <meta name="description" content="Rumbo - Sistema de Orientación Vocacional">
     <link rel="manifest" href="/manifest.json">
-    <title>Administración - Rumbo - Inicio</title>
+    <title>Usuarios - Rumbo</title>
     <link rel="stylesheet" href="/style.css">
+    <script src="/js/rumbo.js" defer></script>
 <link rel="stylesheet" href="/css/administracionUsuarios.css?v=f5-t03-4">
 </head>
 <body>
@@ -134,28 +136,31 @@
         <!-- Contenido principal -->
         <div class="contenido-principal-app">
             <header>
-                <h1>Rumbo</h1>
-                <p id="encabezado-usuario">Tu guía de orientación vocacional</p>
+                <h1>Usuarios</h1>
+                <p id="encabezado-usuario">Consulta perfiles y administra las cuentas de Rumbo.</p>
             </header>
 
             <main id="contenido-principal">
-                <p class="alerta alerta-info" role="note" style="margin: 0 0 var(--space-4);">
+                <p class="ayuda-vista" role="note" style="margin: 0 0 var(--space-4);">
                     Selecciona una cuenta para consultar su perfil y las acciones disponibles. Revisa sus datos antes de confirmar una eliminación.
                 </p>
-                <div class="vista-encabezado"><div><h2>Usuarios</h2><p>Consulta perfiles y administra las cuentas de Rumbo.</p></div><a href="/inicio.html" class="btn btn-secundario">Volver al inicio</a></div>
-                <p id="estado-admin-usuarios" role="status" aria-live="polite">Comprobando sesión...</p>
-                <section id="contenido-admin-usuarios" hidden>
-                    <section class="card" aria-labelledby="titulo-cuentas"><h3 id="titulo-cuentas">Cuentas registradas</h3>
+                <div class="vista-acciones">
+                    <p id="estado-admin-usuarios" role="status" aria-live="polite">Comprobando sesión...</p>
+                    <a href="/inicio.html" class="btn btn-secundario btn-pequeno">Volver al inicio</a>
+                </div>
+
+                <section id="contenido-admin-usuarios" class="admin-distribucion" hidden>
+                    <section class="card admin-cuentas" aria-labelledby="titulo-cuentas"><h2 id="titulo-cuentas">Cuentas registradas</h2>
                         <button id="actualizar-admin-usuarios" type="button" class="btn btn-secundario">Actualizar</button>
                         <ul id="lista-admin-usuarios" class="lista-cuentas-admin"></ul>
                         <div class="paginacion-admin"><button id="anterior-admin-usuarios" type="button" class="btn btn-secundario">Anterior</button><p id="pagina-admin-usuarios"></p><button id="siguiente-admin-usuarios" type="button" class="btn btn-secundario">Siguiente</button></div>
                     </section>
                     <section id="detalle-admin-usuario" class="card" aria-labelledby="titulo-detalle-admin" hidden>
-                        <h3 id="titulo-detalle-admin" tabindex="-1">Perfil de la cuenta</h3>
+                        <h2 id="titulo-detalle-admin" tabindex="-1">Perfil de la cuenta</h2>
                         <p id="estado-detalle-admin" role="status" aria-live="polite"></p><dl id="datos-admin-usuario"></dl>
                     </section>
                     <section id="historial-admin" class="card" aria-labelledby="titulo-historial-admin">
-                        <h3 id="titulo-historial-admin">Eliminaciones de cuentas y publicaciones</h3>
+                        <h2 id="titulo-historial-admin">Eliminaciones de cuentas y publicaciones</h2>
                         <a href="/registros-administrativos.html" class="btn btn-secundario">Ver historial de todas las áreas</a>
                         <p id="estado-registros-admin" role="status" aria-live="polite"></p>
                         <button id="actualizar-registros-admin" class="btn btn-secundario" type="button">Actualizar registros</button>
