@@ -22,6 +22,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         document.getElementById("encabezado-usuario").textContent =
             "Tu proceso de orientación, paso a paso.";
 
+        iniciarRecorridoPrimeraVisita(sesion);
+
         await cargarNotificaciones();
 
         acciones.hidden = false;
@@ -51,6 +53,89 @@ document.addEventListener("DOMContentLoaded", async () => {
             mensaje.textContent = error.message;
         }
     });
+
+    function iniciarRecorridoPrimeraVisita(sesion) {
+        const dialogo = document.getElementById("recorrido-inicial");
+        const tarjetas = [...dialogo.querySelectorAll("[data-paso]")];
+        const botonSiguiente = document.getElementById("recorrido-siguiente");
+        const botonSaltar = document.getElementById("recorrido-saltar");
+        const contador = document.getElementById("recorrido-contador");
+        const indicadores = document.getElementById("recorrido-indicadores");
+        const clave = `rumbo-recorrido-inicial-v2:${sesion.idUsuario}`;
+
+        try {
+            if (window.localStorage.getItem(clave) === "completado") return;
+        } catch {
+            // El recorrido sigue disponible si el navegador restringe el almacenamiento local.
+        }
+
+        let pasoActual = 0;
+        tarjetas.forEach((_, indice) => {
+            const indicador = document.createElement("span");
+            indicador.className = "recorrido-indicador";
+            indicador.dataset.indicador = String(indice);
+            indicadores.appendChild(indicador);
+        });
+
+        function actualizarPaso() {
+            tarjetas.forEach((tarjeta, indice) => {
+                tarjeta.hidden = indice !== pasoActual;
+            });
+            indicadores.querySelectorAll(".recorrido-indicador").forEach((indicador, indice) => {
+                indicador.classList.toggle("activo", indice === pasoActual);
+            });
+
+            const tarjetaActiva = tarjetas[pasoActual];
+            const titulo = tarjetaActiva.querySelector("h2");
+            const descripcion = tarjetaActiva.querySelector("p");
+            dialogo.querySelectorAll("#recorrido-titulo-activo, #recorrido-descripcion-activa")
+                .forEach(elemento => elemento.removeAttribute("id"));
+            titulo.id = "recorrido-titulo-activo";
+            descripcion.id = "recorrido-descripcion-activa";
+            dialogo.setAttribute("aria-labelledby", titulo.id);
+            dialogo.setAttribute("aria-describedby", descripcion.id);
+            contador.textContent = `${pasoActual + 1} de ${tarjetas.length}`;
+
+            const esUltimo = pasoActual === tarjetas.length - 1;
+            botonSiguiente.querySelector("span").textContent = esUltimo
+                ? "Entrar a Rumbo"
+                : "Continuar";
+            botonSiguiente.setAttribute("aria-label", esUltimo
+                ? "Finalizar recorrido y entrar a Rumbo"
+                : `Avanzar al paso ${pasoActual + 2}`);
+
+            if (pasoActual === 0) {
+                const personaje = tarjetaActiva.querySelector(".recorrido-mascota");
+                personaje.dataset.rumboMovimiento = "saludo";
+                window.setTimeout(() => delete personaje.dataset.rumboMovimiento, 900);
+            }
+        }
+
+        function finalizarRecorrido() {
+            try {
+                window.localStorage.setItem(clave, "completado");
+            } catch {
+                // Si el navegador bloquea el almacenamiento, el recorrido podrá repetirse en otra visita.
+            }
+            dialogo.close();
+            document.getElementById("saludo").focus();
+        }
+
+        botonSiguiente.addEventListener("click", () => {
+            if (pasoActual === tarjetas.length - 1) {
+                finalizarRecorrido();
+                return;
+            }
+            pasoActual += 1;
+            actualizarPaso();
+        });
+
+        botonSaltar.addEventListener("click", finalizarRecorrido);
+        dialogo.addEventListener("cancel", evento => evento.preventDefault());
+        actualizarPaso();
+        dialogo.showModal();
+        botonSiguiente.focus();
+    }
 
     async function cargarNotificaciones() {
         const seccion = document.getElementById("notificaciones-inicio");

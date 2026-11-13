@@ -13,6 +13,7 @@
     <script src="/js/rumbo.js" defer></script>
     <link rel="stylesheet" href="/css/identidadAreas.css">
     <link rel="stylesheet" href="/css/apariencia.css">
+    <link rel="stylesheet" href="/css/inicio-recorrido.css?v=2">
 </head>
 <body data-area="proceso">
     <a href="#contenido-principal" class="saltar-contenido">Saltar al contenido</a>
@@ -156,8 +157,42 @@
                     </div>
                 </section>
 
-                <section id="bienvenida" class="card">
-                    <h2 id="saludo">Hola</h2>
+                <section id="bienvenida" class="card inicio-bienvenida">
+                    <div class="inicio-bienvenida-texto">
+                        <p class="inicio-bienvenida-etiqueta">TU CAMINO, A TU MANERA</p>
+                        <h2 id="saludo" tabindex="-1">Hola</h2>
+                        <p>Explora tus opciones, reúne ideas y avanza a tu propio ritmo.</p>
+                    </div>
+                    <svg class="inicio-escena" aria-hidden="true" viewBox="0 0 520 460" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M68 398V208a192 192 0 0 1 384 0v190Z" fill="var(--color-primary-soft)"/>
+                        <circle cx="385" cy="105" r="38" fill="var(--color-highlight)"/>
+                        <path d="M230 426c-54-56 110-60 79-113s-140-41-75-104" fill="none" stroke="var(--color-bg)" stroke-width="54"/>
+                        <path d="M230 426c-54-56 110-60 79-113s-140-41-75-104" fill="none" stroke="var(--color-text-muted)" stroke-width="2" stroke-dasharray="7 10"/>
+                        <path d="m276 153 76-38 76 38-76 38Z" fill="var(--color-primary)"/>
+                        <path d="M303 170v38c26 15 50 15 77 0v-38" fill="var(--color-surface-raised)" stroke="var(--color-primary)" stroke-width="3"/>
+                        <path d="M428 153v39" stroke="var(--color-primary)" stroke-width="3"/>
+                        <circle cx="428" cy="197" r="5" fill="var(--color-highlight)"/>
+                        <ellipse cx="135" cy="408" rx="64" ry="12" fill="var(--color-surface-raised)"/>
+                        <path d="m112 317-13 84h23l22-73m-1-11 19 84h22l-10-96" fill="var(--identidad-exploracion)"/>
+                        <path d="M100 242c22-22 56-17 72 2l15 79h-90Z" fill="var(--color-highlight)"/>
+                        <path d="M110 247 86 295l-27-14m109-32 30 38 36-21" fill="none" stroke="#B8764B" stroke-width="15" stroke-linecap="round"/>
+                        <rect x="222" y="240" width="29" height="44" rx="3" transform="rotate(15 222 240)" fill="var(--color-surface)" stroke="var(--color-border)"/>
+                        <circle cx="135" cy="202" r="27" fill="#B8764B"/>
+                        <path d="M108 198c-10-41 56-52 57-9-18-7-26-15-32-18-4 12-12 21-25 27Z" fill="#27362E"/>
+                        <path d="M104 400H86c-7 0-11 9-6 12h45v-12m38 0h22l15 9c2 2 0 4-3 4h-38Z" fill="var(--color-surface)" stroke="var(--identidad-exploracion)" stroke-width="2"/>
+                        <ellipse cx="381" cy="408" rx="57" ry="12" fill="var(--color-surface-raised)"/>
+                        <path d="m358 317-8 85h24l13-64 13 64h24l-6-89" fill="var(--color-primary)"/>
+                        <path d="M347 251c16-20 53-25 72-1l6 76h-82Z" fill="var(--identidad-comunidad)"/>
+                        <path d="M351 257 324 291l-35-13m121-20 18 45-23 12" fill="none" stroke="#D69C79" stroke-width="14" stroke-linecap="round"/>
+                        <path d="M363 229c-34 3-35-59-1-62 22-14 50 9 42 35l6 33Z" fill="#27362E"/>
+                        <circle cx="377" cy="203" r="25" fill="#D69C79"/>
+                        <path d="M350 190c1-33 56-32 54 2-13-1-24-9-31-16-4 8-12 12-23 14Z" fill="#27362E"/>
+                        <path d="M349 402h25v10h-41c-3-3 4-10 16-10Zm52 0h23l13 10h-39Z" fill="var(--color-highlight)" stroke="var(--color-primary)" stroke-width="2"/>
+                        <path d="M61 386v-61m0 43c-28-2-33-30-30-39 21 3 30 17 30 39Zm0-18c27-2 31-24 30-34-19 2-29 16-30 34Z" fill="var(--color-primary)"/>
+                        <path d="m32 386 8 25h40l8-25Z" fill="var(--color-highlight)"/>
+                        <path d="m466 278 8 13 15 2-11 11 3 15-14-7-14 7 3-15-11-11 15-2Z" fill="var(--color-highlight)"/>
+                        <path d="m56 150 10 10m-10 0 10-10m379 83 10 10m-10 0 10-10" stroke="var(--color-primary)" stroke-width="3" stroke-linecap="round"/>
+                    </svg>
                 </section>
 
                 <!-- Resumen por rol en el inicio -->
@@ -238,9 +273,89 @@
         </div>
     </div>
 
+    <dialog id="recorrido-inicial" class="recorrido-dialog" aria-labelledby="recorrido-titulo" aria-describedby="recorrido-descripcion">
+        <div class="recorrido-ventana">
+            <div class="recorrido-cabecera">
+                <p class="recorrido-sobretitulo">CONOCE RUMBO</p>
+                <button id="recorrido-saltar" class="recorrido-saltar" type="button">Omitir recorrido</button>
+            </div>
+
+            <div class="recorrido-tarjetas" aria-live="polite">
+                <article class="recorrido-tarjeta recorrido-tarjeta-bienvenida" data-paso="0" hidden>
+                    <div class="recorrido-mascota-escena" aria-hidden="true">
+                        <span class="recorrido-brillo recorrido-brillo-uno">✦</span>
+                        <span class="recorrido-brillo recorrido-brillo-dos">✧</span>
+                        <span class="recorrido-brillo recorrido-brillo-tres">✦</span>
+                        <span class="rumbo-personaje rumbo-personaje--inicio recorrido-mascota" data-rumbo-estado="reposo">
+                            <span class="rumbo-cuerpo"><span class="rumbo-ojo"></span><span class="rumbo-ojo"></span></span>
+                            <span class="rumbo-sombra"></span>
+                        </span>
+                        <span class="recorrido-saludo-burbuja">¡Hola! Soy Rumbo</span>
+                    </div>
+                    <div class="recorrido-bienvenida-texto">
+                        <h2 id="recorrido-titulo">¡Bienvenido a Rumbo!</h2>
+                        <p id="recorrido-descripcion">Tu orientador vocacional te propone actividades para conocerte y ayudarte a tomar una buena decisión. Explora las opciones, comparte lo que descubras con tu familia y construyan juntos un camino que conecte contigo.</p>
+                        <div class="recorrido-pilares" aria-label="Explora, conversa y decide">
+                            <span>Explora</span>
+                            <span>Conversa</span>
+                            <span>Decide</span>
+                        </div>
+                    </div>
+                </article>
+                <article class="recorrido-tarjeta" data-paso="1" hidden>
+                    <span class="recorrido-icono recorrido-icono-exploracion"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="m2 9 10-5 10 5-10 5Z"/><path d="M6 11v6c4 3 8 3 12 0v-6M22 9v7"/></svg></span>
+                    <h2>Abre tus posibilidades</h2>
+                    <p>Explora carreras de distintas universidades, sus áreas de formación y la información disponible de sus planes.</p>
+                    <span class="recorrido-pie">Catálogo de carreras</span>
+                </article>
+                <article class="recorrido-tarjeta" data-paso="2" hidden>
+                    <span class="recorrido-icono recorrido-icono-exploracion"><svg aria-hidden="true" viewBox="0 0 24 24"><rect x="3" y="4" width="7" height="16" rx="2"/><rect x="14" y="4" width="7" height="16" rx="2"/><path d="M5 9h3m8 0h3M5 13h3m8 0h3"/></svg></span>
+                    <h2>Pon tus opciones lado a lado</h2>
+                    <p>Compara duración, costos de referencia y perfiles de las carreras que te interesan, incluso entre universidades.</p>
+                    <span class="recorrido-pie">Comparador de carreras</span>
+                </article>
+                <article class="recorrido-tarjeta" data-paso="3" hidden>
+                    <span class="recorrido-icono recorrido-icono-proceso"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M9 18h6m-5 3h4M8 14a7 7 0 1 1 8 0c-1 1-1 2-1 2H9s0-1-1-2Z"/><path d="m9 8 2 2 4-4"/></svg></span>
+                    <h2>Descubre qué te mueve</h2>
+                    <p>Encuentra actividades y recursos de pruebas vocacionales para explorar tus intereses y habilidades.</p>
+                    <span class="recorrido-pie">Autoconocimiento</span>
+                </article>
+                <article class="recorrido-tarjeta" data-paso="4" hidden>
+                    <span class="recorrido-icono recorrido-icono-personal"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 3h13a1 1 0 0 1 1 1v17H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Zm0 0v18M9 7h6m-6 4h6m-6 4h4"/></svg></span>
+                    <h2>Dale espacio a tus ideas</h2>
+                    <p>Guarda reflexiones, dudas, archivos y fotografías en tu bitácora personal. Vuelve a ellas cuando lo necesites.</p>
+                    <span class="recorrido-pie">Tu bitácora privada</span>
+                </article>
+                <article class="recorrido-tarjeta" data-paso="5" hidden>
+                    <span class="recorrido-icono recorrido-icono-personal"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3v12m-5-5 5 5 5-5M4 15v5h16v-5"/></svg></span>
+                    <h2>Llévate lo que has construido</h2>
+                    <p>Descarga tus reflexiones en PDF o reúne tu bitácora y sus adjuntos en un ZIP para conservar una copia de tu proceso.</p>
+                    <span class="recorrido-pie">Tus avances contigo</span>
+                </article>
+                <article class="recorrido-tarjeta" data-paso="6" hidden>
+                    <span class="recorrido-icono recorrido-icono-comunidad"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M21 11a8 8 0 0 1-8 8H9l-6 3 1-6a8 8 0 1 1 17-5Z"/><path d="M7 10h10m-10 4h6"/></svg></span>
+                    <h2>Escucha otras perspectivas</h2>
+                    <p>Comparte preguntas y experiencias en el foro con estudiantes y colaboradores, una vez verificada tu cuenta.</p>
+                    <span class="recorrido-pie">Comunidad Rumbo</span>
+                </article>
+            </div>
+
+            <div class="recorrido-pie-controles">
+                <div class="recorrido-progreso">
+                    <span id="recorrido-contador">1 de 7</span>
+                    <div id="recorrido-indicadores" class="recorrido-indicadores" aria-hidden="true"></div>
+                </div>
+                <button id="recorrido-siguiente" class="btn recorrido-siguiente" type="button">
+                    <span>Continuar</span>
+                    <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 12h15m-6-6 6 6-6 6"/></svg>
+                </button>
+            </div>
+        </div>
+    </dialog>
+
     <script src="/js/sesion.js"></script>
     <script src="/js/barraLateral.js?v=f5-t03-4"></script>
-    <script src="/js/vistaInicio.js"></script>
+    <script src="/js/vistaInicio.js?v=recorrido-2"></script>
     <script src="/js/menuGestionActividades.js?v=t10-1"></script>
 </body>
 </html>
