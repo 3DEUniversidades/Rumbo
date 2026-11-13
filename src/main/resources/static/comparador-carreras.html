@@ -8,6 +8,7 @@
     <link rel="manifest" href="/manifest.json">
     <title>Rumbo - Comparador de carreras</title>
     <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/css/carrerasUniversidades.css?v=1">
 </head>
 <body>
     <a href="#contenido-principal" class="saltar-contenido">Saltar al contenido</a>
@@ -137,20 +138,36 @@
             </header>
 
             <main id="contenido-principal">
+                <div id="vista-seleccion-comparador">
                 <p class="alerta alerta-info" role="note" style="margin: 0 0 var(--space-4);">
                     Elige cuántas carreras comparar, agrégalas del listado y pulsa Comparar. Puedes quitar opciones de tu selección para probar otras.
                 </p>
+                <section id="panel-seleccion-comparador" class="perfil-card comparador-panel-seleccion" aria-labelledby="titulo-seleccion-comparador">
+                    <div class="comparador-panel-encabezado">
+                        <div>
+                            <h2 id="titulo-seleccion-comparador">Tu selección</h2>
+                            <p id="contador-comparador" class="texto-secundario" role="status"></p>
+                        </div>
+                        <button id="comparar-carreras" class="btn" type="button" disabled
+                                aria-controls="resultado-comparador" aria-describedby="contador-comparador">Comparar</button>
+                    </div>
+                    <div id="seleccion-comparador" class="seleccion-comparador" aria-label="Carreras seleccionadas"></div>
+                </section>
                 <section class="tarjeta" style="margin-bottom: var(--space-4);">
                     <div class="vista-encabezado">
                         <div>
-                            <h2>Explora tus opciones</h2>
+                            <h2 id="titulo-catalogo-comparador" tabindex="-1">Explora tus opciones</h2>
                             <p class="texto-secundario">
-                                Busca, selecciona y compara las carreras que te interesan.
+                                Selecciona carreras de una o varias universidades. Cambiar los filtros conserva tu selección.
                             </p>
                         </div>
                     </div>
 
                     <div class="filtros-comparador">
+                        <label>
+                            <span>Universidad</span>
+                            <select id="universidad-comparador"><option value="">Todas</option></select>
+                        </label>
                         <label>
                             <span>Buscar</span>
                             <input id="buscar-comparador" type="search"
@@ -185,23 +202,26 @@
                         </label>
                     </div>
 
-                    <section aria-labelledby="titulo-seleccion-comparador" style="margin: var(--space-4) 0;">
-                        <h3 id="titulo-seleccion-comparador">Tu selección</h3>
-                        <p id="contador-comparador" class="texto-secundario"></p>
-                        <div id="seleccion-comparador" class="seleccion-comparador"></div>
-
-                        <button id="comparar-carreras" class="btn btn-principal" type="button" disabled>
-                            Comparar
-                        </button>
-                    </section>
-
                     <p id="estado-comparador" class="estado-vista"
                        role="status" aria-live="polite"></p>
 
+                    <ul id="catalogo-comparador" class="listado-compacto-comparador" aria-label="Carreras disponibles"></ul>
+                    <nav id="paginacion-comparador" class="paginacion-comparador" aria-label="Páginas de carreras" hidden>
+                        <button id="pagina-anterior-comparador" class="btn btn-secundario" type="button" disabled>Anterior</button>
+                        <p id="pagina-comparador" class="texto-secundario" role="status"></p>
+                        <button id="pagina-siguiente-comparador" class="btn btn-secundario" type="button" disabled>Siguiente</button>
+                    </nav>
                 </section>
+                </div>
 
                 <section id="resultado-comparador" class="tarjeta" aria-labelledby="titulo-resultado-comparador" hidden>
-                    <h2 id="titulo-resultado-comparador" tabindex="-1">Tablero de comparación</h2>
+                    <div class="vista-encabezado">
+                        <h2 id="titulo-resultado-comparador" tabindex="-1">Tablero de comparación</h2>
+                        <div class="acciones-resultado-comparador">
+                            <button id="editar-seleccion-comparador" class="btn btn-secundario" type="button" aria-controls="vista-seleccion-comparador">Editar selección</button>
+                            <button id="nueva-comparacion" class="btn" type="button" aria-controls="vista-seleccion-comparador">Nueva comparación</button>
+                        </div>
+                    </div>
 
                     <p class="texto-secundario" style="margin-bottom: var(--space-3);">
                         Mayor o menor describe una cifra, no indica cuál carrera es mejor.
@@ -231,10 +251,6 @@
                     </details>
                 </section>
 
-                <section class="tarjeta" aria-labelledby="titulo-catalogo-comparador">
-                    <h2 id="titulo-catalogo-comparador">Carreras disponibles</h2>
-                    <div id="catalogo-comparador" class="lista-carreras"></div>
-                </section>
             </main>
 
             <footer>
@@ -245,6 +261,6 @@
 
     <script src="/js/sesion.js"></script>
     <script src="/js/barraLateral.js"></script>
-    <script src="/js/vistaComparadorCarreras.js"></script>
+    <script src="/js/vistaComparadorCarreras.js?v=4"></script>
 </body>
 </html>

@@ -285,6 +285,57 @@ Estudiantes y colaboradores pueden subir una foto con
 `DELETE /api/perfil/foto`. Se aceptan JPG, PNG y WebP de hasta 5 MB; la imagen
 se guarda en Cloudinary y se devuelve una URL pública recortada a 320x320.
 
+## Carreras de varias universidades
+
+Cada carrera incluye `universidad` (obligatoria, hasta 160 caracteres). Las
+carreras anteriores conservan sus identificadores y relaciones y quedan como
+`UVG`. La carga inicial mantiene los 48 programas UVG y añade dos de `USAC`:
+Ingeniería Industrial e Ingeniería Mecánica Industrial. Sus nombres y perfiles
+se contrastaron con la [página oficial de EMI/USAC](https://emi.ingenieria.usac.edu.gt/carreras/).
+Los costos, duración, modalidad, créditos y demás datos no confirmados quedan
+como `null` o listas vacías y se presentan como **No disponible**, nunca como cero.
+
+Para cargar estos datos después de actualizar la rama, usa PostgreSQL, configura
+`DB_SQL_INIT_MODE=always` en tu `.env` y reinicia con `./mvnw spring-boot:run`
+(en Windows, `.\mvnw.cmd spring-boot:run`). El catálogo inicial tendrá **50
+carreras: 48 UVG y 2 USAC**. No es necesario borrar ni recrear la base; el perfil
+`h2` continúa sin ejecutar este SQL específico de PostgreSQL.
+
+- `GET /api/carreras` devuelve universidad en el catálogo.
+- `GET /api/carreras?universidad=USAC` filtra por universidad, sin distinguir mayúsculas.
+- `POST /api/carreras` permite a `ENCARGADO_DE_CARRERAS` y `ADMIN` registrar una
+  carrera; exige `nombre` y `universidad`, y admite los demás campos del editor.
+- `PUT /api/carreras/{id}` modifica únicamente los campos enviados. Universidad
+  no puede quedar vacía; cada campo que cambia genera su registro con valor
+  anterior, nuevo, fecha y responsable obtenido de la sesión. La creación también
+  deja registros de los valores iniciales.
+
+Ejemplo de creación mínima (los demás datos quedan como no disponibles):
+
+```json
+{"nombre":"Nueva carrera","universidad":"Otra universidad"}
+```
+
+Una carrera puede tener el mismo nombre en dos instituciones; se rechaza repetir
+nombre y universidad dentro de la misma institución. Los filtros y selecciones
+muestran ambos datos para distinguirlas. La carga SQL identifica los programas
+por nombre **y universidad**, no mezcla los homónimos ni duplica los registros
+al reiniciar; los programas USAC existentes no se sobrescriben.
+
+En **Gestión de Carreras**, «Registrar carrera» abre el formulario y permite
+escribir otra universidad o elegir una sugerida. El catálogo y el comparador
+tienen filtro por universidad. Cambiar el filtro del comparador conserva la
+selección, por lo que es posible escoger una carrera UVG y una USAC.
+
+El panel «Tu selección», con el botón **Comparar**, permanece visible durante
+la selección, también en móvil. Las carreras se presentan en filas compactas,
+con páginas de 10. Cambiar de página o aplicar filtros conserva las elegidas.
+Al comparar, el listado y los filtros se ocultan y la tabla ocupa la vista de
+resultados, sin tener que recorrer las carreras. **Editar selección** recupera
+las carreras, filtros y página; **Nueva comparación** limpia la selección y los
+filtros. La tabla incluye la fila Universidad; los costos sin periodo/año
+equivalentes no se comparan como si fueran importes del mismo alcance.
+
 ## Bitácora y adjuntos
 
 Los estudiantes pueden adjuntar imágenes JPG/PNG/WebP o PDF a sus entradas de

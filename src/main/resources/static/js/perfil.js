@@ -484,7 +484,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     function agregarCarrera(opcion, perfil) {
         const elemento = document.createElement("option");
         elemento.value = opcion.id;
-        elemento.textContent = opcion.nombre;
+        elemento.textContent = opcion.nombre + " · " + (opcion.universidad || "No disponible");
         elemento.selected = opcion.id === perfil.carreraId;
         carrera.appendChild(elemento);
     }

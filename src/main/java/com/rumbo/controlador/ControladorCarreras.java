@@ -13,6 +13,7 @@ import com.rumbo.servicio.GestorPermisos;
 import jakarta.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Map;
+import java.net.URI;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,13 +34,26 @@ public class ControladorCarreras {
 
     // Consulta disponible para usuarios con sesión.
     @GetMapping
-    public List<CarreraRespuesta> consultarCarreras(HttpSession sesion) {
+    public List<CarreraRespuesta> consultarCarreras(
+            @RequestParam(required = false) String universidad, HttpSession sesion) {
         gestorPermisos.exigirSesion(sesion);
 
-        return carreraService.consultarCarreras()
+        return carreraService.consultarCarreras(universidad)
                 .stream()
                 .map(this::mapearRespuesta)
                 .toList();
+    }
+
+    @PostMapping
+    public ResponseEntity<?> crearCarrera(@RequestBody JsonNode solicitud, HttpSession sesion) {
+        SesionUsuario encargado = gestorPermisos.exigirRol(sesion, Rol.ENCARGADO_DE_CARRERAS, Rol.ADMIN);
+        try {
+            Carrera creada = carreraService.crearCarrera(solicitud, encargado.getIdUsuario());
+            return ResponseEntity.created(URI.create("/api/carreras/" + creada.getId()))
+                    .body(mapearRespuesta(creada));
+        } catch (ExcepcionCarrera e) {
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+        }
     }
 
     @GetMapping("/{id}")
@@ -119,6 +133,7 @@ public class ControladorCarreras {
         return new CarreraRespuesta(
                 carrera.getId(),
                 carrera.getNombre(),
+                carrera.getUniversidad(),
                 carrera.getFacultad(),
                 carrera.getDescripcion(),
                 carrera.getDuracion(),

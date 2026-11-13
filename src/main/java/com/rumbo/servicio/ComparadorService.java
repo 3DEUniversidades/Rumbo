@@ -49,6 +49,8 @@ public class ComparadorService {
 
         List<Fila> filas = new ArrayList<>();
 
+        filas.add(texto("universidad", "Universidad", carreras,
+                CarreraRespuesta::universidad));
         filas.add(texto("facultad", "Facultad", carreras,
                 CarreraRespuesta::facultad));
         filas.add(texto("descripcion", "Descripción", carreras,
@@ -325,6 +327,7 @@ public class ComparadorService {
         return new CarreraRespuesta(
                 c.getId(),
                 c.getNombre(),
+                c.getUniversidad(),
                 c.getFacultad(),
                 c.getDescripcion(),
                 c.getDuracion(),

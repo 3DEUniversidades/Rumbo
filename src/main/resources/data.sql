@@ -4,12 +4,18 @@
 -- NULL = dato no confirmado todavia; nunca equivale a cero.
 -- Las listas (areas, competencias, oportunidades) se guardan como arreglos JSON en texto.
 
+-- Las carreras anteriores pertenecen a UVG. Conservar ids y claves foraneas.
+ALTER TABLE carreras ADD COLUMN IF NOT EXISTS universidad VARCHAR(160) DEFAULT 'UVG';
+UPDATE carreras SET universidad = 'UVG' WHERE universidad IS NULL OR BTRIM(universidad) = '';
+ALTER TABLE carreras ALTER COLUMN universidad SET NOT NULL;
+
 -- La finalizacion ahora pertenece al registro de cada estudiante, no a la actividad.
 ALTER TABLE actividad DROP COLUMN IF EXISTS completada;
 
 -- Retira las carreras de ejemplo anteriores (enlaces example.org) si no tienen historial de cambios.
 DELETE FROM carreras
 WHERE pdf_oficial_url LIKE 'https://example.org/%'
+  AND universidad = 'UVG'
   AND NOT EXISTS (
       SELECT 1
       FROM registro_actualizacion_carrera AS registro
@@ -1287,26 +1293,47 @@ SET
     pdf_oficial_url = datos.pdf_oficial_url,
     url_carrera_oficial = datos.url_carrera_oficial
 FROM uvg_datos_20261028 AS datos
-WHERE existente.nombre = datos.nombre;
+WHERE existente.nombre = datos.nombre AND existente.universidad = 'UVG';
 
 -- Inserta solo nombres ausentes; ejecutar de nuevo no duplica estos registros.
 INSERT INTO carreras (
-    nombre, facultad, descripcion, duracion, costo, costo_periodo, costo_anio, modalidad, carga_creditos, areas_formacion, competencias_desarrolladas, oportunidades_laborales, salario_estimado, empleabilidad, contexto_laboral, pdf_oficial_url, url_carrera_oficial
+    universidad, nombre, facultad, descripcion, duracion, costo, costo_periodo, costo_anio, modalidad, carga_creditos, areas_formacion, competencias_desarrolladas, oportunidades_laborales, salario_estimado, empleabilidad, contexto_laboral, pdf_oficial_url, url_carrera_oficial
 )
-SELECT datos.nombre, datos.facultad, datos.descripcion, datos.duracion, datos.costo, datos.costo_periodo, datos.costo_anio, datos.modalidad, datos.carga_creditos, datos.areas_formacion, datos.competencias_desarrolladas, datos.oportunidades_laborales, datos.salario_estimado, datos.empleabilidad, datos.contexto_laboral, datos.pdf_oficial_url, datos.url_carrera_oficial
+SELECT 'UVG', datos.nombre, datos.facultad, datos.descripcion, datos.duracion, datos.costo, datos.costo_periodo, datos.costo_anio, datos.modalidad, datos.carga_creditos, datos.areas_formacion, datos.competencias_desarrolladas, datos.oportunidades_laborales, datos.salario_estimado, datos.empleabilidad, datos.contexto_laboral, datos.pdf_oficial_url, datos.url_carrera_oficial
 FROM uvg_datos_20261028 AS datos
 WHERE NOT EXISTS (
-    SELECT 1 FROM carreras AS existente WHERE existente.nombre = datos.nombre
+    SELECT 1 FROM carreras AS existente WHERE existente.nombre = datos.nombre AND existente.universidad = 'UVG'
 );
 
 -- Verifica que los 48 nombres del lote estén presentes en la tabla de destino.
 SELECT COUNT(*) AS programas_del_lote,
        COUNT(*) FILTER (WHERE EXISTS (
-           SELECT 1 FROM carreras AS c WHERE c.nombre = d.nombre
+            SELECT 1 FROM carreras AS c WHERE c.nombre = d.nombre AND c.universidad = 'UVG'
        )) AS nombres_cargados
 FROM uvg_datos_20261028 AS d;
 
 COMMIT;
+
+-- USAC: oferta y perfiles confirmados en el portal oficial de EMI/Facultad de Ingenieria.
+-- Fuente: https://emi.ingenieria.usac.edu.gt/carreras/
+-- No se infieren costos, duracion, modalidad, creditos, salarios ni empleabilidad.
+-- NULL y listas vacias se muestran como "No disponible". No sobrescribir ediciones del encargado.
+INSERT INTO carreras (universidad, nombre, facultad, descripcion, areas_formacion,
+    competencias_desarrolladas, oportunidades_laborales, url_carrera_oficial)
+SELECT 'USAC', datos.nombre, 'Facultad de Ingeniería', datos.descripcion, datos.areas,
+    '[]', '[]', 'https://emi.ingenieria.usac.edu.gt/carreras/'
+FROM (VALUES
+    ('Ingeniería Industrial',
+     'Formación orientada a mejorar la eficiencia de procesos de producción, calidad, logística y servicios, con herramientas de gestión y toma de decisiones.',
+     '["Gestión empresarial", "Producción y operaciones", "Investigación e innovación"]'),
+    ('Ingeniería Mecánica Industrial',
+     'Formación en diseño, implementación y mantenimiento de maquinaria y sistemas mecánicos y térmicos aplicados a la industria.',
+     '["Gestión empresarial", "Producción y operaciones", "Investigación e innovación", "Mecánica"]')
+) AS datos(nombre, descripcion, areas)
+WHERE NOT EXISTS (
+    SELECT 1 FROM carreras AS existente
+    WHERE existente.nombre = datos.nombre AND existente.universidad = 'USAC'
+);
 
 INSERT INTO usuario (id_usuario, nombre_usuario, nombre_completo, correo, contrasenia, rol, estado_verificacion)
 VALUES ('usr-0001', 'admin', 'Administrador General', 'admin@rumbo.com',

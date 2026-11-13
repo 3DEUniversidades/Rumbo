@@ -3,6 +3,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const estado = document.getElementById("estado-carreras");
     const lista = document.getElementById("lista-carreras");
+    const universidad = document.getElementById("universidad-catalogo");
+    let carreras = [];
+    universidad.addEventListener("change", () => mostrarCarreras(carreras));
     const modal = document.getElementById("modal-carrera");
     const botonCerrar = document.getElementById("cerrar-modal-carrera");
 
@@ -53,7 +56,11 @@ document.addEventListener("DOMContentLoaded", () => {
                 throw new Error("No se pudo consultar el catalogo de carreras.");
             }
 
-            const carreras = await respuesta.json();
+            carreras = await respuesta.json();
+            universidad.replaceChildren(new Option("Todas las universidades", ""),
+                ...[...new Set(carreras.map(c => c.universidad).filter(Boolean))]
+                    .sort((a, b) => a.localeCompare(b, "es")).map(u => new Option(u, u)));
+            universidad.disabled = false;
             mostrarCarreras(carreras);
         } catch (error) {
             estado.textContent = "No se pudieron cargar las carreras.";
@@ -62,15 +69,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function mostrarCarreras(carreras) {
         lista.replaceChildren();
+        const visibles = carreras.filter(c => !universidad.value || c.universidad === universidad.value);
 
-        if (carreras.length === 0) {
-            estado.textContent = "No hay carreras disponibles aun.";
+        if (visibles.length === 0) {
+            estado.textContent = "No hay carreras disponibles para esta universidad.";
             return;
         }
 
-        estado.textContent = "";
+        estado.textContent = `${visibles.length} carrera(s) disponibles.`;
 
-        carreras.forEach((carrera) => {
+        visibles.forEach((carrera) => {
             lista.appendChild(crearTarjetaCarrera(carrera));
         });
     }
@@ -81,11 +89,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const nombre = document.createElement("h3");
         nombre.textContent = carrera.nombre;
+        const institucion = document.createElement("p");
+        institucion.className = "carrera-universidad";
+        institucion.textContent = carrera.universidad ?? NO_DISPONIBLE;
 
         const facultad = document.createElement("p");
         facultad.className = "carrera-area";
-        facultad.textContent = carrera.facultad ?? "";
-        facultad.hidden = !carrera.facultad;
+        facultad.textContent = "Facultad: " + (carrera.facultad ?? NO_DISPONIBLE);
 
         const resumen = document.createElement("p");
         resumen.className = "carrera-uni";
@@ -101,16 +111,15 @@ document.addEventListener("DOMContentLoaded", () => {
         botonDetalle.textContent = "Ver detalle";
         botonDetalle.addEventListener("click", () => abrirDetalle(carrera));
 
-        tarjeta.append(nombre, facultad, resumen, botonDetalle);
+        tarjeta.append(nombre, institucion, facultad, resumen, botonDetalle);
         return tarjeta;
     }
 
     function abrirDetalle(carrera) {
         modalNombre.textContent = carrera.nombre;
-        modalFacultad.textContent = carrera.facultad ?? "";
-        modalFacultad.hidden = !carrera.facultad;
-        modalDescripcion.textContent = carrera.descripcion ?? "";
-        modalDescripcion.hidden = !carrera.descripcion;
+        document.getElementById("modal-carrera-universidad").textContent = carrera.universidad ?? NO_DISPONIBLE;
+        modalFacultad.textContent = "Facultad: " + (carrera.facultad ?? NO_DISPONIBLE);
+        modalDescripcion.textContent = carrera.descripcion ?? NO_DISPONIBLE;
 
         modalDuracion.textContent = carrera.duracion == null
             ? NO_DISPONIBLE : `${carrera.duracion} años`;
@@ -128,8 +137,8 @@ document.addEventListener("DOMContentLoaded", () => {
             ? NO_DISPONIBLE
             : `${carrera.empleabilidad} %`;
 
-        modalContextoLaboral.textContent = carrera.contextoLaboral ?? "";
-        bloqueContextoLaboral.hidden = !carrera.contextoLaboral;
+        modalContextoLaboral.textContent = carrera.contextoLaboral ?? NO_DISPONIBLE;
+        bloqueContextoLaboral.hidden = false;
 
         mostrarEnlaceOficial(bloquePdf, enlacePdf, carrera.pdfOficialUrl);
         mostrarEnlaceOficial(
@@ -176,18 +185,21 @@ document.addEventListener("DOMContentLoaded", () => {
         try {
             url = new URL(direccion);
         } catch {
-            bloque.hidden = true;
+            bloque.hidden = false;
             enlace.removeAttribute("href");
+            enlace.textContent = NO_DISPONIBLE;
             return;
         }
 
         if (url.protocol !== "https:") {
-            bloque.hidden = true;
+            bloque.hidden = false;
             enlace.removeAttribute("href");
+            enlace.textContent = NO_DISPONIBLE;
             return;
         }
 
         enlace.href = url.href;
+        enlace.textContent = bloque === bloquePdf ? "Abrir PDF oficial" : "Visitar sitio oficial";
         bloque.hidden = false;
     }
 
