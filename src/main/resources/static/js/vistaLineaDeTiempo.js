@@ -215,12 +215,42 @@ document.addEventListener('DOMContentLoaded', async function () {
             actividad.razonDecision?.trim() || 'Sin razón registrada.', '', 'Resultados y anotaciones:',
             actividad.resultadosRegistrados?.trim() || 'Sin resultados registrados.'].join('\n');
     }
-    function agregarDato(contenedor, etiqueta, valor) {
+    function agregarDato(contenedor, etiqueta, valor, convertirEnlaces = false) {
         const fila = crear('div');
         const contenido = crear('dd', '', valor == null || String(valor).trim() === '' ? 'Sin información registrada.' : String(valor));
+        if (convertirEnlaces) agregarEnlaces(contenido);
         fila.append(crear('dt', '', etiqueta), contenido);
         contenedor.append(fila);
         return contenido;
+    }
+
+    function agregarEnlaces(contenedor) {
+        const texto = contenedor.textContent;
+        const direcciones = /https?:\/\/[^\s<>"']+/gi;
+        let posicion = 0;
+        contenedor.replaceChildren();
+
+        for (const coincidencia of texto.matchAll(direcciones)) {
+            const direccion = coincidencia[0].replace(/[.,;:!?)\]}]+$/, '');
+
+            try {
+                new URL(direccion);
+            } catch (error) {
+                continue;
+            }
+
+            contenedor.append(document.createTextNode(texto.slice(posicion, coincidencia.index)));
+
+            const enlace = document.createElement('a');
+            enlace.href = direccion;
+            enlace.textContent = direccion;
+            enlace.target = '_blank';
+            enlace.rel = 'noopener noreferrer';
+            contenedor.appendChild(enlace);
+            posicion = coincidencia.index + direccion.length;
+        }
+
+        contenedor.append(document.createTextNode(texto.slice(posicion)));
     }
 
     function crearTarjeta(inicial, indice) {
@@ -250,7 +280,8 @@ document.addEventListener('DOMContentLoaded', async function () {
         [['Tipo', actividad.tipoActividad], ['Instrucciones', actividad.instrucciones],
             ['Acciones a realizar', actividad.accionesARealizar], ['Método recomendado', actividad.metodoRecomendado],
             ['Herramientas', actividad.herramientasDisponibles], ['Información que debes guardar', actividad.informacionAGuardar]
-        ].forEach(([etiqueta, valor]) => agregarDato(datos, etiqueta, valor));
+        ].forEach(([etiqueta, valor]) => agregarDato(datos, etiqueta, valor,
+            etiqueta === 'Herramientas' || etiqueta === 'Método recomendado'));
         instrucciones.append(crear('summary', '', 'Instrucciones y recursos de la actividad'), datos);
         informacion.append(contexto, instrucciones);
         if (actividadesConPrueba.has(actividad.idActividad)) {

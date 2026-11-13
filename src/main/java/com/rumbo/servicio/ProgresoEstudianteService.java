@@ -2,6 +2,7 @@ package com.rumbo.servicio;
 
 import com.rumbo.dto.ActividadEstudianteRespuesta;
 import com.rumbo.dto.ProgresoEstudianteRespuesta;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -120,6 +121,9 @@ public List<ActividadEstudianteRespuesta> consultarLineaDeTiempo(
                     ));
 
     return actividades.stream()
+            .sorted(Comparator.comparing(
+                    Actividad::getFecha, OrdenFechasActividades.porProximidad()
+            ).thenComparing(Actividad::getIdActividad))
             .map(actividad -> construirRespuesta(
                     actividad,
                     registrosPorActividad.get(actividad.getIdActividad())
