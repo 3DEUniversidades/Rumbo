@@ -544,6 +544,16 @@ textarea:focus {
     font-weight: 600;
 }
 
+.volver-portada {
+    max-width: 440px;
+    margin: 0 auto var(--space-4);
+}
+
+.volver-portada a {
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+}
+
 /* Formulario de perfil */
 #formulario-perfil {
     display: grid;

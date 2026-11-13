@@ -465,6 +465,9 @@ src/main/java/com/rumbo/
 
 src/main/resources/
   static/                    # Frontend PWA (HTML, CSS, JS)
+  static/index.html          # Portada publica con acceso a registro e inicio de sesion
+  static/css/landing.css     # Estilos propios de la portada
+  static/js/landing.js       # Estado de sesion en la portada
   application.properties     # Configuracion comun y PostgreSQL predeterminado
   application-h2.properties  # Alternativa local con H2 en memoria
 

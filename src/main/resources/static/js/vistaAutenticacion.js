@@ -1,10 +1,24 @@
 const seccionLogin = document.getElementById('login');
 const seccionRegistro = document.getElementById('registro');
 
-function mostrarSeccion(seccion) {
+function mostrarSeccion(seccion, actualizarHash = true) {
     seccionLogin.hidden = seccion !== 'login';
     seccionRegistro.hidden = seccion !== 'registro';
+
+    if (actualizarHash) {
+        history.replaceState(null, '', seccion === 'registro' ? '#crear-cuenta' : '#acceder');
+    }
 }
+
+function esVistaRegistro(hash) {
+    return hash === '#crear-cuenta' || hash === '#registro';
+}
+
+mostrarSeccion(esVistaRegistro(window.location.hash) ? 'registro' : 'login', false);
+
+window.addEventListener('hashchange', function () {
+    mostrarSeccion(esVistaRegistro(window.location.hash) ? 'registro' : 'login', false);
+});
 
 document.getElementById('ir-a-registro').addEventListener('click', function (event) {
     event.preventDefault();

@@ -73,7 +73,7 @@
             return boton;
         }
 
-        document.querySelectorAll(".barra-lateral-marca a").forEach(marca => {
+        document.querySelectorAll(".barra-lateral-marca a, [data-rumbo-marca]").forEach(marca => {
             const figura = crearPersonaje("marca");
             const anterior = marca.querySelector("svg");
             if (anterior) anterior.replaceWith(figura);

@@ -89,6 +89,7 @@ public class ConfiguracionWeb implements WebMvcConfigurer {
                 "/api/auth/login",
                 "/api/auth/registro",
                 "/style.css",
+                "/css/**",
                 "/js/**",
                 "/manifest.json",
                 "/service-worker.js",
