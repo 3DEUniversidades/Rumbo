@@ -1,18 +1,20 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta name="color-scheme" content="dark">
+    <meta name="color-scheme" content="dark light">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#0C1420">
     <link rel="manifest" href="/manifest.json">
     <title>Mi perfil - Rumbo</title>
+    <script src="/js/apariencia.js"></script>
     <link rel="stylesheet" href="/style.css">
     <link rel="stylesheet" href="/css/ilustraciones.css">
     <script src="/js/rumbo.js" defer></script>
     <link rel="stylesheet" href="/css/perfil.css?v=1">
     <link rel="stylesheet" href="/css/historialSupervisor.css?v=f5-t10-1">
     <link rel="stylesheet" href="/css/identidadAreas.css">
+    <link rel="stylesheet" href="/css/apariencia.css">
 </head>
 <body data-area="personal">
     <a href="#contenido-perfil" class="saltar-contenido">Saltar al contenido</a>
@@ -149,6 +151,26 @@
                 <p class="ayuda-vista" role="note" style="margin: 0 0 var(--space-4);">
                     Revisa los datos de tu cuenta y las opciones disponibles para tu rol. Para volver a este perfil, pulsa tu nombre al pie del menú.
                 </p>
+                <section class="perfil-card perfil-apariencia" aria-labelledby="titulo-apariencia">
+                    <div>
+                        <h2 id="titulo-apariencia">Apariencia</h2>
+                        <p id="estado-apariencia" role="status">Modo oscuro activado.</p>
+                    </div>
+                    <div class="opciones-apariencia" role="group" aria-label="Modo de apariencia">
+                        <button class="opcion-apariencia" type="button" data-modo-apariencia="claro" aria-pressed="false">
+                            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+                                <circle cx="12" cy="12" r="4"></circle><path d="M12 2v2m0 16v2M2 12h2m16 0h2M4.9 4.9l1.4 1.4m11.4 11.4 1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path>
+                            </svg>
+                            Claro
+                        </button>
+                        <button class="opcion-apariencia" type="button" data-modo-apariencia="oscuro" aria-pressed="true">
+                            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20.9 13A9 9 0 0 1 11 3.1 9 9 0 1 0 20.9 13Z"></path>
+                            </svg>
+                            Oscuro
+                        </button>
+                    </div>
+                </section>
                 <div class="bloques-vista perfil-distribucion">
                 <div class="perfil-cuenta">
                 <section class="perfil-card perfil-identidad" aria-labelledby="titulo-perfil">

@@ -1,10 +1,11 @@
-const CACHE_NAME = "rumbo-v14-multiuniversidad";
+const CACHE_NAME = "rumbo-v15-apariencia";
 const ASSETS = [
     "/style.css",
     "/css/lineaTiempo.css",
     "/css/ilustraciones.css",
     "/css/identidadAreas.css",
     "/css/carrerasUniversidades.css",
+    "/css/apariencia.css",
     "/icons/ilustraciones/carreras.svg",
     "/icons/ilustraciones/comparador.svg",
     "/icons/ilustraciones/bitacora.svg",
@@ -17,6 +18,7 @@ const ASSETS = [
     "/icons/ilustraciones/registros.svg",
     "/manifest.json",
     "/js/rumbo.js",
+    "/js/apariencia.js",
     "/icons/fonts/PublicSans-Regular.woff2",
     "/icons/fonts/PublicSans-Medium.woff2",
     "/icons/fonts/PublicSans-SemiBold.woff2",
