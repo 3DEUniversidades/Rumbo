@@ -1,6 +1,6 @@
 [hidden] { display: none !important; }
 .lista-cuentas-admin { list-style: none; padding: 0; margin: 1rem 0; }
-.lista-cuentas-admin li { display: flex; align-items: center; justify-content: space-between; gap: 1rem; border-bottom: 1px solid var(--border, #d8dfdb); padding: 1rem 0; }
+.lista-cuentas-admin li { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: var(--space-3); padding: var(--space-4); border-radius: var(--radius-sm); background: var(--color-bg); }
 .lista-cuentas-admin p { margin: .25rem 0; overflow-wrap: anywhere; }
 .paginacion-admin { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
 #datos-admin-usuario dt { font-weight: 700; margin-top: .8rem; }

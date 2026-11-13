@@ -241,7 +241,7 @@
             const boton = crear(
                 "button",
                 agregada ? "Quitar" : "Agregar",
-                "btn btn-pequeno"
+                "btn btn-pequeno btn-seleccion-carrera"
             );
 
             boton.type = "button";

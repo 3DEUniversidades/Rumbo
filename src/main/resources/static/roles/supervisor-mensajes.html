@@ -1,15 +1,19 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+    <meta name="color-scheme" content="dark">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#0B6B3A">
+    <meta name="theme-color" content="#0C1420">
     <meta name="description" content="Rumbo - Revisión y moderación de publicaciones del foro">
-    <title>Rumbo - Revisión de mensajes</title>
+    <title>Revisión de mensajes - Rumbo</title>
     <link rel="manifest" href="/manifest.json">
     <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/css/ilustraciones.css">
+    <script src="/js/rumbo.js" defer></script>
+    <link rel="stylesheet" href="/css/identidadAreas.css">
 </head>
-<body>
+<body data-area="comunidad">
     <a href="#panel-supervision" class="saltar-contenido">Saltar al contenido</a>
 
     <!-- Barra superior para tablet y móvil -->
@@ -131,9 +135,12 @@
 
         <!-- Contenido principal -->
         <div class="contenido-principal-app">
-            <header>
-                <h1>Revisión de Mensajes</h1>
-                <p>Supervisa, valida o elimina publicaciones reportadas o pendientes de moderación en el foro</p>
+            <header class="encabezado-ilustrado" data-ilustracion="foro">
+                <h1>Revisión de mensajes</h1>
+                <p>Revisa las publicaciones pendientes y el historial de moderación.</p>
+                <span class="ilustracion-seccion" aria-hidden="true">
+                    <img src="/icons/ilustraciones/foro.svg" width="240" height="160" alt="" decoding="async">
+                </span>
             </header>
 
             <p id="estado-acceso-supervision" class="estado-vista" role="status" style="margin: var(--space-3) var(--space-4);">
@@ -141,12 +148,12 @@
             </p>
 
             <main id="panel-supervision" hidden>
-                <p class="alerta alerta-info" role="note" style="margin: 0 0 var(--space-4);">
+                <p class="ayuda-vista" role="note" style="margin: 0 0 var(--space-4);">
                     Revisa el contenido de cada publicación antes de validarla o retirarla. Consulta tus revisiones para dar seguimiento a tus decisiones.
                 </p>
-                <div class="vista-encabezado">
+                <div class="vista-acciones">
                     <div>
-                        <h2>Publicaciones del Foro</h2>
+
                         <p class="texto-secundario">Supervisor: <strong id="nombre-supervisor"></strong></p>
                     </div>
                     <button id="actualizar-supervision" class="btn btn-secundario" type="button">
@@ -157,7 +164,7 @@
                 <p id="mensaje-supervision" class="estado-vista" role="status" aria-live="polite"></p>
 
                 <!-- Sección: Publicaciones pendientes -->
-                <section class="tarjeta" style="margin-bottom: var(--space-4);">
+                <section class="panel-vista">
                     <div class="vista-encabezado">
                         <div>
                             <h2>Publicaciones pendientes</h2>
@@ -173,7 +180,7 @@
                 </section>
 
                 <!-- Sección: Historial de revisiones -->
-                <section class="tarjeta" style="margin-bottom: var(--space-4);">
+                <section class="panel-vista">
                     <h2>Mis revisiones recientes</h2>
                     <p id="estado-revisiones" class="estado-vista"></p>
 

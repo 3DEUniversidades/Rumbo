@@ -1,16 +1,20 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+    <meta name="color-scheme" content="dark">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#0B6B3A">
+    <meta name="theme-color" content="#0C1420">
     <meta name="description" content="Rumbo - Comparador de carreras universitarias">
     <link rel="manifest" href="/manifest.json">
-    <title>Rumbo - Comparador de carreras</title>
+    <title>Comparar carreras - Rumbo</title>
     <link rel="stylesheet" href="/style.css">
     <link rel="stylesheet" href="/css/carrerasUniversidades.css?v=1">
+    <link rel="stylesheet" href="/css/ilustraciones.css">
+    <script src="/js/rumbo.js" defer></script>
+    <link rel="stylesheet" href="/css/identidadAreas.css">
 </head>
-<body>
+<body data-area="exploracion">
     <a href="#contenido-principal" class="saltar-contenido">Saltar al contenido</a>
 
     <!-- Barra superior para tablet y móvil -->
@@ -132,14 +136,17 @@
 
         <!-- Contenido principal -->
         <div class="contenido-principal-app">
-            <header>
-                <h1>Comparador de Carreras</h1>
-                <p>Compara planes de estudio, costos, duración y campo laboral</p>
+            <header class="encabezado-ilustrado" data-ilustracion="comparador">
+                <h1>Comparar carreras</h1>
+                <p>Revisa planes de estudio, duración, costos y campo laboral.</p>
+                <span class="ilustracion-seccion" aria-hidden="true">
+                    <img src="/icons/ilustraciones/comparador.svg" width="240" height="160" alt="" decoding="async">
+                </span>
             </header>
 
             <main id="contenido-principal">
                 <div id="vista-seleccion-comparador">
-                <p class="alerta alerta-info" role="note" style="margin: 0 0 var(--space-4);">
+                <p class="ayuda-vista" role="note" style="margin: 0 0 var(--space-4);">
                     Elige cuántas carreras comparar, agrégalas del listado y pulsa Comparar. Puedes quitar opciones de tu selección para probar otras.
                 </p>
                 <section id="panel-seleccion-comparador" class="perfil-card comparador-panel-seleccion" aria-labelledby="titulo-seleccion-comparador">
@@ -163,7 +170,7 @@
                         </div>
                     </div>
 
-                    <div class="filtros-comparador">
+                    <div class="filtros-comparador panel-vista">
                         <label>
                             <span>Universidad</span>
                             <select id="universidad-comparador"><option value="">Todas</option></select>
@@ -214,7 +221,7 @@
                 </section>
                 </div>
 
-                <section id="resultado-comparador" class="tarjeta" aria-labelledby="titulo-resultado-comparador" hidden>
+                <section id="resultado-comparador" class="tarjeta comparador-resultados" aria-labelledby="titulo-resultado-comparador" hidden>
                     <div class="vista-encabezado">
                         <h2 id="titulo-resultado-comparador" tabindex="-1">Tablero de comparación</h2>
                         <div class="acciones-resultado-comparador">

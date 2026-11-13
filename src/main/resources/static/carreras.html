@@ -1,16 +1,20 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+    <meta name="color-scheme" content="dark">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#0B6B3A">
+    <meta name="theme-color" content="#0C1420">
     <meta name="description" content="Rumbo - Catálogo de carreras">
     <link rel="manifest" href="/manifest.json">
-    <title>Rumbo - Carreras</title>
+    <title>Carreras universitarias - Rumbo</title>
     <link rel="stylesheet" href="/style.css">
     <link rel="stylesheet" href="/css/carrerasUniversidades.css?v=1">
+    <link rel="stylesheet" href="/css/ilustraciones.css">
+    <script src="/js/rumbo.js" defer></script>
+    <link rel="stylesheet" href="/css/identidadAreas.css">
 </head>
-<body>
+<body data-area="exploracion">
     <a href="#contenido-principal" class="saltar-contenido">Saltar al contenido</a>
 
     <!-- Barra superior para tablet y móvil -->
@@ -132,20 +136,22 @@
 
         <!-- Contenido principal -->
         <div class="contenido-principal-app">
-            <header>
-                <h1>Catálogo de Carreras</h1>
-                <p>Oferta académica y perfiles profesionales universitarios</p>
+            <header class="encabezado-ilustrado" data-ilustracion="carreras">
+                <h1>Carreras universitarias</h1>
+                <p>Explora los programas y encuentra opciones para tu próxima etapa.</p>
+                <span class="ilustracion-seccion" aria-hidden="true">
+                    <img src="/icons/ilustraciones/carreras.svg" width="240" height="160" alt="" decoding="async">
+                </span>
             </header>
 
             <main id="contenido-principal">
-                <p class="alerta alerta-info" role="note" style="margin: 0 0 var(--space-4);">
+                <p class="ayuda-vista" role="note" style="margin: 0 0 var(--space-4);">
                     Abre el detalle de una carrera para conocer su formación, duración y costos. Usa el comparador para revisar tus favoritas juntas.
                 </p>
                 <section id="catalogo-carreras">
                     <div class="vista-encabezado">
                         <div>
-                            <h2>Carreras disponibles</h2>
-                            <p class="texto-secundario">Consulta la información detallada de cada carrera.</p>
+                            <h2>Oferta académica</h2>
                         </div>
                         <div style="display: flex; gap: var(--space-2); flex-wrap: wrap;">
                             <a href="/inicio.html" class="btn btn-secundario">Volver al inicio</a>
@@ -158,7 +164,7 @@
                         <select id="universidad-catalogo" disabled><option value="">Todas las universidades</option></select>
                     </div>
                     <div id="estado-carreras" class="estado-vista" role="status">Cargando carreras...</div>
-                    <div id="lista-carreras" class="lista-carreras" aria-live="polite"></div>
+                    <div id="lista-carreras" class="lista-carreras catalogo-tarjetas" aria-live="polite"></div>
                 </section>
             </main>
 

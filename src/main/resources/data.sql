@@ -1380,3 +1380,97 @@ VALUES ('act-t10-familia', '2026-10-22', 'Conversar con tu familia sobre tus opc
 'Conversacion guiada', 'Lista de carreras y preguntas personales',
 'Acuerdos, inquietudes y conclusiones personales', 'Acompanamiento familiar')
 ON CONFLICT (id_actividad) DO NOTHING;
+
+-- Fecha sugerida para investigar: no representa un plazo oficial de la UVG.
+-- Fuente: https://www.uvg.edu.gt/admisiones/becas/
+INSERT INTO actividad (id_actividad, fecha, descripcion, contexto, instrucciones,
+acciones_a_realizar, metodo_recomendado, herramientas_disponibles, informacion_a_guardar, tipo_actividad)
+VALUES ('act-ayuda-financiera', '2026-11-16', 'Investigar planes de ayuda financiera',
+'Conocer las opciones de apoyo económico de la UVG para evaluar cómo financiar la carrera elegida y planificar el ingreso a la universidad.',
+'Consulta el enlace oficial. Compara becas y créditos, revisa sus requisitos y confirma con Admisiones las fechas vigentes. La solicitud de ayuda financiera se realiza después de ser admitido.',
+'Revisa el proceso: ingresar al portal, pagar la admisión, completar el formulario y programar la prueba. Tras ser admitido, solicitar ayuda financiera con los documentos requeridos y completar la inscripción.',
+'Investigación individual en línea de 45 a 60 minutos; compara las opciones con tu familia o encargado y prepara preguntas para Admisiones.',
+'Página oficial de becas y ayudas financieras UVG: https://www.uvg.edu.gt/admisiones/becas/',
+'Guarda en tu bitácora las opciones de interés, diferencias entre beca y crédito, requisitos, documentos pendientes, fechas confirmadas y tu siguiente paso.',
+'Investigación de ayuda financiera')
+ON CONFLICT (id_actividad) DO NOTHING;
+
+-- Actividades de exploración y preparación. Fechas sugeridas de realización,
+-- no convocatorias oficiales de la UVG ni fechas de admisión.
+-- Fuentes: https://www.uvg.edu.gt/admisiones/aplica-nuestros-programas/
+-- https://www.uvg.edu.gt/medios/
+-- https://noticias.uvg.edu.gt/abrimos-las-puertas-de-uvg-en-open-house-2025/
+-- https://excel.cloud.microsoft/create/es/budget-templates/
+-- https://support.google.com/docs/answer/148833?hl=es
+-- https://help.libreoffice.org/latest/es/text/scalc/main0503.html
+-- https://excel.cloud.microsoft/create/es/blog/budget-plan-examples/
+
+INSERT INTO actividad (id_actividad, fecha, descripcion, contexto, instrucciones,
+acciones_a_realizar, metodo_recomendado, herramientas_disponibles, informacion_a_guardar, tipo_actividad)
+VALUES ('act-comparar-planes',
+'2026-11-13',
+'Comparar los planes de estudio de tres carreras',
+'Conocer qué estudiarías en cada opción ayuda a distinguir las carreras y a relacionar sus materias con tus intereses, fortalezas y metas. Continúa la exploración de carreras que ya realizaste en Rumbo.',
+'1. Elige tres carreras de interés. 2. Busca sus planes de estudio oficiales. 3. Anota duración, materias, prácticas y requisitos. 4. Compara sus diferencias y marca las asignaturas que más te atraen o te generan dudas.',
+'Crea una tabla con una columna por carrera. Compara materias comunes y diferentes, duración y prácticas. Identifica tres materias favoritas por opción y dos dudas para conversar con un profesional o estudiante.',
+'Investigación individual de 60 a 90 minutos. Usa el catálogo y comparador de Rumbo como apoyo; confirma la información en las páginas de cada universidad y distingue los datos confirmados de los que faltan por consultar.',
+'Catálogo de carreras y comparador de Rumbo; páginas oficiales de las universidades; hojas de cálculo o cuaderno. Oferta académica UVG: https://www.uvg.edu.gt/academico/carreras/',
+'Guarda en tu bitácora la tabla comparativa, los enlaces consultados, las materias favoritas, las dudas pendientes y qué carrera se ajusta mejor a tus intereses, explicando por qué.',
+'Comparación de planes de estudio')
+ON CONFLICT (id_actividad) DO NOTHING;
+
+INSERT INTO actividad (id_actividad, fecha, descripcion, contexto, instrucciones,
+acciones_a_realizar, metodo_recomendado, herramientas_disponibles, informacion_a_guardar, tipo_actividad)
+VALUES ('act-entrevista-carrera',
+'2026-11-17',
+'Entrevistar a un profesional o estudiante de una carrera',
+'Conocer experiencias reales permite contrastar lo que leíste en los planes de estudio con las clases, proyectos, retos y trabajo cotidiano. Busca a un profesional del área o a un estudiante que curse la carrera de tu interés.',
+'1. Elige una carrera y una persona relacionada. 2. Pregunta qué estudia o en qué trabaja y acuerda la entrevista. 3. Prepara cinco preguntas sobre materias, dificultades, proyectos, trabajo y consejos. 4. Resume las respuestas.',
+'También puedes usar Foro: con tu cuenta de estudiante verificada, publica una duda, selecciona la carrera y pide respuestas a quienes la estudien o ejerzan. Revisa publicaciones y responde en el hilo para ampliar tus preguntas.',
+'Entrevista de 20 a 30 minutos o intercambio de preguntas en el foro. Pide a la persona indicar su relación con la carrera; distingue experiencias personales de requisitos oficiales y solicita permiso antes de grabar.',
+'Menú Foro de Rumbo: crea una publicación de tipo Duda y selecciona la carrera relacionada. Usa las respuestas públicas para conversar; si aún no estás verificado, solicita verificación o realiza la entrevista fuera del foro.',
+'Registra la carrera, el perfil de la persona, cinco preguntas y respuestas, tres aprendizajes y si cambió tu interés. Si usaste el foro, anota el título de la publicación para volver a consultarla.',
+'Entrevista y exploración vocacional')
+ON CONFLICT (id_actividad) DO NOTHING;
+
+INSERT INTO actividad (id_actividad, fecha, descripcion, contexto, instrucciones,
+acciones_a_realizar, metodo_recomendado, herramientas_disponibles, informacion_a_guardar, tipo_actividad)
+VALUES ('act-charla-uvg',
+'2026-11-19',
+'Participar en una charla o taller de orientación de la UVG',
+'La UVG ha organizado Experiencia UVG y Open House para conocer carreras, proyectos y laboratorios, conversar con docentes y estudiantes y participar en actividades de orientación. Revisa qué opciones se ajustan a tus intereses.',
+'1. Revisa los canales oficiales. 2. Busca una charla, taller o visita sobre tu carrera de interés. 3. Confirma fecha, modalidad, registro y disponibilidad. 4. Prepara tres preguntas y participa cuando exista una convocatoria vigente.',
+'El 19 de noviembre revisa la oferta y elige una opción. Si no hay eventos próximos, consulta una charla grabada oficial o pide información a Admisiones. La fecha de Rumbo es para investigar; no anuncia un evento de la UVG.',
+'Participación presencial o virtual, según la convocatoria. Ejemplo de un evento anterior, no una invitación vigente: https://noticias.uvg.edu.gt/abrimos-las-puertas-de-uvg-en-open-house-2025/',
+'Puedes revisar en sus redes si alguna actividad está pronta a realizarse en la universidad: redes de la Universidad del Valle de Guatemala https://www.uvg.edu.gt/medios/ | Instagram: https://www.instagram.com/uvggt/',
+'Anota evento o grabación, enlace, fecha confirmada, carrera relacionada, tres aprendizajes y respuestas a tus preguntas. Explica si la experiencia cambió tu percepción de la carrera; si no hay evento, registra tu siguiente consulta.',
+'Charlas y orientación universitaria')
+ON CONFLICT (id_actividad) DO NOTHING;
+
+INSERT INTO actividad (id_actividad, fecha, descripcion, contexto, instrucciones,
+acciones_a_realizar, metodo_recomendado, herramientas_disponibles, informacion_a_guardar, tipo_actividad)
+VALUES ('act-presupuesto-universitario',
+'2026-11-23',
+'Preparar y comparar presupuestos universitarios',
+'Después de investigar ayudas financieras, estima el costo de estudiar tus opciones de carrera. Incluye matrícula, cuotas, materiales, transporte, alimentación e internet; distingue gastos mensuales de pagos únicos.',
+'1. Elige dos opciones y consulta costos oficiales. 2. Usa una plantilla con concepto, monto, frecuencia y fuente. 3. Calcula totales mensuales y anuales por el mismo período. 4. Compara ingresos disponibles con gastos.',
+'Compara un escenario sin ayuda con otro de apoyo confirmado; marca cualquier beca hipotética como pendiente. Añade un margen para imprevistos y comprueba que no repitas pagos únicos. Identifica cuánto falta financiar en cada opción.',
+'Si eres principiante, usa una plantilla. Una IA como Copilot puede sugerir categorías, explicar fórmulas y comparar escenarios; algunas funciones requieren un plan compatible. Comprueba los cálculos con costos confirmados.',
+'Excel (plantillas): https://excel.cloud.microsoft/create/es/budget-templates/ | Google Sheets: https://sheets.google.com/ | LibreOffice Calc: https://help.libreoffice.org/latest/es/text/scalc/main0503.html',
+'Guarda el archivo o su enlace, costos y fuentes, supuestos, totales, diferencia entre ingresos y gastos y opción más viable. Si usaste IA, anota qué te ayudó a hacer y qué cifras o fórmulas verificaste.',
+'Planificación económica universitaria')
+ON CONFLICT (id_actividad) DO NOTHING;
+
+INSERT INTO actividad (id_actividad, fecha, descripcion, contexto, instrucciones,
+acciones_a_realizar, metodo_recomendado, herramientas_disponibles, informacion_a_guardar, tipo_actividad)
+VALUES ('act-plan-ingreso',
+'2026-11-25',
+'Crear un plan de preparación para el ingreso universitario',
+'Las universidades suelen solicitar identificación, fotografía, notas y constancia de graduación. Requisitos y pruebas varían por programa; organiza tus pendientes usando el ingreso ordinario a licenciaturas de la UVG como ejemplo.',
+'UVG solicita fotografía, certificado oficial de cursos desde 1.º básico hasta 4.º o 5.º diversificado, y DPI; si eres menor, partida de nacimiento; si eres extranjero, pasaporte. Consulta los requisitos aplicables a tu caso.',
+'1. Crea tu usuario y completa la solicitud. 2. Adjunta los documentos. 3. Paga, agenda, prepara y realiza la PAA. 4. Consulta la resolución del Comité: necesitas ser admitido para iniciar la preinscripción; la prueba no garantiza admisión.',
+'Crea una lista de pendientes con responsable y fecha. Confirma documentos de inscripción y el proceso de tu programa con Admisiones: la Facultad de Educación tiene un procedimiento distinto. Si ya hiciste la PAA, consulta cómo validar el resultado.',
+'Proceso y documentos UVG: https://www.uvg.edu.gt/admisiones/aplica-nuestros-programas/ | Solicitud: https://admisiones.uvg.edu.gt/ | Fechas de evaluación: https://www.uvg.edu.gt/fechas-de-admision/',
+'Registra universidad, carrera, documentos listos y pendientes, fechas confirmadas y plan de estudio para la PAA. Anota el estado de admisión y próximos trámites; conserva tus documentos personales en un lugar privado.',
+'Preparación para admisión universitaria')
+ON CONFLICT (id_actividad) DO NOTHING;

@@ -1,16 +1,20 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+    <meta name="color-scheme" content="dark">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#0B6B3A">
+    <meta name="theme-color" content="#0C1420">
     <meta name="description" content="Rumbo - Gestión de actividades de orientación">
-    <title>Rumbo - Gestión de actividades</title>
+    <title>Gestión de actividades - Rumbo</title>
     <link rel="manifest" href="/manifest.json">
     <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/css/ilustraciones.css">
+    <script src="/js/rumbo.js" defer></script>
     <link rel="stylesheet" href="/css/gestionActividades.css">
+    <link rel="stylesheet" href="/css/identidadAreas.css">
 </head>
-<body>
+<body data-area="proceso">
     <a href="#contenido-principal" class="saltar-contenido">Saltar al contenido</a>
 
     <!-- Barra superior para tablet y móvil -->
@@ -132,13 +136,16 @@
 
         <!-- Contenido principal -->
         <div class="contenido-principal-app">
-            <header>
-                <h1>Gestión de Actividades</h1>
-                <p>Crea, actualiza y programa actividades vocacionales para los estudiantes</p>
+            <header class="encabezado-ilustrado" data-ilustracion="actividades">
+                <h1>Gestión de actividades</h1>
+                <p>Crea y organiza las actividades del proceso de orientación.</p>
+                <span class="ilustracion-seccion" aria-hidden="true">
+                    <img src="/icons/ilustraciones/actividades.svg" width="240" height="160" alt="" decoding="async">
+                </span>
             </header>
 
             <main id="contenido-principal">
-                <p class="alerta alerta-info" role="note" style="margin: 0 0 var(--space-4);">
+                <p class="ayuda-vista" role="note" style="margin: 0 0 var(--space-4);">
                     Crea o ajusta las actividades que guían al estudiante. Revisa que sus instrucciones indiquen qué hacer y qué información guardar.
                 </p>
                 <p id="acceso-actividades" class="estado-vista" role="alert" style="margin: var(--space-3) 0;">Comprobando acceso...</p>

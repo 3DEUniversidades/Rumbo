@@ -1,5 +1,27 @@
-const CACHE_NAME = "rumbo-v7-supervision";
-const ASSETS = ["/style.css", "/manifest.json"];
+const CACHE_NAME = "rumbo-v14-multiuniversidad";
+const ASSETS = [
+    "/style.css",
+    "/css/lineaTiempo.css",
+    "/css/ilustraciones.css",
+    "/css/identidadAreas.css",
+    "/css/carrerasUniversidades.css",
+    "/icons/ilustraciones/carreras.svg",
+    "/icons/ilustraciones/comparador.svg",
+    "/icons/ilustraciones/bitacora.svg",
+    "/icons/ilustraciones/pruebas.svg",
+    "/icons/ilustraciones/foro.svg",
+    "/icons/ilustraciones/recorrido.svg",
+    "/icons/ilustraciones/perfil.svg",
+    "/icons/ilustraciones/actividades.svg",
+    "/icons/ilustraciones/usuarios.svg",
+    "/icons/ilustraciones/registros.svg",
+    "/manifest.json",
+    "/js/rumbo.js",
+    "/icons/fonts/PublicSans-Regular.woff2",
+    "/icons/fonts/PublicSans-Medium.woff2",
+    "/icons/fonts/PublicSans-SemiBold.woff2",
+    "/icons/fonts/PublicSans-Bold.woff2"
+];
 
 self.addEventListener("install", event => {
     event.waitUntil((async () => {

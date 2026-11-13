@@ -1,15 +1,19 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+    <meta name="color-scheme" content="dark">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#0B6B3A">
+    <meta name="theme-color" content="#0C1420">
     <link rel="manifest" href="/manifest.json">
-    <title>Rumbo - Pruebas Vocacionales</title>
+    <title>Pruebas vocacionales - Rumbo</title>
     <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/css/ilustraciones.css">
+    <script src="/js/rumbo.js" defer></script>
     <link rel="stylesheet" href="/css/pruebasVocacionales.css?v=t11-2">
+    <link rel="stylesheet" href="/css/identidadAreas.css">
 </head>
-<body>
+<body data-area="proceso">
     <a href="#contenido-principal" class="saltar-contenido">Saltar al contenido</a>
 
     <!-- Barra superior para tablet y móvil -->
@@ -131,25 +135,25 @@
 
         <!-- Contenido principal -->
         <div class="contenido-principal-app">
-            <header>
-                <h1>Pruebas Vocacionales</h1>
-                <p>Herramientas externas y registro privado de tus resultados</p>
+            <header class="encabezado-ilustrado" data-ilustracion="pruebas">
+                <h1>Pruebas vocacionales</h1>
+                <p>Consulta recursos externos y conserva tus resultados privados.</p>
+                <span class="ilustracion-seccion" aria-hidden="true">
+                    <img src="/icons/ilustraciones/pruebas.svg" width="240" height="160" alt="" decoding="async">
+                </span>
             </header>
 
             <main id="contenido-principal">
-                <p class="alerta alerta-info" role="note" style="margin: 0 0 var(--space-4);">
+                <p class="ayuda-vista" role="note" style="margin: 0 0 var(--space-4);">
                     Consulta las pruebas externas y registra tus resultados al terminarlas para revisarlos durante tu orientación.
                 </p>
-                <div class="vista-encabezado">
-                    <div>
-                        <h2>Mis pruebas externas</h2>
-                        <p class="texto-secundario">Consulta las instrucciones del proveedor y registra los resultados que obtengas fuera de Rumbo.</p>
-                    </div>
-                    <a href="/inicio.html" class="btn btn-secundario">Volver al inicio</a>
+                <div class="vista-acciones">
+
+                    <a href="/inicio.html" class="btn btn-secundario btn-pequeno">Volver al inicio</a>
                 </div>
 
-                <section class="card" aria-labelledby="aviso-pruebas">
-                    <h3 id="aviso-pruebas">Como funciona</h3>
+                <section class="card pruebas-contexto" aria-labelledby="aviso-pruebas">
+                    <h2 id="aviso-pruebas">Cómo funcionan</h2>
                     <p>Rumbo no aplica, califica ni sustituye pruebas estandarizadas. Abre los recursos oficiales, realiza la prueba fuera de la plataforma y registra tus resultados manualmente.</p>
                     <p>Los resultados son privados. Guardarlos no completa automaticamente la actividad ni genera una recomendacion de carrera.</p>
                 </section>
@@ -166,12 +170,14 @@
                         <a id="todas-las-pruebas" class="btn btn-secundario" href="/test-vocacional.html" hidden>Ver todas las pruebas</a>
                         <button id="recargar-pruebas" type="button" class="btn btn-secundario">Actualizar</button>
                     </div>
+                    <div class="bloques-vista pruebas-distribucion">
                     <div id="lista-pruebas"></div>
-                    <section class="card" aria-labelledby="titulo-mis-resultados">
+                    <section class="card pruebas-historial" aria-labelledby="titulo-mis-resultados">
                         <h2 id="titulo-mis-resultados">Mis resultados guardados</h2>
                         <p>Tu registro mas reciente de cada prueba. Los resultados de actividades retiradas se conservan como historial.</p>
                         <div id="historial-resultados"></div>
                     </section>
+                    </div>
                 </section>
             </main>
 

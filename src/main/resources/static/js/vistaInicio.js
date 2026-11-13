@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         document.getElementById("saludo").textContent =
             "Hola, " + sesion.nombreCompleto;
         document.getElementById("encabezado-usuario").textContent =
-            "Orientación vocacional para " + sesion.nombreCompleto;
+            "Tu proceso de orientación, paso a paso.";
 
         await cargarNotificaciones();
 

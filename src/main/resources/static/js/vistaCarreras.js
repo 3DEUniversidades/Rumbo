@@ -86,6 +86,8 @@ document.addEventListener("DOMContentLoaded", () => {
     function crearTarjetaCarrera(carrera) {
         const tarjeta = document.createElement("article");
         tarjeta.className = "carrera-card";
+        const cabecera = document.createElement("div");
+        cabecera.className = "carrera-cabecera";
 
         const nombre = document.createElement("h3");
         nombre.textContent = carrera.nombre;
@@ -97,21 +99,31 @@ document.addEventListener("DOMContentLoaded", () => {
         facultad.className = "carrera-area";
         facultad.textContent = "Facultad: " + (carrera.facultad ?? NO_DISPONIBLE);
 
-        const resumen = document.createElement("p");
-        resumen.className = "carrera-uni";
-        const duracion = carrera.duracion == null
-            ? "Duración no disponible" : `${carrera.duracion} años`;
-        resumen.textContent = carrera.costo == null
-            ? `${duracion} · Costo no disponible`
-            : `${duracion} · ${formatearMonto(carrera.costo)} el primer semestre`;
+        cabecera.append(nombre, institucion, facultad);
+
+        const resumen = document.createElement("dl");
+        resumen.className = "carrera-resumen";
+        const datos = [
+            ["Duración", carrera.duracion == null ? NO_DISPONIBLE : `${carrera.duracion} años`],
+            ["Primer semestre", formatearMonto(carrera.costo)]
+        ];
+        datos.forEach(([etiqueta, valor]) => {
+            const dato = document.createElement("div");
+            const titulo = document.createElement("dt");
+            const contenido = document.createElement("dd");
+            titulo.textContent = etiqueta;
+            contenido.textContent = valor;
+            dato.append(titulo, contenido);
+            resumen.appendChild(dato);
+        });
 
         const botonDetalle = document.createElement("button");
-        botonDetalle.className = "btn";
+        botonDetalle.className = "btn btn-detalle-carrera";
         botonDetalle.type = "button";
         botonDetalle.textContent = "Ver detalle";
         botonDetalle.addEventListener("click", () => abrirDetalle(carrera));
 
-        tarjeta.append(nombre, institucion, facultad, resumen, botonDetalle);
+        tarjeta.append(cabecera, resumen, botonDetalle);
         return tarjeta;
     }
 

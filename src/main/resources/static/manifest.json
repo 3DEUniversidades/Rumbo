@@ -4,8 +4,8 @@
     "description": "Sistema de Orientacion Vocacional",
     "start_url": "/",
     "display": "standalone",
-    "background_color": "#F5F8F6",
-    "theme_color": "#0B6B3A",
+    "background_color": "#111925",
+    "theme_color": "#0C1420",
     "icons": [
         {
             "src": "/icon-192.png",

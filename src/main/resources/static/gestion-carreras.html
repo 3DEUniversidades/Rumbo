@@ -1,16 +1,20 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+    <meta name="color-scheme" content="dark">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#0B6B3A">
+    <meta name="theme-color" content="#0C1420">
     <meta name="description" content="Rumbo - Gestión y administración del catálogo de carreras">
-    <title>Rumbo - Gestión de carreras</title>
+    <title>Gestión de carreras - Rumbo</title>
     <link rel="manifest" href="/manifest.json">
     <link rel="stylesheet" href="/style.css">
     <link rel="stylesheet" href="/css/carrerasUniversidades.css?v=1">
+    <link rel="stylesheet" href="/css/ilustraciones.css">
+    <script src="/js/rumbo.js" defer></script>
+    <link rel="stylesheet" href="/css/identidadAreas.css">
 </head>
-<body>
+<body data-area="exploracion">
     <a href="#gestion-carreras" class="saltar-contenido">Saltar al contenido</a>
 
     <!-- Barra superior para tablet y móvil -->
@@ -132,19 +136,22 @@
 
         <!-- Contenido principal -->
         <div class="contenido-principal-app">
-            <header>
-                <h1>Gestión de Carreras</h1>
-                <p>Administra la oferta académica, información de costos y perfiles profesionales</p>
+            <header class="encabezado-ilustrado" data-ilustracion="carreras">
+                <h1>Gestión de carreras</h1>
+                <p>Administra la oferta académica y consulta sus actualizaciones.</p>
+                <span class="ilustracion-seccion" aria-hidden="true">
+                    <img src="/icons/ilustraciones/carreras.svg" width="240" height="160" alt="" decoding="async">
+                </span>
             </header>
 
             <p id="estado-acceso" class="estado-vista" role="alert" style="margin: var(--space-3) var(--space-4);"></p>
 
             <main id="gestion-carreras" hidden>
-                <p class="alerta alerta-info" role="note" style="margin: 0 0 var(--space-4);">
+                <p class="ayuda-vista" role="note" style="margin: 0 0 var(--space-4);">
                     Selecciona una carrera para editar su información. Cada campo que modifiques quedará registrado en el historial.
                 </p>
                 <!-- Sección: Tablero de carreras -->
-                <section class="tarjeta" style="margin-bottom: var(--space-4);">
+                <section class="panel-vista">
                     <div class="vista-encabezado">
                         <div>
                             <h2>Tablero de carreras</h2>
@@ -185,7 +192,7 @@
                 </section>
 
                 <!-- Sección: Historial de actualizaciones -->
-                <section class="tarjeta" style="margin-bottom: var(--space-4);">
+                <section class="panel-vista">
                     <div class="vista-encabezado">
                         <div>
                             <h2>Historial de actualizaciones</h2>

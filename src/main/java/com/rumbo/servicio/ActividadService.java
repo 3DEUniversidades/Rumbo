@@ -5,6 +5,7 @@ import com.rumbo.modelo.Actividad;
 import com.rumbo.persistencia.ActividadRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
@@ -20,7 +21,12 @@ public class ActividadService {
 
     @Transactional(readOnly = true)
     public List<Actividad> obtenerLineaDeTiempo() {
-        return actividadRepository.findByEliminadaFalseOrderByFechaAsc();
+        return actividadRepository.findByEliminadaFalseOrderByFechaAsc()
+                .stream()
+                .sorted(Comparator.comparing(
+                        Actividad::getFecha, OrdenFechasActividades.cronologico()
+                ).thenComparing(Actividad::getIdActividad))
+                .toList();
     }
 
     @Transactional(readOnly = true)

@@ -3,6 +3,6 @@
 .filtros-historial-supervisor label{display:grid;gap:.4rem;}
 .filtros-historial-supervisor select{font:inherit;max-width:100%;padding:.5rem;}
 .paginacion-historial-supervisor{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.75rem;}
-.decision-supervisor{padding:1rem 0;border-bottom:1px solid var(--border,#d8dfdb);overflow-wrap:anywhere;}
+.decision-supervisor{padding:var(--space-4);margin-bottom:var(--space-3);border-radius:var(--radius-sm);background:var(--color-surface);overflow-wrap:anywhere;}
 .decision-supervisor dt{font-weight:700;margin-top:.5rem;}
 .decision-supervisor dd{margin:.2rem 0 0;white-space:pre-wrap;overflow-wrap:anywhere;}

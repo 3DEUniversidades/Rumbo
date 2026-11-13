@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="240" height="160" viewBox="0 0 240 160" fill="none">
+  <ellipse cx="114" cy="82" rx="86" ry="58" fill="#253653" opacity=".48"/>
+  <circle cx="194" cy="42" r="4" fill="#91B5F5" opacity=".4"/>
+  <g stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <g transform="rotate(-8 80 83)">
+      <rect x="44" y="35" width="69" height="99" rx="7" fill="#293A56" stroke="#B0BDCE" stroke-opacity=".7"/>
+      <rect x="57" y="49" width="20" height="8" rx="3" fill="#91B5F5" fill-opacity=".25" stroke="#91B5F5"/>
+      <path d="M57 72h41m-41 11h29m-29 11h36m-36 20h18" stroke="#B0BDCE" opacity=".65"/>
+    </g>
+    <g transform="rotate(6 150 73)">
+      <rect x="116" y="25" width="69" height="103" rx="7" fill="#293A56" stroke="#C4D8FC"/>
+      <rect x="129" y="40" width="29" height="8" rx="3" fill="#91B5F5" fill-opacity=".25" stroke="#91B5F5"/>
+      <path d="M129 63h41m-41 11h35m-35 11h23m-23 20h25" stroke="#B0BDCE" opacity=".65"/>
+    </g>
+    <circle cx="113" cy="117" r="21" fill="#253653" stroke="#91B5F5"/>
+    <path d="M101 112h23m-5-5 5 5-5 5m6 6h-23m5-5-5 5 5 5" stroke="#C4D8FC"/>
+  </g>
+</svg>
