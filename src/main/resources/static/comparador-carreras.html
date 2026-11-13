@@ -114,10 +114,6 @@
                     </a>
                 </div>
 
-                <a id="enlace-perfil" href="/perfil.html" class="nav-item-sub">
-                    <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-                    <span id="texto-enlace-perfil">Mi perfil</span>
-                </a>
 
                 <button id="cerrar-sesion" class="btn-cerrar-sesion" type="button" aria-label="Cerrar sesión">
                     <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
@@ -143,6 +139,9 @@
 
             <main id="contenido-principal">
                 <div id="vista-seleccion-comparador">
+                <p class="alerta alerta-info" role="note" style="margin: 0 0 var(--space-4);">
+                    Elige cuántas carreras comparar, agrégalas del listado y pulsa Comparar. Puedes quitar opciones de tu selección para probar otras.
+                </p>
                 <section id="panel-seleccion-comparador" class="perfil-card comparador-panel-seleccion" aria-labelledby="titulo-seleccion-comparador">
                     <div class="comparador-panel-encabezado">
                         <div>
@@ -251,6 +250,7 @@
                         </div>
                     </details>
                 </section>
+
             </main>
 
             <footer>
@@ -261,6 +261,6 @@
 
     <script src="/js/sesion.js"></script>
     <script src="/js/barraLateral.js"></script>
-    <script src="/js/vistaComparadorCarreras.js?v=3"></script>
+    <script src="/js/vistaComparadorCarreras.js?v=4"></script>
 </body>
 </html>

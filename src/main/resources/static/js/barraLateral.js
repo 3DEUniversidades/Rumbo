@@ -11,7 +11,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     const btnAbrirMenu = document.getElementById("btn-abrir-menu");
     const backdropMenu = document.getElementById("backdrop-menu");
     const contenedorUsuario = document.getElementById("usuario-bloque-perfil");
-    const textoPerfil = document.getElementById("texto-enlace-perfil");
     const inicialesElem = document.getElementById("usuario-iniciales");
     const nombreElem = document.getElementById("usuario-nombre");
     const rolEtiquetaElem = document.getElementById("usuario-rol-etiqueta");
@@ -90,12 +89,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         if (rolEtiquetaElem) {
             rolEtiquetaElem.textContent = formatearRol(rol);
-        }
-
-        // Configurar texto de perfil según el rol
-        if (textoPerfil) {
-            const esPerfilEditable = rol === "ESTUDIANTE" || rol === "COLABORADOR";
-            textoPerfil.textContent = esPerfilEditable ? "Mi perfil" : "Mi cuenta";
         }
 
         // Asegurar que la zona del usuario redirija al perfil
