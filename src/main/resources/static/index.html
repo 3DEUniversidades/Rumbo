@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="color-scheme" content="dark light">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0C1420">
+    <meta name="description" content="Tu siguiente paso hacia la universidad empieza en Rumbo. Explora carreras, compara tus opciones y construye tu decisión con una bitácora personal.">
+    <link rel="manifest" href="/manifest.json">
+    <title>Rumbo — Tu siguiente paso hacia la u</title>
+    <script src="/js/apariencia.js"></script>
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/css/identidadAreas.css">
+    <link rel="stylesheet" href="/css/apariencia.css">
+    <link rel="stylesheet" href="/css/landing.css?v=3">
+    <script src="/js/rumbo.js?v=landing-1" defer></script>
+    <script src="/js/landing.js?v=1" defer></script>
+</head>
+<body class="landing">
+    <a href="#contenido" class="saltar-contenido">Saltar al contenido</a>
+
+    <svg class="landing-simbolos" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+        <symbol id="icono-rumbo" viewBox="0 0 32 32"><path d="M16 3 28 27 16 22 4 27Z"/><path d="M16 3v19"/></symbol>
+        <symbol id="icono-carreras" viewBox="0 0 24 24"><path d="m2 9 10-5 10 5-10 5Z"/><path d="M6 11v6c4 3 8 3 12 0v-6M22 9v7"/></symbol>
+        <symbol id="icono-comparar" viewBox="0 0 24 24"><rect x="3" y="4" width="7" height="16" rx="2"/><rect x="14" y="4" width="7" height="16" rx="2"/><path d="M5 9h3m8 0h3M5 13h3m8 0h3"/></symbol>
+        <symbol id="icono-intereses" viewBox="0 0 24 24"><path d="M9 18h6m-5 3h4M8 14a7 7 0 1 1 8 0c-1 1-1 2-1 2H9s0-1-1-2Z"/><path d="m9 8 2 2 4-4"/></symbol>
+        <symbol id="icono-bitacora" viewBox="0 0 24 24"><path d="M5 3h13a1 1 0 0 1 1 1v17H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Zm0 0v18M9 7h6m-6 4h6m-6 4h4"/></symbol>
+        <symbol id="icono-descarga" viewBox="0 0 24 24"><path d="M12 3v12m-5-5 5 5 5-5M4 15v5h16v-5"/></symbol>
+        <symbol id="icono-comunidad" viewBox="0 0 24 24"><path d="M21 11a8 8 0 0 1-8 8H9l-6 3 1-6a8 8 0 1 1 17-5Z"/><path d="M7 10h10m-10 4h6"/></symbol>
+        <symbol id="icono-flecha" viewBox="0 0 24 24"><path d="M4 12h15m-6-6 6 6-6 6"/></symbol>
+    </svg>
+
+    <header class="landing-header">
+        <div class="landing-shell landing-navegacion">
+            <a href="/" class="landing-marca" aria-label="Rumbo, página principal">
+                <span class="landing-marca-icono" data-rumbo-marca><svg aria-hidden="true"><use href="#icono-rumbo"/></svg></span>
+                Rumbo<span class="landing-marca-punto">.</span>
+            </a>
+            <nav class="landing-enlaces" aria-label="Navegación principal">
+                <a href="#herramientas">Qué puedes hacer</a>
+                <a href="#como-empezar">Cómo empezar</a>
+                <a href="#preguntas">Tus dudas</a>
+            </nav>
+            <div class="landing-acceso">
+                <a href="/login.html" class="landing-login" data-sin-sesion>Iniciar sesión</a>
+                <a href="/login.html#crear-cuenta" class="btn" data-crear-cuenta data-texto-sesion="Mi inicio">Crear cuenta</a>
+            </div>
+        </div>
+    </header>
+
+    <main id="contenido" tabindex="-1">
+        <section class="landing-hero" aria-labelledby="titulo-portada">
+            <div class="landing-shell landing-hero-grid">
+                <div class="landing-hero-texto">
+                    <p class="landing-etiqueta"><span aria-hidden="true">✦</span> DE BACHILLERATO A LA U</p>
+                    <h1 id="titulo-portada">Tu siguiente paso hacia la u <span>empieza aquí.</span></h1>
+                    <p class="landing-intro">No tienes que tener todo claro hoy. Descubre lo que te mueve, explora carreras y encuentra opciones que conecten contigo.</p>
+                    <div class="landing-hero-acciones">
+                        <a href="/login.html#crear-cuenta" class="btn landing-btn-principal" data-crear-cuenta>Empezar mi camino</a>
+                        <a href="#herramientas" class="landing-enlace-flecha">Conocer Rumbo <span aria-hidden="true">↓</span></a>
+                    </div>
+                    <p class="landing-microtexto">Tus intereses. Tus opciones. Una decisión más informada.</p>
+                </div>
+
+                <div class="landing-ilustracion" aria-hidden="true">
+                    <div class="landing-nota landing-nota-inicio"><span>✦</span> Un mundo de posibilidades</div>
+                    <svg class="landing-escena" viewBox="0 0 520 460" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M68 398V208a192 192 0 0 1 384 0v190Z" fill="var(--color-primary-soft)"/>
+                        <circle cx="385" cy="105" r="38" fill="var(--color-highlight)"/>
+                        <path d="M230 426c-54-56 110-60 79-113s-140-41-75-104" fill="none" stroke="var(--color-bg)" stroke-width="54"/>
+                        <path d="M230 426c-54-56 110-60 79-113s-140-41-75-104" fill="none" stroke="var(--color-text-muted)" stroke-width="2" stroke-dasharray="7 10"/>
+                        <path d="m276 153 76-38 76 38-76 38Z" fill="var(--color-primary)"/>
+                        <path d="M303 170v38c26 15 50 15 77 0v-38" fill="var(--color-surface-raised)" stroke="var(--color-primary)" stroke-width="3"/>
+                        <path d="M428 153v39" stroke="var(--color-primary)" stroke-width="3"/>
+                        <circle cx="428" cy="197" r="5" fill="var(--color-highlight)"/>
+                        <ellipse cx="135" cy="408" rx="64" ry="12" fill="var(--color-surface-raised)"/>
+                        <path d="m112 317-13 84h23l22-73m-1-11 19 84h22l-10-96" fill="var(--identidad-exploracion)"/>
+                        <path d="M100 242c22-22 56-17 72 2l15 79h-90Z" fill="var(--color-highlight)"/>
+                        <path d="M110 247 86 295l-27-14m109-32 30 38 36-21" fill="none" stroke="#B8764B" stroke-width="15" stroke-linecap="round"/>
+                        <rect x="222" y="240" width="29" height="44" rx="3" transform="rotate(15 222 240)" fill="var(--color-surface)" stroke="var(--color-border)"/>
+                        <circle cx="135" cy="202" r="27" fill="#B8764B"/>
+                        <path d="M108 198c-10-41 56-52 57-9-18-7-26-15-32-18-4 12-12 21-25 27Z" fill="#27362E"/>
+                        <path d="M104 400H86c-7 0-11 9-6 12h45v-12m38 0h22l15 9c2 2 0 4-3 4h-38Z" fill="var(--color-surface)" stroke="var(--identidad-exploracion)" stroke-width="2"/>
+                        <ellipse cx="381" cy="408" rx="57" ry="12" fill="var(--color-surface-raised)"/>
+                        <path d="m358 317-8 85h24l13-64 13 64h24l-6-89" fill="var(--color-primary)"/>
+                        <path d="M347 251c16-20 53-25 72-1l6 76h-82Z" fill="var(--identidad-comunidad)"/>
+                        <path d="M351 257 324 291l-35-13m121-20 18 45-23 12" fill="none" stroke="#D69C79" stroke-width="14" stroke-linecap="round"/>
+                        <path d="M363 229c-34 3-35-59-1-62 22-14 50 9 42 35l6 33Z" fill="#27362E"/>
+                        <circle cx="377" cy="203" r="25" fill="#D69C79"/>
+                        <path d="M350 190c1-33 56-32 54 2-13-1-24-9-31-16-4 8-12 12-23 14Z" fill="#27362E"/>
+                        <path d="M349 402h25v10h-41c-3-3 4-10 16-10Zm52 0h23l13 10h-39Z" fill="var(--color-highlight)" stroke="var(--color-primary)" stroke-width="2"/>
+                        <path d="M61 386v-61m0 43c-28-2-33-30-30-39 21 3 30 17 30 39Zm0-18c27-2 31-24 30-34-19 2-29 16-30 34Z" fill="var(--color-primary)"/>
+                        <path d="m32 386 8 25h40l8-25Z" fill="var(--color-highlight)"/>
+                        <path d="m466 278 8 13 15 2-11 11 3 15-14-7-14 7 3-15-11-11 15-2Z" fill="var(--color-highlight)"/>
+                        <path d="m56 150 10 10m-10 0 10-10m379 83 10 10m-10 0 10-10" stroke="var(--color-primary)" stroke-width="3" stroke-linecap="round"/>
+                    </svg>
+                    <div class="landing-nota landing-nota-destino"><span class="landing-nota-check">✓</span><div>Tu futuro, a tu manera<small>Un paso a la vez</small></div></div>
+                    <div class="landing-orbita landing-orbita-uno"></div>
+                    <div class="landing-orbita landing-orbita-dos"></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="herramientas" class="landing-herramientas" aria-labelledby="titulo-herramientas">
+            <div class="landing-shell">
+                <div class="landing-encabezado-seccion">
+                    <p class="landing-sobretitulo">MÁS QUE UNA LISTA DE CARRERAS</p>
+                    <h2 id="titulo-herramientas">Un espacio para descubrir<br>lo que viene para ti.</h2>
+                    <p>Conecta lo que te gusta con lo que podrías estudiar. En Rumbo, cada herramienta te ayuda a dar un paso más.</p>
+                </div>
+                <div class="landing-herramientas-grid">
+                    <article class="landing-herramienta">
+                        <span class="landing-icono landing-icono-exploracion"><svg aria-hidden="true"><use href="#icono-carreras"/></svg></span>
+                        <h3>Abre tus posibilidades</h3>
+                        <p>Explora carreras de distintas universidades, sus áreas de formación y la información disponible de sus planes.</p>
+                        <span class="landing-herramienta-pie">Catálogo de carreras</span>
+                    </article>
+                    <article class="landing-herramienta">
+                        <span class="landing-icono landing-icono-exploracion"><svg aria-hidden="true"><use href="#icono-comparar"/></svg></span>
+                        <h3>Pon tus opciones lado a lado</h3>
+                        <p>Compara duración, costos de referencia y perfiles de las carreras que te interesan, incluso entre universidades.</p>
+                        <span class="landing-herramienta-pie">Comparador de carreras</span>
+                    </article>
+                    <article class="landing-herramienta">
+                        <span class="landing-icono landing-icono-proceso"><svg aria-hidden="true"><use href="#icono-intereses"/></svg></span>
+                        <h3>Descubre qué te mueve</h3>
+                        <p>Encuentra actividades y recursos de pruebas vocacionales para explorar tus intereses y habilidades.</p>
+                        <span class="landing-herramienta-pie">Autoconocimiento</span>
+                    </article>
+                    <article class="landing-herramienta">
+                        <span class="landing-icono landing-icono-personal"><svg aria-hidden="true"><use href="#icono-bitacora"/></svg></span>
+                        <h3>Dale espacio a tus ideas</h3>
+                        <p>Guarda reflexiones, dudas, archivos y fotografías en tu bitácora personal. Vuelve a ellas cuando lo necesites.</p>
+                        <span class="landing-herramienta-pie">Tu bitácora privada</span>
+                    </article>
+                    <article class="landing-herramienta">
+                        <span class="landing-icono landing-icono-personal"><svg aria-hidden="true"><use href="#icono-descarga"/></svg></span>
+                        <h3>Llévate lo que has construido</h3>
+                        <p>Descarga tus reflexiones en PDF o reúne tu bitácora y sus adjuntos en un ZIP para conservar una copia de tu proceso.</p>
+                        <span class="landing-herramienta-pie">Tus avances contigo</span>
+                    </article>
+                    <article class="landing-herramienta">
+                        <span class="landing-icono landing-icono-comunidad"><svg aria-hidden="true"><use href="#icono-comunidad"/></svg></span>
+                        <h3>Escucha otras perspectivas</h3>
+                        <p>Comparte preguntas y experiencias en el foro con estudiantes y colaboradores, una vez verificada tu cuenta.</p>
+                        <span class="landing-herramienta-pie">Comunidad Rumbo</span>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section id="como-empezar" class="landing-pasos" aria-labelledby="titulo-pasos">
+            <div class="landing-shell">
+                <div class="landing-encabezado-seccion">
+                    <p class="landing-sobretitulo">NO NECESITAS RESOLVERLO TODO HOY</p>
+                    <h2 id="titulo-pasos">Tu camino empieza con un paso.</h2>
+                </div>
+                <ol class="landing-pasos-grid">
+                    <li><span class="landing-numero" aria-hidden="true">01</span><h3>Crea tu cuenta</h3><p>Haz de Rumbo tu espacio para explorar esta nueva etapa como estudiante.</p></li>
+                    <li><span class="landing-numero" aria-hidden="true">02</span><h3>Descubre y compara</h3><p>Conoce tus intereses y contrasta las carreras que llaman tu atención.</p></li>
+                    <li><span class="landing-numero" aria-hidden="true">03</span><h3>Construye tu decisión</h3><p>Registra lo que aprendes y reúne información para elegir con más confianza.</p></li>
+                </ol>
+                <a href="/login.html#crear-cuenta" class="btn landing-btn-claro" data-crear-cuenta>Quiero dar mi primer paso</a>
+            </div>
+        </section>
+
+        <section id="preguntas" class="landing-preguntas" aria-labelledby="titulo-preguntas">
+            <div class="landing-shell landing-preguntas-grid">
+                <div>
+                    <p class="landing-sobretitulo">ES NORMAL TENER PREGUNTAS</p>
+                    <h2 id="titulo-preguntas">Aclaremos algunas<br>antes de empezar.</h2>
+                    <p>No tener una carrera elegida también es un buen punto de partida.</p>
+                </div>
+                <div class="landing-acordeon">
+                    <details><summary>¿Necesito saber qué quiero estudiar?</summary><p>No. Puedes empezar explorando tus intereses y las carreras disponibles. Rumbo te ayuda a organizar la información mientras descubres qué opciones conectan contigo.</p></details>
+                    <details><summary>¿Rumbo decide una carrera por mí?</summary><p>La decisión es tuya. Rumbo te ofrece recursos para conocerte, comparar información y reflexionar sobre las opciones que te interesan.</p></details>
+                    <details><summary>¿Quién puede ver mi bitácora?</summary><p>Tu bitácora y sus adjuntos son privados: solo tú puedes consultarlos y descargarlos. Tú decides con quién compartes las copias que exportas.</p></details>
+                    <details><summary>¿Cómo puedo participar en el foro?</summary><p>Después de crear tu cuenta de estudiante, solicita su verificación desde tu perfil. Una vez verificada, podrás participar en el foro y compartir con la comunidad.</p></details>
+                    <details><summary>¿Puedo usar Rumbo desde mi celular?</summary><p>Sí. Puedes acceder desde el navegador de tu celular, tablet o computadora para continuar explorando tus opciones.</p></details>
+                </div>
+            </div>
+        </section>
+
+        <section class="landing-cierre" aria-labelledby="titulo-cierre">
+            <div class="landing-shell">
+                <div class="landing-cierre-tarjeta">
+                    <div><p class="landing-sobretitulo">EL SIGUIENTE PASO ES TUYO</p><h2 id="titulo-cierre">No necesitas todas las respuestas.<br>Solo un lugar para empezar.</h2><p>Encuentra el tuyo en Rumbo.</p></div>
+                    <div class="landing-cierre-acciones">
+                        <a href="/login.html#crear-cuenta" class="btn landing-btn-principal" data-crear-cuenta>Crear mi cuenta</a>
+                        <p data-sin-sesion>¿Ya tienes cuenta? <a href="/login.html">Inicia sesión</a></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="landing-footer">
+        <div class="landing-shell landing-footer-fila">
+            <div><a href="/" class="landing-marca"><span class="landing-marca-icono" data-rumbo-marca></span>Rumbo<span class="landing-marca-punto">.</span></a><p>Explora tus opciones. Construye tu camino.</p></div>
+            <nav aria-label="Enlaces al pie"><a href="#herramientas">Herramientas</a><a href="#preguntas">Preguntas frecuentes</a><a href="/login.html">Acceder a mi cuenta</a></nav>
+        </div>
+        <div class="landing-shell landing-footer-base"><p>Rumbo &copy; 2026 · Orientación vocacional</p><a href="#contenido">Volver arriba ↑</a></div>
+    </footer>
+</body>
+</html>

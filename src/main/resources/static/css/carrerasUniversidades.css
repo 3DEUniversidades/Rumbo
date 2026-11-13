@@ -1,0 +1,39 @@
+.filtro-universidad { display: grid; gap: var(--space-2); max-width: 28rem; margin-bottom: var(--space-4); }
+.carrera-universidad { color: var(--color-primary); font-weight: 600; margin-bottom: var(--space-2); }
+
+/* Es hermano del catálogo: sigue disponible durante TODO el recorrido del listado. */
+.comparador-panel-seleccion {
+    position: sticky;
+    top: var(--offset-comparador, 0px);
+    z-index: 30;
+    background: var(--color-surface);
+    padding: var(--space-4);
+    border-top: 3px solid var(--color-primary);
+    box-shadow: var(--shadow-hover);
+}
+.comparador-panel-encabezado { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); }
+.comparador-panel-encabezado h2 { margin: 0; font-size: var(--font-size-md); }
+.comparador-panel-encabezado p { margin: var(--space-1) 0 0; }
+#comparar-carreras { flex: 0 0 auto; min-width: 8rem; min-height: 44px; }
+.comparador-panel-seleccion .seleccion-comparador { max-height: 6rem; overflow-y: auto; margin: var(--space-2) 0 0; padding: 2px; }
+.comparador-panel-seleccion .seleccion-comparador:empty { display: none; }
+.comparador-panel-seleccion .seleccion-comparador .btn { white-space: normal; text-align: left; overflow-wrap: anywhere; }
+
+.listado-compacto-comparador { list-style: none; padding: 0; margin: 0; border: 1px solid var(--color-border); border-radius: var(--radius-md); background: var(--color-surface); }
+.listado-compacto-comparador:empty { display: none; }
+.fila-carrera-comparador { display: flex; justify-content: space-between; align-items: center; gap: var(--space-3); padding: var(--space-3) var(--space-4); }
+.fila-carrera-comparador + .fila-carrera-comparador { border-top: 1px solid var(--color-border); }
+.fila-carrera-comparador > div { min-width: 0; }
+.fila-carrera-comparador h3 { font-size: var(--font-size-base); margin: 0; overflow-wrap: anywhere; }
+.fila-carrera-comparador .carrera-universidad { margin: var(--space-1) 0 0; font-size: var(--font-size-xs); }
+.fila-carrera-comparador .btn { flex: 0 0 auto; min-height: 44px; }
+.paginacion-comparador { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: var(--space-3); margin-top: var(--space-4); }
+.paginacion-comparador p { margin: 0; }
+.acciones-resultado-comparador { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+
+@media (max-width: 640px) {
+    .comparador-panel-seleccion { padding: var(--space-3); }
+    .comparador-panel-encabezado h2 { font-size: 18px; }
+    .comparador-panel-encabezado p { font-size: var(--font-size-xs); }
+    .comparador-panel-seleccion .seleccion-comparador { max-height: 4.5rem; }
+}

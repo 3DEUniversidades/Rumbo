@@ -1,0 +1,374 @@
+/* Ilustración y bienvenida dentro del inicio autenticado. */
+.inicio-bienvenida {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 32px;
+    min-height: 230px;
+    overflow: hidden;
+    padding: 28px 36px;
+    background: linear-gradient(115deg, var(--color-surface) 0%, var(--color-primary-soft) 100%);
+}
+
+.inicio-bienvenida-texto {
+    max-width: 560px;
+}
+
+.inicio-bienvenida-etiqueta {
+    margin-bottom: 10px;
+    color: var(--color-primary);
+    font-size: 11px;
+    font-weight: 750;
+    letter-spacing: 1.4px;
+}
+
+.inicio-bienvenida #saludo {
+    margin-bottom: 8px;
+    font-size: clamp(28px, 3vw, 38px);
+    letter-spacing: -.8px;
+}
+
+.inicio-bienvenida-texto > p:last-child {
+    max-width: 48ch;
+    color: var(--color-text-muted);
+    line-height: 1.6;
+}
+
+.inicio-escena {
+    display: block;
+    flex: 0 0 clamp(190px, 23vw, 250px);
+    width: clamp(190px, 23vw, 250px);
+    height: auto;
+    margin: -12px 0 -22px;
+    overflow: visible;
+}
+
+/* Recorrido de bienvenida con seis tarjetas de la portada. */
+.recorrido-dialog {
+    width: min(720px, calc(100vw - 48px));
+    max-width: none;
+    max-height: none;
+    padding: 0;
+    overflow: visible;
+    border: 0;
+    background: transparent;
+    color: var(--color-text);
+}
+
+.recorrido-dialog::backdrop {
+    background: var(--color-backdrop);
+    backdrop-filter: blur(7px);
+}
+
+.recorrido-ventana {
+    max-height: calc(100vh - 48px);
+    overflow: auto;
+    padding: clamp(28px, 4vw, 44px);
+    border: 1px solid var(--color-border);
+    border-radius: 22px;
+    background: var(--color-surface);
+    box-shadow: var(--shadow-modal);
+}
+
+.recorrido-cabecera,
+.recorrido-pie-controles,
+.recorrido-progreso {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.recorrido-cabecera {
+    gap: 20px;
+    margin-bottom: 28px;
+}
+
+.recorrido-sobretitulo {
+    margin: 0;
+    color: var(--color-primary);
+    font-size: 11px;
+    font-weight: 750;
+    letter-spacing: 1.5px;
+}
+
+.recorrido-saltar {
+    min-height: 40px;
+    padding: 8px 10px;
+    border: 0;
+    border-radius: 8px;
+    background: transparent;
+    color: var(--color-text-muted);
+    font: inherit;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.recorrido-saltar:hover {
+    background: var(--color-surface-raised);
+    color: var(--color-text);
+}
+
+.recorrido-tarjetas {
+    min-height: 280px;
+}
+
+.recorrido-tarjeta[hidden] {
+    display: none;
+}
+
+.recorrido-tarjeta-bienvenida {
+    display: grid;
+    min-height: 280px;
+    grid-template-columns: minmax(170px, .76fr) minmax(0, 1.24fr);
+    align-items: center;
+    gap: 30px;
+}
+
+.recorrido-mascota-escena {
+    position: relative;
+    display: grid;
+    min-height: 220px;
+    place-items: center;
+    border-radius: 22px;
+    background: radial-gradient(circle at 50% 48%, var(--color-primary-soft) 0 43%, transparent 44%);
+}
+
+.recorrido-mascota {
+    --rumbo-tamano: 112px;
+    z-index: 1;
+}
+
+.recorrido-saludo-burbuja {
+    position: absolute;
+    bottom: 2%;
+    left: 50%;
+    z-index: 2;
+    padding: 8px 13px;
+    transform: translateX(-50%);
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    background: var(--color-surface);
+    color: var(--color-text);
+    box-shadow: var(--shadow-hover);
+    font-size: 12px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.recorrido-saludo-burbuja::after {
+    position: absolute;
+    top: -5px;
+    left: calc(50% - 5px);
+    width: 9px;
+    height: 9px;
+    transform: rotate(45deg);
+    border-top: 1px solid var(--color-border);
+    border-left: 1px solid var(--color-border);
+    background: var(--color-surface);
+    content: "";
+}
+
+.recorrido-brillo {
+    position: absolute;
+    color: var(--color-highlight);
+    line-height: 1;
+}
+
+.recorrido-brillo-uno { top: 13%; left: 17%; font-size: 27px; }
+.recorrido-brillo-dos { top: 26%; right: 12%; color: var(--color-primary); font-size: 32px; }
+.recorrido-brillo-tres { right: 20%; bottom: 18%; font-size: 19px; }
+
+.recorrido-bienvenida-texto h2 {
+    margin: 0 0 14px;
+    color: var(--color-text);
+    font-size: clamp(25px, 3vw, 34px);
+    line-height: 1.2;
+    letter-spacing: -.7px;
+}
+
+.recorrido-bienvenida-texto > p {
+    max-width: 48ch;
+    margin: 0;
+    color: var(--color-text-muted);
+    font-size: 15px;
+    line-height: 1.65;
+}
+
+.recorrido-pilares {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 20px;
+}
+
+.recorrido-pilares span {
+    padding: 5px 10px;
+    border-radius: 999px;
+    background: var(--color-primary-soft);
+    color: var(--color-primary);
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.recorrido-pilares span:nth-child(2) {
+    background: var(--identidad-personal-suave);
+    color: var(--identidad-personal);
+}
+
+.recorrido-pilares span:nth-child(3) {
+    background: var(--identidad-comunidad-suave);
+    color: var(--identidad-comunidad);
+}
+
+.recorrido-icono {
+    display: grid;
+    width: 64px;
+    height: 64px;
+    margin-bottom: 24px;
+    place-items: center;
+    border-radius: 17px;
+}
+
+.recorrido-icono svg {
+    width: 34px;
+    height: 34px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.7;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.recorrido-icono-exploracion {
+    background: var(--identidad-exploracion-suave);
+    color: var(--identidad-exploracion);
+}
+
+.recorrido-icono-proceso {
+    background: var(--identidad-proceso-suave);
+    color: var(--identidad-proceso);
+}
+
+.recorrido-icono-personal {
+    background: var(--identidad-personal-suave);
+    color: var(--identidad-personal);
+}
+
+.recorrido-icono-comunidad {
+    background: var(--identidad-comunidad-suave);
+    color: var(--identidad-comunidad);
+}
+
+.recorrido-tarjeta h2 {
+    margin: 0 0 12px;
+    color: var(--color-text);
+    font-size: clamp(25px, 3vw, 34px);
+    line-height: 1.2;
+    letter-spacing: -.7px;
+}
+
+.recorrido-tarjeta p {
+    max-width: 58ch;
+    margin: 0;
+    color: var(--color-text-muted);
+    font-size: 16px;
+    line-height: 1.65;
+}
+
+.recorrido-tarjeta .recorrido-pie {
+    display: inline-flex;
+    margin-top: 23px;
+    padding-top: 13px;
+    border-top: 1px solid var(--color-border);
+    color: var(--color-primary);
+    font-size: 13px;
+    font-weight: 650;
+}
+
+.recorrido-pie-controles {
+    gap: 20px;
+    margin-top: 26px;
+    padding-top: 20px;
+    border-top: 1px solid var(--color-border);
+}
+
+.recorrido-progreso {
+    justify-content: flex-start;
+    gap: 15px;
+    color: var(--color-text-muted);
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.recorrido-indicadores {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.recorrido-indicador {
+    width: 7px;
+    height: 7px;
+    border-radius: 999px;
+    background: var(--color-border);
+    transition: width .2s ease, background-color .2s ease;
+}
+
+.recorrido-indicador.activo {
+    width: 22px;
+    background: var(--color-primary);
+}
+
+.recorrido-siguiente {
+    display: inline-flex;
+    min-height: 48px;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 11px 18px;
+    border-radius: 9px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.recorrido-siguiente svg {
+    width: 18px;
+    height: 18px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.recorrido-dialog :is(button, [tabindex]):focus-visible {
+    outline: 3px solid var(--color-highlight);
+    outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .recorrido-dialog[open] .recorrido-ventana {
+        animation: recorrido-aparecer .24s ease-out both;
+    }
+
+    .recorrido-dialog[open] .recorrido-brillo {
+        animation: recorrido-brillar 2.7s ease-in-out infinite;
+    }
+
+    .recorrido-brillo-dos { animation-delay: .5s !important; }
+    .recorrido-brillo-tres { animation-delay: 1s !important; }
+}
+
+@keyframes recorrido-aparecer {
+    from { opacity: 0; transform: translateY(9px) scale(.985); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes recorrido-brillar {
+    0%, 100% { opacity: .58; transform: scale(.85) rotate(-8deg); }
+    50% { opacity: 1; transform: scale(1.12) rotate(8deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .recorrido-indicador { transition: none; }
+}

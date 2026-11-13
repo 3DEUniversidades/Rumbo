@@ -1,0 +1,19 @@
+[hidden] { display: none !important; }
+.lista-cuentas-admin { list-style: none; padding: 0; margin: 1rem 0; }
+.lista-cuentas-admin li { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: var(--space-3); padding: var(--space-4); border-radius: var(--radius-sm); background: var(--color-bg); }
+.lista-cuentas-admin p { margin: .25rem 0; overflow-wrap: anywhere; }
+.paginacion-admin { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+#datos-admin-usuario dt { font-weight: 700; margin-top: .8rem; }
+#datos-admin-usuario dd { margin: .25rem 0 0; white-space: pre-wrap; overflow-wrap: anywhere; }
+@media(max-width: 600px) { .lista-cuentas-admin li { align-items: flex-start; flex-direction: column; } .paginacion-admin { flex-wrap: wrap; } }
+
+.acciones-cuenta-admin { display: flex; flex-wrap: wrap; gap: .5rem; }
+#lista-registros-admin li { padding: .75rem 0; white-space: pre-wrap; overflow-wrap: anywhere; }
+
+.publicacion-admin { margin: 1rem 0; overflow-wrap: anywhere; }
+.publicacion-admin details { margin: .75rem 0; }
+
+.registro-historial-admin {margin: 1rem 0;overflow-wrap:anywhere;}
+.registro-historial-admin dt {font-weight:700;margin-top:.6rem;}
+.registro-historial-admin dd {margin:.2rem 0 0;white-space:pre-wrap;overflow-wrap:anywhere;}
+#origen-historial-admin {font:inherit;max-width:100%;padding:.5rem;}

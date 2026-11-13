@@ -1,0 +1,4 @@
+Public Sans: archivos oficiales sin modificaciones.
+https://github.com/uswds/public-sans/tree/e40fcf567e44b4f5f08a658247663275fa1ad741
+Los archivos se sirven localmente desde una ruta ya publica de recursos graficos.
+Consulta LICENSE.txt para la licencia y los avisos originales.
