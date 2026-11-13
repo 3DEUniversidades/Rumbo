@@ -24,6 +24,10 @@ public class Carrera {
     @Column(nullable = false, length = 120)
     private String nombre;
 
+    // El valor SQL por defecto permite incorporar la columna a bases ya pobladas.
+    @Column(nullable = false, length = 160, columnDefinition = "varchar(160) default 'UVG'")
+    private String universidad = "UVG";
+
     @Column(length = 120)
     private String facultad;
 
@@ -98,6 +102,14 @@ public class Carrera {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+
+    public String getUniversidad() {
+        return universidad;
+    }
+
+    public void setUniversidad(String universidad) {
+        this.universidad = universidad;
     }
 
     public String getFacultad() {

@@ -8,6 +8,7 @@
     <link rel="manifest" href="/manifest.json">
     <title>Rumbo - Carreras</title>
     <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/css/carrerasUniversidades.css?v=1">
 </head>
 <body>
     <a href="#contenido-principal" class="saltar-contenido">Saltar al contenido</a>
@@ -153,7 +154,11 @@
                         </div>
                     </div>
 
-                    <div id="estado-carreras" class="estado-vista">Cargando carreras...</div>
+                    <div class="filtro-universidad">
+                        <label for="universidad-catalogo">Universidad</label>
+                        <select id="universidad-catalogo" disabled><option value="">Todas las universidades</option></select>
+                    </div>
+                    <div id="estado-carreras" class="estado-vista" role="status">Cargando carreras...</div>
                     <div id="lista-carreras" class="lista-carreras" aria-live="polite"></div>
                 </section>
             </main>
@@ -163,6 +168,7 @@
                 <article>
                     <button id="cerrar-modal-carrera" class="modal-cerrar" type="button" aria-label="Cerrar detalle">&times;</button>
                     <h2 id="modal-carrera-nombre"></h2>
+                    <p id="modal-carrera-universidad" class="carrera-universidad"></p>
                     <p id="modal-carrera-facultad" class="carrera-area"></p>
                     <p id="modal-carrera-descripcion" class="detalle-descripcion"></p>
                     <dl class="detalle-carrera">
@@ -237,6 +243,6 @@
 
     <script src="/js/sesion.js"></script>
     <script src="/js/barraLateral.js"></script>
-    <script src="/js/vistaCarreras.js"></script>
+    <script src="/js/vistaCarreras.js?v=2"></script>
 </body>
 </html>

@@ -9,10 +9,12 @@ document.addEventListener("DOMContentLoaded", () => {
     let carreras = [];
     let carreraActual = null;
     let guardando = false;
+    let creando = false;
     let revisionHistorial = 0;
 
     const CAMPOS = [
         ["f-nombre", "nombre", "texto"],
+        ["f-universidad", "universidad", "texto"],
         ["f-facultad", "facultad", "texto"],
         ["f-descripcion", "descripcion", "texto"],
         ["f-duracion", "duracion", "numero"],
@@ -33,6 +35,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const ETIQUETAS = {
         nombre: "Nombre",
+        universidad: "Universidad",
         facultad: "Facultad",
         descripcion: "Descripción",
         duracion: "Duración",
@@ -59,6 +62,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     formulario.addEventListener("submit", guardarCambios);
+    obtener("crear-carrera").addEventListener("click", () => abrirEdicion(null));
     obtener("filtro-carrera").addEventListener("change", cargarHistorial);
 
     iniciar();
@@ -133,6 +137,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 [
                     c.nombre,
+                    dato(c.universidad),
                     dato(c.facultad),
                     c.duracion == null ? "No disponible" : `${c.duracion} años`,
                     moneda(c.costo),
@@ -193,8 +198,11 @@ document.addEventListener("DOMContentLoaded", () => {
             filtro.replaceChildren(new Option("Todas", ""));
 
             carreras.forEach(c => {
-                filtro.appendChild(new Option(c.nombre, c.id));
+                filtro.appendChild(new Option(`${c.nombre} · ${dato(c.universidad)}`, c.id));
             });
+
+            obtener("universidades-gestion").replaceChildren(...[...new Set(["UVG", "USAC",
+                ...carreras.map(c => c.universidad).filter(Boolean)])].sort().map(u => new Option(u, u)));
 
             filtro.value = carreras.some(c => String(c.id) === anterior)
                 ? anterior
@@ -265,14 +273,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function abrirEdicion(carrera) {
         carreraActual = carrera;
+        creando = !carrera;
 
         obtener("edicion-titulo").textContent =
-            "Editar: " + carrera.nombre;
+            creando ? "Registrar carrera" : `Editar: ${carrera.nombre} · ${dato(carrera.universidad)}`;
+        guardar.textContent = creando ? "Crear carrera" : "Guardar cambios";
 
         error.style.display = "none";
 
         CAMPOS.forEach(([id, clave, tipo]) => {
-            const valor = carrera[clave];
+            const valor = carrera?.[clave];
 
             obtener(id).value = tipo === "lista"
                 ? (valor ?? []).join("\n")
@@ -280,6 +290,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
         modal.showModal();
+        obtener("f-nombre").focus();
     }
 
     function cerrar() {
@@ -306,7 +317,7 @@ document.addEventListener("DOMContentLoaded", () => {
         evento.preventDefault();
 
         if (guardando
-            || !carreraActual
+            || (!creando && !carreraActual)
             || !formulario.reportValidity()) {
             return;
         }
@@ -319,10 +330,10 @@ document.addEventListener("DOMContentLoaded", () => {
             const nuevo = leerCampo(id, tipo);
 
             const anterior = tipo === "lista"
-                ? carreraActual[clave] ?? []
-                : carreraActual[clave] ?? null;
+                ? carreraActual?.[clave] ?? []
+                : carreraActual?.[clave] ?? null;
 
-            if (JSON.stringify(nuevo) !== JSON.stringify(anterior)) {
+            if (creando || JSON.stringify(nuevo) !== JSON.stringify(anterior)) {
                 cambios[clave] = nuevo;
             }
         });
@@ -339,9 +350,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
         try {
             const actualizada = await api(
-                `/api/carreras/${carreraActual.id}`,
+                creando ? "/api/carreras" : `/api/carreras/${carreraActual.id}`,
                 {
-                    method: "PUT",
+                    method: creando ? "POST" : "PUT",
                     body: JSON.stringify(cambios)
                 }
             );
@@ -350,7 +361,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const mensaje = obtener("mensaje-gestion");
             mensaje.textContent =
-                "Carrera actualizada: " + actualizada.nombre;
+                (creando ? "Carrera registrada: " : "Carrera actualizada: ")
+                    + `${actualizada.nombre} · ${dato(actualizada.universidad)}`;
             mensaje.hidden = false;
 
             await cargarCarreras();
@@ -363,7 +375,7 @@ document.addEventListener("DOMContentLoaded", () => {
         } finally {
             guardando = false;
             guardar.disabled = false;
-            guardar.textContent = "Guardar cambios";
+            guardar.textContent = creando ? "Crear carrera" : "Guardar cambios";
         }
     }
 

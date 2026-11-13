@@ -1,6 +1,7 @@
 ﻿document.addEventListener("DOMContentLoaded", () => {
     const buscar = document.getElementById("buscar-comparador");
     const facultad = document.getElementById("facultad-comparador");
+    const universidad = document.getElementById("universidad-comparador");
     const duracion = document.getElementById("duracion-comparador");
     const costo = document.getElementById("costo-comparador");
     const cantidad = document.getElementById("cantidad-comparador");
@@ -13,6 +14,26 @@
     const botonComparar = document.getElementById("comparar-carreras");
     const resultado = document.getElementById("resultado-comparador");
     const tabla = document.getElementById("tabla-comparador");
+    const panel = document.getElementById("panel-seleccion-comparador");
+    const vistaSeleccion = document.getElementById("vista-seleccion-comparador");
+    const paginacion = document.getElementById("paginacion-comparador");
+    const paginaAnterior = document.getElementById("pagina-anterior-comparador");
+    const paginaSiguiente = document.getElementById("pagina-siguiente-comparador");
+    const estadoPagina = document.getElementById("pagina-comparador");
+    const barraMovil = document.querySelector(".barra-superior-movil");
+
+    function ajustarPanel() {
+        const offset = barraMovil?.getBoundingClientRect().height || 0;
+        panel.style.setProperty("--offset-comparador", `${offset}px`);
+        resultado.style.scrollMarginTop = `${offset + 16}px`;
+    }
+    window.addEventListener("resize", ajustarPanel);
+    if (window.ResizeObserver) {
+        const observador = new ResizeObserver(ajustarPanel);
+        observador.observe(panel);
+        if (barraMovil) observador.observe(barraMovil);
+    }
+    ajustarPanel();
 
     let carreras = [];
     const seleccionadas = new Map();
@@ -20,9 +41,48 @@
     let objetivo = 2;
     let consultando = false;
     let revision = 0;
+    const POR_PAGINA = 10;
+    let paginaActual = 1;
+    let scrollSeleccion = 0;
 
-    [buscar, facultad, duracion, costo].forEach(control => {
-        control.addEventListener("input", mostrarCatalogo);
+    [buscar, universidad, facultad, duracion, costo].forEach(control => {
+        control.addEventListener("input", () => {
+            paginaActual = 1;
+            mostrarCatalogo();
+        });
+    });
+
+    function cambiarPagina(cambio) {
+        paginaActual += cambio;
+        mostrarCatalogo();
+        const primerBoton = catalogo.querySelector("button");
+        if (primerBoton) {
+            primerBoton.scrollIntoView({ block: "center" });
+            primerBoton.focus({ preventScroll: true });
+        }
+    }
+    paginaAnterior.addEventListener("click", () => cambiarPagina(-1));
+    paginaSiguiente.addEventListener("click", () => cambiarPagina(1));
+    document.getElementById("editar-seleccion-comparador").addEventListener("click", () => {
+        revision++;
+        resultado.hidden = true;
+        vistaSeleccion.hidden = false;
+        ajustarPanel();
+        window.scrollTo(0, scrollSeleccion);
+        botonComparar.focus({ preventScroll: true });
+    });
+    document.getElementById("nueva-comparacion").addEventListener("click", () => {
+        seleccionadas.clear();
+        [buscar, universidad, facultad, duracion, costo].forEach(control => { control.value = ""; });
+        objetivo = 2;
+        cantidad.value = "2";
+        paginaActual = 1;
+        invalidarResultado();
+        vistaSeleccion.hidden = false;
+        actualizarSeleccion();
+        mostrarCatalogo();
+        window.scrollTo(0, 0);
+        buscar.focus();
     });
 
     cantidad.addEventListener("change", () => {
@@ -58,6 +118,9 @@
             }
 
             carreras = await respuesta.json();
+            cargarOpciones(universidad,
+                [...new Set(carreras.map(c => c.universidad).filter(Boolean))]
+                    .sort((a, b) => a.localeCompare(b, "es")), "Todas");
 
             cargarOpciones(
                 facultad,
@@ -119,6 +182,7 @@
         catalogo.replaceChildren();
 
         if (!costo.checkValidity()) {
+            paginacion.hidden = true;
             estado.textContent = "Introduce un costo máximo válido.";
             return;
         }
@@ -129,11 +193,13 @@
         const visibles = carreras.filter(c => {
             const texto = normalizar([
                 c.nombre,
+                c.universidad,
                 ...(c.areasFormacion ?? []),
                 ...(c.oportunidadesLaborales ?? [])
             ].join(" "));
 
             return texto.includes(consulta)
+                && (!universidad.value || c.universidad === universidad.value)
                 && (!facultad.value || c.facultad === facultad.value)
                 && (!duracion.value
                     || String(c.duracion) === duracion.value)
@@ -141,26 +207,30 @@
                     || (c.costo != null && Number(c.costo) <= maximo));
         });
 
+        const paginas = Math.max(1, Math.ceil(visibles.length / POR_PAGINA));
+        paginaActual = Math.min(Math.max(1, paginaActual), paginas);
+        const inicio = (paginaActual - 1) * POR_PAGINA;
+        const dePagina = visibles.slice(inicio, inicio + POR_PAGINA);
+        paginacion.hidden = visibles.length === 0;
+        paginaAnterior.disabled = paginaActual === 1;
+        paginaSiguiente.disabled = paginaActual === paginas;
+        estadoPagina.textContent = `Página ${paginaActual} de ${paginas}`;
+
         estado.textContent = carreras.length < 2
             ? "Se necesitan al menos dos carreras registradas para comparar."
             : visibles.length === 0
                 ? "No hay carreras que coincidan con los filtros."
-                : `${visibles.length} carrera(s) encontradas.`;
+                : `Mostrando ${inicio + 1}–${inicio + dePagina.length} de ${visibles.length} carreras.`;
 
-        visibles.forEach(c => {
-            const tarjeta = crear("article", "", "carrera-card");
+        dePagina.forEach(c => {
+            const tarjeta = crear("li", "", "fila-carrera-comparador");
+            const informacion = crear("div");
 
-            tarjeta.append(
+            informacion.append(
                 crear("h3", c.nombre),
-                crear("p", c.facultad ?? "Facultad no disponible", "carrera-area"),
-                crear(
-                    "p",
-                    (c.duracion == null ? "Duración no disponible" : `${c.duracion} años`)
-                        + " · " + (c.costo == null
-                            ? "Costo no disponible" : `${moneda(c.costo)} el primer semestre`),
-                    "carrera-uni"
-                )
+                crear("p", c.universidad ?? "No disponible", "carrera-universidad")
             );
+            tarjeta.appendChild(informacion);
 
             const agregada = seleccionadas.has(c.id);
 
@@ -172,6 +242,7 @@
 
             boton.type = "button";
             boton.setAttribute("aria-pressed", String(agregada));
+            boton.setAttribute("aria-label", `${agregada ? "Quitar" : "Agregar"} ${c.nombre} · ${c.universidad ?? "No disponible"}`);
 
             boton.disabled = !agregada
                 && seleccionadas.size >= objetivo;
@@ -201,12 +272,12 @@
         seleccionadas.forEach(c => {
             const boton = crear(
                 "button",
-                `${c.nombre} ×`,
+                `${c.nombre} · ${c.universidad ?? "No disponible"} ×`,
                 "btn btn-secundario btn-pequeno"
             );
 
             boton.type = "button";
-            boton.setAttribute("aria-label", `Quitar ${c.nombre}`);
+            boton.setAttribute("aria-label", `Quitar ${c.nombre} de ${c.universidad ?? "universidad no disponible"}`);
 
             boton.addEventListener("click", () => {
                 seleccionadas.delete(c.id);
@@ -219,6 +290,7 @@
         });
 
         actualizarBoton();
+        ajustarPanel();
     }
 
     function actualizarBoton() {
@@ -235,6 +307,7 @@
         revision++;
         resultado.hidden = true;
         tabla.replaceChildren();
+        document.getElementById("tabla-general-comparador").replaceChildren();
     }
 
     async function comparar() {
@@ -292,13 +365,18 @@
         document.getElementById("abrir-detalle-comparador").hidden = sonDos;
 
         if (!sonDos) {
-            const campos = ["facultad", "duracion", "costo", "costoPeriodo",
+            const campos = ["universidad", "facultad", "duracion", "costo", "costoPeriodo",
                 "costoAnio", "modalidad", "cargaCreditos"];
             llenarTabla(datos, document.getElementById("tabla-general-comparador"),
                 datos.filas.filter(fila => campos.includes(fila.campo)));
         }
         llenarTabla(datos, tabla, datos.filas);
+        scrollSeleccion = window.scrollY;
+        vistaSeleccion.hidden = true;
         resultado.hidden = false;
+        ajustarPanel();
+        resultado.scrollIntoView({ block: "start" });
+        document.getElementById("titulo-resultado-comparador").focus({ preventScroll: true });
     }
 
     function llenarTabla(datos, tabla, filas) {
@@ -317,7 +395,7 @@
                 ? `${indice === 0 ? "A" : "B"} — `
                 : "";
 
-            const th = crear("th", prefijo + c.nombre);
+            const th = crear("th", `${prefijo}${c.nombre} · ${c.universidad ?? "No disponible"}`);
             th.scope = "col";
             filaCabecera.appendChild(th);
         });

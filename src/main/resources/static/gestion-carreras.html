@@ -8,6 +8,7 @@
     <title>Rumbo - Gestión de carreras</title>
     <link rel="manifest" href="/manifest.json">
     <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/css/carrerasUniversidades.css?v=1">
 </head>
 <body>
     <a href="#gestion-carreras" class="saltar-contenido">Saltar al contenido</a>
@@ -149,9 +150,10 @@
                         <div>
                             <h2>Tablero de carreras</h2>
                             <p class="texto-secundario">
-                                Actualiza la información del catálogo y del comparador.
+                                Registra y actualiza carreras de distintas universidades.
                             </p>
                         </div>
+                        <button id="crear-carrera" class="btn" type="button">Registrar carrera</button>
                     </div>
 
                     <div id="mensaje-gestion" class="mensaje-gestion"
@@ -166,6 +168,7 @@
                             <thead>
                                 <tr>
                                     <th>Carrera</th>
+                                    <th>Universidad</th>
                                     <th>Facultad</th>
                                     <th>Duración</th>
                                     <th>Costo primer semestre</th>
@@ -237,6 +240,12 @@
                     <form id="form-edicion" class="form-gestion">
                         <label for="f-nombre">Nombre de la carrera</label>
                         <input id="f-nombre" type="text" maxlength="120" required>
+
+                        <label for="f-universidad">Universidad de origen</label>
+                        <input id="f-universidad" type="text" maxlength="160" list="universidades-gestion" required
+                               placeholder="Ej. UVG, USAC o el nombre de otra institución">
+                        <datalist id="universidades-gestion"><option value="UVG"></option><option value="USAC"></option></datalist>
+                        <p class="ayuda-form">Nombre y universidad son obligatorios. Deja vacíos los datos no confirmados para mostrarlos como «No disponible».</p>
 
                         <label for="f-facultad">Facultad</label>
                         <input id="f-facultad" type="text" maxlength="120">
@@ -357,6 +366,6 @@
 
     <script src="/js/sesion.js"></script>
     <script src="/js/barraLateral.js"></script>
-    <script src="/js/vistaGestionCarreras.js"></script>
+    <script src="/js/vistaGestionCarreras.js?v=2"></script>
 </body>
 </html>

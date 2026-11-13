@@ -29,7 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class CarreraService {
 
     private static final Set<String> CAMPOS_EDITABLES = Set.of(
-            "nombre", "facultad", "descripcion", "duracion", "costo", "costoPeriodo", "costoAnio",
+            "nombre", "universidad", "facultad", "descripcion", "duracion", "costo", "costoPeriodo", "costoAnio",
             "modalidad", "cargaCreditos", "areasFormacion", "competenciasDesarrolladas",
             "oportunidadesLaborales", "salarioEstimado", "empleabilidad", "contextoLaboral",
             "pdfOficialUrl", "urlCarreraOficial");
@@ -56,6 +56,21 @@ public class CarreraService {
         return carreraRepository.findAll(Sort.by("id"));
     }
 
+    public List<Carrera> consultarCarreras(String universidad) {
+        if (universidad == null || universidad.isBlank()) return consultarCarreras();
+        return carreraRepository.findByUniversidadIgnoreCase(universidad.strip(), Sort.by("id"));
+    }
+
+    @Transactional
+    public Carrera crearCarrera(JsonNode datos, String responsable) {
+        if (datos == null || !datos.isObject() || !datos.has("nombre") || !datos.has("universidad")) {
+            throw new ExcepcionCarrera("El nombre y la universidad son obligatorios");
+        }
+        Carrera carrera = new Carrera(null, null, null);
+        carrera.setUniversidad(null);
+        return aplicarCambios(carrera, datos, responsable);
+    }
+
     public Optional<Carrera> buscarPorId(Long id) {
         return carreraRepository.findById(id);
     }
@@ -69,7 +84,10 @@ public class CarreraService {
     public Carrera actualizarCarrera(Long id, JsonNode cambios, String responsable) {
         Carrera carrera = carreraRepository.findById(id)
                 .orElseThrow(ExcepcionCarreraNoEncontrada::new);
+        return aplicarCambios(carrera, cambios, responsable);
+    }
 
+    private Carrera aplicarCambios(Carrera carrera, JsonNode cambios, String responsable) {
         if (cambios == null || !cambios.isObject()) {
             throw new ExcepcionCarrera("La solicitud debe ser un objeto JSON");
         }
@@ -80,10 +98,19 @@ public class CarreraService {
         });
 
         Registrador r = new Registrador(carrera, LocalDateTime.now(), responsable);
+        String nombreAnterior = carrera.getNombre();
+        String universidadAnterior = carrera.getUniversidad();
 
         if (cambios.has("nombre")) {
             r.aplicar("nombre", carrera.getNombre(),
                     textoRequerido(cambios.get("nombre"), "nombre", 120), carrera::setNombre);
+        }
+        if (cambios.has("universidad")) {
+            String universidad = textoRequerido(cambios.get("universidad"), "universidad", 160)
+                    .replaceAll("\\s+", " ");
+            if ("uvg".equalsIgnoreCase(universidad)) universidad = "UVG";
+            if ("usac".equalsIgnoreCase(universidad)) universidad = "USAC";
+            r.aplicar("universidad", carrera.getUniversidad(), universidad, carrera::setUniversidad);
         }
         if (cambios.has("facultad")) {
             r.aplicar("facultad", carrera.getFacultad(),
@@ -185,6 +212,15 @@ public class CarreraService {
                     carrera::setUrlCarreraOficial);
         }
 
+        if (!Objects.equals(nombreAnterior, carrera.getNombre())
+                || !Objects.equals(universidadAnterior, carrera.getUniversidad())) {
+            boolean duplicada = carrera.getId() == null
+                    ? carreraRepository.existsByNombreIgnoreCaseAndUniversidadIgnoreCase(
+                            carrera.getNombre(), carrera.getUniversidad())
+                    : carreraRepository.existsByNombreIgnoreCaseAndUniversidadIgnoreCaseAndIdNot(
+                            carrera.getNombre(), carrera.getUniversidad(), carrera.getId());
+            if (duplicada) throw new ExcepcionConflicto("Esa carrera ya está registrada en la universidad indicada");
+        }
         carreraRepository.save(carrera);
         registroRepository.saveAll(r.registros);
         return carrera;

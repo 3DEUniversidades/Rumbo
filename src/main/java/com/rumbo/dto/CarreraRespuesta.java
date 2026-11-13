@@ -6,6 +6,7 @@ import java.util.List;
 public record CarreraRespuesta(
         Long id,
         String nombre,
+        String universidad,
         String facultad,
         String descripcion,
         BigDecimal duracion,
