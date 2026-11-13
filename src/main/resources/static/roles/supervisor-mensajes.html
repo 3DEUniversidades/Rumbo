@@ -9,9 +9,11 @@
     <title>Revisión de mensajes - Rumbo</title>
     <link rel="manifest" href="/manifest.json">
     <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/css/ilustraciones.css">
     <script src="/js/rumbo.js" defer></script>
+    <link rel="stylesheet" href="/css/identidadAreas.css">
 </head>
-<body>
+<body data-area="comunidad">
     <a href="#panel-supervision" class="saltar-contenido">Saltar al contenido</a>
 
     <!-- Barra superior para tablet y móvil -->
@@ -133,9 +135,12 @@
 
         <!-- Contenido principal -->
         <div class="contenido-principal-app">
-            <header>
+            <header class="encabezado-ilustrado" data-ilustracion="foro">
                 <h1>Revisión de mensajes</h1>
                 <p>Revisa las publicaciones pendientes y el historial de moderación.</p>
+                <span class="ilustracion-seccion" aria-hidden="true">
+                    <img src="/icons/ilustraciones/foro.svg" width="240" height="160" alt="" decoding="async">
+                </span>
             </header>
 
             <p id="estado-acceso-supervision" class="estado-vista" role="status" style="margin: var(--space-3) var(--space-4);">

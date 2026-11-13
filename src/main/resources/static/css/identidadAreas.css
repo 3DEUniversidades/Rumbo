@@ -1,0 +1,144 @@
+/* Familias de color: proceso, exploración, espacio personal y comunidad. */
+:root {
+    --identidad-proceso: #86C9CA;
+    --identidad-proceso-suave: #203B44;
+    --identidad-exploracion: #91B5F5;
+    --identidad-exploracion-suave: #253653;
+    --identidad-personal: #E5BD79;
+    --identidad-personal-suave: #3B3023;
+    --identidad-comunidad: #C0ADE5;
+    --identidad-comunidad-suave: #342B46;
+}
+
+body[data-area] {
+    --color-primary: var(--identidad-proceso);
+    --color-primary-dark: #B4DEDF;
+    --color-primary-hover: #A3DADB;
+    --color-primary-soft: var(--identidad-proceso-suave);
+    --color-on-primary: #10282A;
+    --color-accent: var(--color-primary);
+    --color-surface: #1A2933;
+    --color-surface-raised: #243A43;
+    --color-border: #334D58;
+    --color-success-soft: #1D3732;
+    --area-titulo: #C8E6E8;
+    /* Los alias heredados deben resolverse dentro de la misma área. */
+    --primary: var(--color-primary);
+    --primary-dark: var(--color-primary-dark);
+    --surface: var(--color-surface);
+    --border: var(--color-border);
+}
+
+body[data-area="exploracion"] {
+    --color-primary: var(--identidad-exploracion);
+    --color-primary-dark: #C4D8FC;
+    --color-primary-hover: #B2CBF8;
+    --color-primary-soft: var(--identidad-exploracion-suave);
+    --color-on-primary: #132137;
+    --color-surface: #1A273E;
+    --color-surface-raised: #293A56;
+    --color-border: #394C6C;
+    --area-titulo: #D5E3FB;
+}
+
+body[data-area="personal"] {
+    --color-primary: var(--identidad-personal);
+    --color-primary-dark: #F1D6AA;
+    --color-primary-hover: #F0D29D;
+    --color-primary-soft: var(--identidad-personal-suave);
+    --color-on-primary: #2B2112;
+    --color-surface: #2A2725;
+    --color-surface-raised: #3C342D;
+    --color-border: #524639;
+    --area-titulo: #F2E2C8;
+}
+
+body[data-area="comunidad"] {
+    --color-primary: var(--identidad-comunidad);
+    --color-primary-dark: #E0D4F4;
+    --color-primary-hover: #D2C3EE;
+    --color-primary-soft: var(--identidad-comunidad-suave);
+    --color-on-primary: #251C33;
+    --color-surface: #252437;
+    --color-surface-raised: #363048;
+    --color-border: #4C4260;
+    --area-titulo: #E6DDF4;
+}
+
+/* La administración mantiene superficies neutrales dentro de la familia del proceso. */
+body[data-area="gestion"] {
+    --color-surface: #1A2534;
+    --color-surface-raised: #243246;
+    --color-border: #303D50;
+    --area-titulo: #D5E2EA;
+}
+
+body[data-area] .contenido-principal-app > header h1 {
+    color: var(--area-titulo);
+}
+
+/* La navegación identifica el destino, incluso cuando cambia según el rol. */
+body[data-area] .barra-lateral-nav .nav-item {
+    --nav-acento: var(--identidad-proceso);
+    --nav-superficie: var(--identidad-proceso-suave);
+}
+
+body[data-area] .barra-lateral-nav .nav-item:is(
+    [href^="/carreras.html"], [href^="/comparador-carreras.html"],
+    [href^="/gestion-carreras.html"]
+) {
+    --nav-acento: var(--identidad-exploracion);
+    --nav-superficie: var(--identidad-exploracion-suave);
+}
+
+body[data-area] .barra-lateral-nav .nav-item:is(
+    [href^="/bitacora.html"], [href^="/perfil.html"]
+) {
+    --nav-acento: var(--identidad-personal);
+    --nav-superficie: var(--identidad-personal-suave);
+}
+
+body[data-area] .barra-lateral-nav .nav-item:is(
+    [href^="/foro.html"], [href^="/administracion-publicaciones.html"],
+    [href^="/roles/supervisor-mensajes.html"], [href^="/supervision-mensajes.html"]
+) {
+    --nav-acento: var(--identidad-comunidad);
+    --nav-superficie: var(--identidad-comunidad-suave);
+}
+
+body[data-area] .barra-lateral-nav .nav-item svg {
+    color: var(--nav-acento);
+    stroke: currentColor;
+}
+
+body[data-area] .barra-lateral-nav .nav-item:is(:hover, .activo, [aria-current="page"]) {
+    color: var(--nav-acento);
+    background-color: var(--nav-superficie);
+}
+
+/* Rumbo y el avatar del menú conservan la identidad de marca en todas las vistas. */
+body[data-area] .rumbo-personaje {
+    --color-primary: var(--identidad-proceso);
+    --color-primary-soft: var(--identidad-proceso-suave);
+    --color-on-primary: #10282A;
+}
+
+body[data-area] [data-rumbo-indicador]::before {
+    --color-primary: var(--identidad-proceso);
+    --color-on-primary: #10282A;
+}
+
+body[data-area] .barra-lateral-usuario .usuario-avatar {
+    background-color: var(--identidad-proceso);
+    color: #10282A;
+}
+
+/* El color de un área nunca sustituye el significado de una confirmación. */
+body[data-area] :is(
+    .etiqueta-estado.verificado, .etiqueta-estado.aprobado,
+    .etiqueta-verificado, .marca-mayor,
+    .alerta-exito, .mensaje-exito, .mensaje-gestion
+) {
+    --color-primary-soft: var(--color-success-soft);
+    --color-accent: var(--color-success);
+}

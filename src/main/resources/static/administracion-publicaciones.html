@@ -9,10 +9,12 @@
     <link rel="manifest" href="/manifest.json">
     <title>Publicaciones del foro - Rumbo</title>
     <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/css/ilustraciones.css">
     <script src="/js/rumbo.js" defer></script>
 <link rel="stylesheet" href="/css/administracionUsuarios.css?v=f5-t03-4">
+    <link rel="stylesheet" href="/css/identidadAreas.css">
 </head>
-<body>
+<body data-area="comunidad">
     <a href="#contenido-principal" class="saltar-contenido">Saltar al contenido</a>
 
     <!-- Barra superior para tablet y móvil -->
@@ -135,9 +137,12 @@
 
         <!-- Contenido principal -->
         <div class="contenido-principal-app">
-            <header>
+            <header class="encabezado-ilustrado" data-ilustracion="foro">
                 <h1>Publicaciones del foro</h1>
                 <p id="encabezado-usuario">Consulta y administra el contenido de la comunidad.</p>
+                <span class="ilustracion-seccion" aria-hidden="true">
+                    <img src="/icons/ilustraciones/foro.svg" width="240" height="160" alt="" decoding="async">
+                </span>
             </header>
 
             <main id="contenido-principal">

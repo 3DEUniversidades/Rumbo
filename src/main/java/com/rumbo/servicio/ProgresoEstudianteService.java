@@ -122,7 +122,7 @@ public List<ActividadEstudianteRespuesta> consultarLineaDeTiempo(
 
     return actividades.stream()
             .sorted(Comparator.comparing(
-                    Actividad::getFecha, OrdenFechasActividades.porProximidad()
+                    Actividad::getFecha, OrdenFechasActividades.cronologico()
             ).thenComparing(Actividad::getIdActividad))
             .map(actividad -> construirRespuesta(
                     actividad,

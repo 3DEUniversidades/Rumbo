@@ -1,7 +1,19 @@
-const CACHE_NAME = "rumbo-v11-recorrido";
+const CACHE_NAME = "rumbo-v13-identidad-areas";
 const ASSETS = [
     "/style.css",
     "/css/lineaTiempo.css",
+    "/css/ilustraciones.css",
+    "/css/identidadAreas.css",
+    "/icons/ilustraciones/carreras.svg",
+    "/icons/ilustraciones/comparador.svg",
+    "/icons/ilustraciones/bitacora.svg",
+    "/icons/ilustraciones/pruebas.svg",
+    "/icons/ilustraciones/foro.svg",
+    "/icons/ilustraciones/recorrido.svg",
+    "/icons/ilustraciones/perfil.svg",
+    "/icons/ilustraciones/actividades.svg",
+    "/icons/ilustraciones/usuarios.svg",
+    "/icons/ilustraciones/registros.svg",
     "/manifest.json",
     "/js/rumbo.js",
     "/icons/fonts/PublicSans-Regular.woff2",

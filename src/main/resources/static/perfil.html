@@ -8,11 +8,13 @@
     <link rel="manifest" href="/manifest.json">
     <title>Mi perfil - Rumbo</title>
     <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/css/ilustraciones.css">
     <script src="/js/rumbo.js" defer></script>
     <link rel="stylesheet" href="/css/perfil.css?v=1">
     <link rel="stylesheet" href="/css/historialSupervisor.css?v=f5-t10-1">
+    <link rel="stylesheet" href="/css/identidadAreas.css">
 </head>
-<body>
+<body data-area="personal">
     <a href="#contenido-perfil" class="saltar-contenido">Saltar al contenido</a>
 
     <!-- Barra superior para tablet y móvil -->
@@ -134,9 +136,12 @@
 
         <!-- Contenido principal -->
         <div class="contenido-principal-app">
-            <header>
+            <header class="encabezado-ilustrado" data-ilustracion="perfil">
                 <h1>Mi perfil</h1>
                 <p>Tu cuenta y la información que compartes en Rumbo.</p>
+                <span class="ilustracion-seccion" aria-hidden="true">
+                    <img src="/icons/ilustraciones/perfil.svg" width="240" height="160" alt="" decoding="async">
+                </span>
             </header>
 
             <p id="cargando-perfil" class="estado-vista" role="status">Cargando tu perfil…</p>

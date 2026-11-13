@@ -24,7 +24,7 @@ public class ActividadService {
         return actividadRepository.findByEliminadaFalseOrderByFechaAsc()
                 .stream()
                 .sorted(Comparator.comparing(
-                        Actividad::getFecha, OrdenFechasActividades.porProximidad()
+                        Actividad::getFecha, OrdenFechasActividades.cronologico()
                 ).thenComparing(Actividad::getIdActividad))
                 .toList();
     }
